@@ -13,12 +13,15 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False, index=True)
     password_hash = db.Column(db.String(255), nullable=False)
     role = db.Column(db.String(20), default='user')  # user, admin
+    blessing_points = db.Column(db.Integer, default=0, nullable=False)  # 祝福點數/功德值
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
     # 關聯
     amulets = db.relationship('Amulet', backref='owner', lazy='dynamic', cascade='all, delete-orphan')
     checkins = db.relationship('Checkin', backref='user', lazy='dynamic', cascade='all, delete-orphan')
     energy_logs = db.relationship('Energy', backref='user', lazy='dynamic', cascade='all, delete-orphan')
+    addresses = db.relationship('Address', backref='user', lazy='dynamic', cascade='all, delete-orphan')
+    redemptions = db.relationship('Redemption', backref='user', lazy='dynamic', cascade='all, delete-orphan')
 
     def set_password(self, password):
         """設定密碼（加密）"""
@@ -35,6 +38,7 @@ class User(db.Model):
             'name': self.name,
             'email': self.email,
             'role': self.role,
+            'blessing_points': self.blessing_points,
             'created_at': self.created_at.isoformat()
         }
 

@@ -131,6 +131,8 @@ const Dashboard = () => {
       <header className="dashboard-header">
         <h1>護身符管理系統</h1>
         <div className="user-info">
+          <a href="/shop" className="btn-shop">🛒 功德商城</a>
+          <span className="blessing-points">功德值: {user?.blessing_points || 0}</span>
           <span>歡迎，{user?.name}</span>
           <button onClick={logout} className="btn-logout">登出</button>
         </div>

@@ -97,4 +97,49 @@ export const energyAPI = {
   getByAmulet: (amuletId) => api.get(`/energy/amulet/${amuletId}`),
 };
 
+// ===== 商品 API =====
+export const productAPI = {
+  // 獲取商品列表
+  getAll: (params) => api.get('/products/', { params }),
+
+  // 獲取商品詳情
+  getById: (id) => api.get(`/products/${id}`),
+};
+
+// ===== 地址 API =====
+export const addressAPI = {
+  // 獲取地址列表
+  getAll: () => api.get('/addresses/'),
+
+  // 創建地址
+  create: (data) => api.post('/addresses/', data),
+
+  // 更新地址
+  update: (id, data) => api.put(`/addresses/${id}`, data),
+
+  // 刪除地址
+  delete: (id) => api.delete(`/addresses/${id}`),
+
+  // 設置預設地址
+  setDefault: (id) => api.put(`/addresses/${id}/set-default`),
+};
+
+// ===== 兌換 API =====
+export const redemptionAPI = {
+  // 兌換商品
+  create: (data) => api.post('/redemptions/', data),
+
+  // 獲取兌換記錄
+  getAll: (params) => api.get('/redemptions/', { params }),
+
+  // 獲取兌換詳情
+  getById: (id) => api.get(`/redemptions/${id}`),
+
+  // 取消兌換
+  cancel: (id) => api.post(`/redemptions/${id}/cancel`),
+
+  // 獲取兌換統計
+  getStats: () => api.get('/redemptions/stats'),
+};
+
 export default api;

@@ -29,6 +29,30 @@
   font-size: 14px;
 }
 
+.btn-shop {
+  padding: 8px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  text-decoration: none;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: opacity 0.2s;
+  display: inline-block;
+}
+
+.btn-shop:hover {
+  opacity: 0.9;
+}
+
+.blessing-points {
+  background: #f0f0f0;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+  color: #667eea !important;
+}
+
 .btn-logout {
   padding: 8px 20px;
   background: #f44336;

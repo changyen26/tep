@@ -3,6 +3,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import Shop from './pages/Shop';
 
 // 保護路由組件 - 需要登入才能訪問
 const PrivateRoute = ({ children }) => {
@@ -56,6 +57,14 @@ function AppRoutes() {
         element={
           <PrivateRoute>
             <Dashboard />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/shop"
+        element={
+          <PrivateRoute>
+            <Shop />
           </PrivateRoute>
         }
       />

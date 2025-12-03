@@ -29,15 +29,18 @@ def create_app():
     CORS(app)
 
     # 導入模型（讓 Flask-Migrate 能夠偵測）
-    from app.models import User, Amulet, Checkin, Energy, Temple
+    from app.models import User, Amulet, Checkin, Energy, Temple, Product, Address, Redemption
 
     # 註冊路由
-    from app.routes import auth, user, amulet, checkin, energy, temple
+    from app.routes import auth, user, amulet, checkin, energy, temple, product, address, redemption
     app.register_blueprint(auth.bp)
     app.register_blueprint(user.bp)
     app.register_blueprint(amulet.bp)
     app.register_blueprint(checkin.bp)
     app.register_blueprint(energy.bp)
     app.register_blueprint(temple.bp)
+    app.register_blueprint(product.bp)
+    app.register_blueprint(address.bp)
+    app.register_blueprint(redemption.bp)
 
     return app
