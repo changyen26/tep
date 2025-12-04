@@ -28,3 +28,7 @@ instance/
 # 測試
 .coverage
 htmlcov/
+
+# 上傳檔案
+uploads/
+!uploads/.gitkeep
