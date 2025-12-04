@@ -32,7 +32,7 @@ def create_app():
     from app.models import User, Amulet, Checkin, Energy, Temple, Product, Address, Redemption
 
     # 註冊路由
-    from app.routes import auth, user, amulet, checkin, energy, temple, product, address, redemption, upload
+    from app.routes import auth, user, amulet, checkin, energy, temple, product, address, redemption, upload, stats
     app.register_blueprint(auth.bp)
     app.register_blueprint(user.bp)
     app.register_blueprint(amulet.bp)
@@ -43,5 +43,6 @@ def create_app():
     app.register_blueprint(address.bp)
     app.register_blueprint(redemption.bp)
     app.register_blueprint(upload.bp)
+    app.register_blueprint(stats.bp)
 
     return app
