@@ -9,6 +9,7 @@ from flask import request
 from app.utils.response import error_response
 from app import db
 from app.models.user import User
+from app.models.system_admin import SystemAdmin
 
 def generate_token(user_id, role='user'):
     """
@@ -110,3 +111,110 @@ def admin_required(f):
         return f(current_user=current_user, *args, **kwargs)
 
     return decorated
+
+# ===== System Admin Authentication =====
+
+def generate_admin_token(admin_id):
+    """
+    生成系統管理員 JWT Token
+    """
+    secret_key = os.getenv('JWT_SECRET_KEY')
+    expiration_hours = int(os.getenv('ADMIN_JWT_EXPIRATION_HOURS', 8))  # 管理員token較短
+
+    payload = {
+        'admin_id': admin_id,
+        'type': 'system_admin',
+        'exp': datetime.utcnow() + timedelta(hours=expiration_hours),
+        'iat': datetime.utcnow()
+    }
+
+    token = jwt.encode(payload, secret_key, algorithm='HS256')
+    return token
+
+def admin_token_required(f):
+    """
+    驗證系統管理員 Token 的裝飾器
+    """
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = None
+
+        # 從 Header 中獲取 Token
+        if 'Authorization' in request.headers:
+            auth_header = request.headers['Authorization']
+            try:
+                token = auth_header.split(' ')[1]  # Bearer <token>
+            except IndexError:
+                return error_response('Token 格式錯誤', 401)
+
+        if not token:
+            return error_response('缺少 Token', 401)
+
+        # 解碼 Token
+        payload, error = decode_token(token)
+        if error:
+            return error_response(error, 401)
+
+        # 檢查是否為系統管理員 token
+        if payload.get('type') != 'system_admin':
+            return error_response('需要系統管理員權限', 403)
+
+        # 查詢管理員
+        current_admin = SystemAdmin.query.get(payload.get('admin_id'))
+        if not current_admin:
+            return error_response('管理員不存在', 401)
+
+        if not current_admin.is_active:
+            return error_response('管理員帳號已停用', 403)
+
+        # 將管理員資訊傳遞給路由函式
+        return f(current_admin=current_admin, *args, **kwargs)
+
+    return decorated
+
+def admin_permission_required(permission_name):
+    """
+    驗證系統管理員特定權限的裝飾器
+    """
+    def decorator(f):
+        @wraps(f)
+        def decorated(*args, **kwargs):
+            token = None
+
+            # 從 Header 中獲取 Token
+            if 'Authorization' in request.headers:
+                auth_header = request.headers['Authorization']
+                try:
+                    token = auth_header.split(' ')[1]
+                except IndexError:
+                    return error_response('Token 格式錯誤', 401)
+
+            if not token:
+                return error_response('缺少 Token', 401)
+
+            # 解碼 Token
+            payload, error = decode_token(token)
+            if error:
+                return error_response(error, 401)
+
+            # 檢查是否為系統管理員 token
+            if payload.get('type') != 'system_admin':
+                return error_response('需要系統管理員權限', 403)
+
+            # 查詢管理員
+            current_admin = SystemAdmin.query.get(payload.get('admin_id'))
+            if not current_admin:
+                return error_response('管理員不存在', 401)
+
+            if not current_admin.is_active:
+                return error_response('管理員帳號已停用', 403)
+
+            # 檢查權限
+            if not current_admin.has_permission(permission_name):
+                return error_response(f'缺少權限: {permission_name}', 403)
+
+            # 將管理員資訊傳遞給路由函式
+            return f(current_admin=current_admin, *args, **kwargs)
+
+        return decorated
+    return decorator

@@ -26,13 +26,20 @@ def create_app():
     # 初始化擴充
     db.init_app(app)
     migrate.init_app(app, db)
-    CORS(app)
+
+    # 配置 CORS - 允許所有來源
+    CORS(app,
+         resources={r"/api/*": {"origins": "*"}},
+         supports_credentials=False,
+         allow_headers=['Content-Type', 'Authorization'],
+         methods=['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+    )
 
     # 導入模型（讓 Flask-Migrate 能夠偵測）
-    from app.models import User, Amulet, Checkin, Energy, Temple, Product, Address, Redemption
+    from app.models import User, Amulet, Checkin, Energy, Temple, Product, Address, Redemption, TempleAnnouncement, TempleAdmin, CheckinReward, RewardClaim, SystemAdmin, TempleApplication, SystemSettings, SystemLog, UserReport, Notification, NotificationSettings
 
     # 註冊路由
-    from app.routes import auth, user, amulet, checkin, energy, temple, product, address, redemption, upload, stats
+    from app.routes import auth, user, amulet, checkin, energy, temple, product, address, redemption, upload, stats, leaderboard, temple_announcement, temple_admin, temple_stats, reward, admin, notification
     app.register_blueprint(auth.bp)
     app.register_blueprint(user.bp)
     app.register_blueprint(amulet.bp)
@@ -44,5 +51,12 @@ def create_app():
     app.register_blueprint(redemption.bp)
     app.register_blueprint(upload.bp)
     app.register_blueprint(stats.bp)
+    app.register_blueprint(leaderboard.bp)
+    app.register_blueprint(temple_announcement.bp)
+    app.register_blueprint(temple_admin.bp)
+    app.register_blueprint(temple_stats.bp)
+    app.register_blueprint(reward.bp)
+    app.register_blueprint(admin.bp)
+    app.register_blueprint(notification.bp)
 
     return app

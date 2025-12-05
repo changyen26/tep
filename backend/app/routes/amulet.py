@@ -145,3 +145,66 @@ def delete_amulet(current_user, amulet_id):
     except Exception as e:
         db.session.rollback()
         return error_response(f'刪除失敗: {str(e)}', 500)
+
+@bp.route('/<int:amulet_id>/temple-history', methods=['GET'])
+@token_required
+def get_amulet_temple_history(current_user, amulet_id):
+    """
+    獲取護身符的廟宇參拜歷史
+    GET /api/amulet/<amulet_id>/temple-history
+    Header: Authorization: Bearer <token>
+    """
+    try:
+        from app.models.checkin import Checkin
+        from app.models.temple import Temple
+        from sqlalchemy import func
+
+        # 驗證護身符
+        amulet = Amulet.query.filter_by(id=amulet_id, user_id=current_user.id).first()
+        if not amulet:
+            return error_response('護身符不存在或無權訪問', 404)
+
+        # 查詢此護身符在各廟宇的簽到統計
+        temple_stats = db.session.query(
+            Temple,
+            func.count(Checkin.id).label('total_visits'),
+            func.max(Checkin.timestamp).label('last_visit'),
+            func.sum(Checkin.blessing_points).label('total_points')
+        ).join(
+            Checkin, Temple.id == Checkin.temple_id
+        ).filter(
+            Checkin.amulet_id == amulet_id,
+            Checkin.user_id == current_user.id
+        ).group_by(
+            Temple.id
+        ).order_by(
+            func.count(Checkin.id).desc()
+        ).all()
+
+        # 格式化結果
+        temple_history = []
+        for temple, total_visits, last_visit, total_points in temple_stats:
+            temple_history.append({
+                'temple': temple.to_dict(),
+                'total_visits': total_visits,
+                'last_visit': last_visit.isoformat() if last_visit else None,
+                'total_points_gained': int(total_points) if total_points else 0
+            })
+
+        # 總統計
+        total_temples_visited = len(temple_history)
+        total_visits_all = sum([t['total_visits'] for t in temple_history])
+        total_points_all = sum([t['total_points_gained'] for t in temple_history])
+
+        return success_response({
+            'amulet': amulet.to_dict(),
+            'temple_history': temple_history,
+            'statistics': {
+                'total_temples_visited': total_temples_visited,
+                'total_visits': total_visits_all,
+                'total_points_gained': total_points_all
+            }
+        }, '獲取成功', 200)
+
+    except Exception as e:
+        return error_response(f'獲取失敗: {str(e)}', 500)

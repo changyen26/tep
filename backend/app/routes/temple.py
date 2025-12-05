@@ -282,3 +282,268 @@ def delete_temple(current_user, temple_id):
     except Exception as e:
         db.session.rollback()
         return error_response(f'刪除失敗: {str(e)}', 500)
+
+# ===== 廟宇簽到功能 =====
+
+@bp.route('/<int:temple_id>/checkin', methods=['POST'])
+@token_required
+def temple_checkin(current_user, temple_id):
+    """
+    在廟宇簽到
+    POST /api/temples/<temple_id>/checkin
+    Header: Authorization: Bearer <token>
+    Body: {
+        "amulet_id": 1,
+        "checkin_method": "nfc",  // nfc, qr_code, manual
+        "latitude": 25.0330,  // 可選
+        "longitude": 121.5654,  // 可選
+        "notes": "參拜備註"  // 可選
+    }
+    """
+    try:
+        from app.models.amulet import Amulet
+        from app.models.checkin import Checkin
+        from app.models.energy import Energy
+        from datetime import datetime, timedelta
+
+        data = request.get_json()
+
+        # 驗證必填欄位
+        if not data or 'amulet_id' not in data:
+            return error_response('缺少必填欄位', 400)
+
+        amulet_id = data['amulet_id']
+        checkin_method = data.get('checkin_method', 'manual')
+        latitude = data.get('latitude')
+        longitude = data.get('longitude')
+        notes = data.get('notes', '')
+
+        # 驗證廟宇是否存在且啟用
+        temple = Temple.query.get(temple_id)
+        if not temple:
+            return error_response('廟宇不存在', 404)
+
+        if not temple.is_active:
+            return error_response('此廟宇暫不開放簽到', 400)
+
+        # 驗證護身符是否存在且屬於當前用戶
+        amulet = Amulet.query.get(amulet_id)
+        if not amulet:
+            return error_response('護身符不存在', 404)
+
+        if amulet.user_id != current_user.id:
+            return error_response('這不是您的護身符', 403)
+
+        if amulet.status != 'active':
+            return error_response('護身符狀態異常，無法簽到', 400)
+
+        # 檢查今日是否已在此廟宇簽到
+        today = datetime.utcnow().date()
+        today_start = datetime.combine(today, datetime.min.time())
+        today_end = datetime.combine(today, datetime.max.time())
+
+        existing_checkin = Checkin.query.filter(
+            Checkin.user_id == current_user.id,
+            Checkin.temple_id == temple_id,
+            Checkin.timestamp >= today_start,
+            Checkin.timestamp <= today_end
+        ).first()
+
+        if existing_checkin:
+            return error_response('今日已在此廟宇簽到', 400)
+
+        # 位置驗證（如果提供了經緯度且廟宇有座標）
+        if latitude and longitude and temple.latitude and temple.longitude:
+            distance = calculate_distance(
+                latitude, longitude,
+                temple.latitude, temple.longitude
+            )
+            # 必須在廟宇 1 公里範圍內
+            if distance > 1.0:
+                return error_response(f'您距離廟宇太遠（{distance:.2f}公里），無法簽到', 400)
+
+        # 計算獲得的功德值（在廟宇簽到獲得更多）
+        blessing_points = 20  # 廟宇簽到獲得 20 點（比一般簽到的 10 點多）
+
+        # 創建簽到記錄
+        checkin = Checkin(
+            user_id=current_user.id,
+            amulet_id=amulet_id,
+            temple_id=temple_id,
+            latitude=latitude,
+            longitude=longitude,
+            notes=notes,
+            blessing_points=blessing_points
+        )
+        db.session.add(checkin)
+
+        # 增加護身符能量
+        amulet.energy += blessing_points
+
+        # 增加用戶功德值
+        current_user.blessing_points += blessing_points
+
+        # 創建能量記錄
+        energy_log = Energy(
+            user_id=current_user.id,
+            amulet_id=amulet_id,
+            energy_added=blessing_points
+        )
+        db.session.add(energy_log)
+
+        # 更新廟宇簽到統計（如果有 checkin_count 欄位）
+        if hasattr(temple, 'checkin_count'):
+            temple.checkin_count = (temple.checkin_count or 0) + 1
+
+        db.session.commit()
+
+        return success_response({
+            'checkin': checkin.to_dict(),
+            'amulet': {
+                'id': amulet.id,
+                'energy': amulet.energy
+            },
+            'blessing_points_gained': blessing_points,
+            'current_blessing_points': current_user.blessing_points,
+            'temple': temple.to_dict()
+        }, f'在 {temple.name} 簽到成功！獲得 {blessing_points} 點功德值', 201)
+
+    except Exception as e:
+        db.session.rollback()
+        return error_response(f'簽到失敗: {str(e)}', 500)
+
+@bp.route('/<int:temple_id>/my-checkins', methods=['GET'])
+@token_required
+def get_my_temple_checkins(current_user, temple_id):
+    """
+    獲取我在此廟宇的簽到記錄
+    GET /api/temples/<temple_id>/my-checkins
+    Header: Authorization: Bearer <token>
+    Query Parameters:
+        - limit: 數量限制 (default: 20)
+    """
+    try:
+        from app.models.checkin import Checkin
+
+        temple = Temple.query.get(temple_id)
+        if not temple:
+            return error_response('廟宇不存在', 404)
+
+        limit = request.args.get('limit', default=20, type=int)
+
+        checkins = Checkin.query.filter_by(
+            user_id=current_user.id,
+            temple_id=temple_id
+        ).order_by(
+            Checkin.timestamp.desc()
+        ).limit(limit).all()
+
+        total_visits = Checkin.query.filter_by(
+            user_id=current_user.id,
+            temple_id=temple_id
+        ).count()
+
+        total_points = db.session.query(
+            func.sum(Checkin.blessing_points)
+        ).filter(
+            Checkin.user_id == current_user.id,
+            Checkin.temple_id == temple_id
+        ).scalar() or 0
+
+        return success_response({
+            'temple': temple.to_dict(),
+            'checkins': [c.to_dict() for c in checkins],
+            'statistics': {
+                'total_visits': total_visits,
+                'total_points_gained': int(total_points),
+                'showing': len(checkins)
+            }
+        }, '獲取成功', 200)
+
+    except Exception as e:
+        return error_response(f'獲取失敗: {str(e)}', 500)
+
+@bp.route('/nearby/available', methods=['GET'])
+@token_required
+def get_nearby_available_temples(current_user):
+    """
+    獲取附近可簽到的廟宇（排除今日已簽到的）
+    GET /api/temples/nearby/available
+    Header: Authorization: Bearer <token>
+    Query Parameters:
+        - latitude: 當前緯度 (必需)
+        - longitude: 當前經度 (必需)
+        - radius: 搜索半徑（公里）(default: 10)
+        - limit: 返回數量 (default: 20)
+    """
+    try:
+        from app.models.checkin import Checkin
+        from datetime import datetime
+
+        latitude = request.args.get('latitude', type=float)
+        longitude = request.args.get('longitude', type=float)
+        radius = request.args.get('radius', default=10, type=float)
+        limit = request.args.get('limit', default=20, type=int)
+
+        if not latitude or not longitude:
+            return error_response('缺少經緯度參數', 400)
+
+        # 獲取今日已簽到的廟宇 ID
+        today = datetime.utcnow().date()
+        today_start = datetime.combine(today, datetime.min.time())
+
+        checked_in_temple_ids = db.session.query(Checkin.temple_id).filter(
+            Checkin.user_id == current_user.id,
+            Checkin.timestamp >= today_start,
+            Checkin.temple_id.isnot(None)
+        ).distinct().all()
+        checked_in_temple_ids = [t[0] for t in checked_in_temple_ids]
+
+        # 獲取所有啟用的廟宇（有座標的）
+        temples = Temple.query.filter(
+            Temple.is_active == True,
+            Temple.latitude.isnot(None),
+            Temple.longitude.isnot(None)
+        ).all()
+
+        # 計算距離並篩選
+        nearby_temples = []
+        for temple in temples:
+            distance = calculate_distance(
+                latitude, longitude,
+                temple.latitude, temple.longitude
+            )
+
+            if distance <= radius:
+                temple_dict = temple.to_dict()
+                temple_dict['distance'] = round(distance, 2)
+                temple_dict['checked_in_today'] = temple.id in checked_in_temple_ids
+                temple_dict['available'] = temple.id not in checked_in_temple_ids
+                nearby_temples.append(temple_dict)
+
+        # 按距離排序
+        nearby_temples.sort(key=lambda x: x['distance'])
+
+        # 限制返回數量
+        nearby_temples = nearby_temples[:limit]
+
+        # 統計
+        available_count = len([t for t in nearby_temples if t['available']])
+        checked_in_count = len([t for t in nearby_temples if not t['available']])
+
+        return success_response({
+            'temples': nearby_temples,
+            'search_center': {
+                'latitude': latitude,
+                'longitude': longitude
+            },
+            'radius': radius,
+            'statistics': {
+                'total': len(nearby_temples),
+                'available': available_count,
+                'checked_in_today': checked_in_count
+            }
+        }, '獲取成功', 200)
+
+    except Exception as e:
+        return error_response(f'獲取失敗: {str(e)}', 500)
