@@ -1,0 +1,254 @@
+/**
+ * 登入頁面樣式
+ * 參考：平安符打卡系統 PDF 第6頁第1張
+ */
+
+.login-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #242428 0%, #3A3A3E 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 背景裝飾圖形 */
+.bg-decoration {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.05;
+  background-image:
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 50px,
+      rgba(189, 161, 56, 0.1) 50px,
+      rgba(189, 161, 56, 0.1) 51px
+    );
+  pointer-events: none;
+}
+
+/* 主容器 */
+.login-container {
+  width: 100%;
+  max-width: 400px;
+  background: rgba(36, 36, 40, 0.6);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  padding: 40px 32px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(189, 161, 56, 0.2);
+  position: relative;
+  z-index: 1;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Logo 區域 */
+.logo-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.logo-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #BDA138 0%, #D4B756 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 8px 24px rgba(189, 161, 56, 0.4);
+  animation: logoFloat 3s ease-in-out infinite;
+}
+
+@keyframes logoFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.logo-text {
+  font-size: 20px;
+  font-weight: 700;
+  color: #242428;
+  letter-spacing: 2px;
+}
+
+/* 標語 */
+.login-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #FFFFFF;
+  text-align: center;
+  margin-bottom: 32px;
+  line-height: 1.6;
+}
+
+/* 表單區域 */
+.form-section {
+  margin-bottom: 24px;
+}
+
+.form-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #FFFFFF;
+  margin-bottom: 8px;
+  margin-top: 0;
+}
+
+/* 輸入框樣式覆蓋 */
+.login-input {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 12px !important;
+  color: #FFFFFF !important;
+  height: 48px !important;
+  font-size: 15px !important;
+}
+
+.login-input:hover,
+.login-input:focus {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-color: #BDA138 !important;
+  box-shadow: 0 0 0 2px rgba(189, 161, 56, 0.1) !important;
+}
+
+.login-input input {
+  background: transparent !important;
+  color: #FFFFFF !important;
+}
+
+.login-input input::placeholder {
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+
+/* 密碼輸入框圖標顏色 */
+.login-input .ant-input-password-icon {
+  color: #999 !important;
+}
+
+/* 忘記密碼 */
+.forgot-password {
+  text-align: right;
+  margin-bottom: 20px;
+  margin-top: -8px;
+}
+
+.forgot-password a {
+  font-size: 13px;
+  color: #BDA138;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.forgot-password a:hover {
+  color: #D4B756;
+}
+
+/* 登入按鈕 */
+.login-button {
+  height: 50px !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  border-radius: 12px !important;
+  background: linear-gradient(135deg, #BDA138 0%, #D4B756 100%) !important;
+  border: none !important;
+  color: #242428 !important;
+  margin-top: 8px !important;
+  box-shadow: 0 4px 16px rgba(189, 161, 56, 0.4) !important;
+  transition: all 0.3s ease !important;
+}
+
+.login-button:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(189, 161, 56, 0.5) !important;
+}
+
+.login-button:active {
+  transform: translateY(0) !important;
+}
+
+/* 註冊按鈕 */
+.register-button {
+  height: 50px !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  border-radius: 12px !important;
+  background: transparent !important;
+  border: 2px solid rgba(255, 255, 255, 0.2) !important;
+  color: #FFFFFF !important;
+  transition: all 0.3s ease !important;
+}
+
+.register-button:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-color: #BDA138 !important;
+  color: #BDA138 !important;
+  transform: translateY(-2px) !important;
+}
+
+.register-button:active {
+  transform: translateY(0) !important;
+}
+
+/* 底部提示 */
+.bottom-hint {
+  text-align: center;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 16px;
+}
+
+/* 表單驗證錯誤訊息 */
+.ant-form-item-explain-error {
+  color: #ff4d4f !important;
+  font-size: 12px !important;
+}
+
+/* 響應式設計 */
+@media (max-width: 480px) {
+  .login-container {
+    padding: 32px 24px;
+  }
+
+  .login-title {
+    font-size: 16px;
+  }
+
+  .logo-circle {
+    width: 70px;
+    height: 70px;
+  }
+
+  .logo-text {
+    font-size: 18px;
+  }
+}
+
+@media (min-width: 768px) {
+  .login-container {
+    max-width: 440px;
+    padding: 48px 40px;
+  }
+}

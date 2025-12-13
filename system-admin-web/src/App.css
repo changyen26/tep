@@ -1,0 +1,39 @@
+/* 全域樣式重置 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* 標題樣式調整 */
+h1 {
+  font-size: 28px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+}
+
+h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #374151;
+  margin: 0;
+}
+
+h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #4b5563;
+  margin: 0;
+}
+
+/* 確保內容區域不會過寬 */
+.content-wrapper {
+  max-width: 1600px;
+  margin: 0 auto;
+}

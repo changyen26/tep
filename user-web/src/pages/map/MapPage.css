@@ -1,0 +1,370 @@
+/**
+ * 地圖搜尋頁面樣式
+ * 參考：平安符打卡系統 PDF 第8頁第3張
+ */
+
+.map-page {
+  min-height: 100vh;
+  background: #E8F4F8;
+  position: relative;
+  overflow: hidden;
+  padding-bottom: 80px;
+}
+
+/* 地圖容器 */
+.map-container {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+}
+
+/* 地圖背景 */
+.map-background {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #C4E0EC 0%, #E8F4F8 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 地圖網格 */
+.map-grid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    linear-gradient(rgba(189, 161, 56, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(189, 161, 56, 0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+}
+
+/* 地圖標記點 */
+.map-marker {
+  position: absolute;
+  cursor: pointer;
+  z-index: 5;
+  transition: all 0.3s ease;
+}
+
+.marker-pin {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #D32F2F 0%, #C62828 100%);
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(211, 47, 47, 0.4);
+  position: relative;
+}
+
+.marker-pin::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 10px solid #C62828;
+}
+
+.marker-pin .anticon {
+  transform: rotate(45deg);
+  font-size: 20px;
+  color: white;
+}
+
+.map-marker.active .marker-pin {
+  background: linear-gradient(135deg, #BDA138 0%, #D4B756 100%);
+  box-shadow: 0 6px 20px rgba(189, 161, 56, 0.6);
+  transform: rotate(-45deg) scale(1.2);
+}
+
+.map-marker.active .marker-pin::after {
+  border-top-color: #BDA138;
+}
+
+.marker-pulse {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(189, 161, 56, 0.3);
+  animation: markerPulse 2s ease-out infinite;
+}
+
+@keyframes markerPulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 0;
+  }
+}
+
+/* 用戶位置標記 */
+.user-location-marker {
+  position: absolute;
+  top: 50%;
+  left: 30%;
+  transform: translate(-50%, -50%);
+  z-index: 4;
+}
+
+.user-dot {
+  width: 20px;
+  height: 20px;
+  background: #2196F3;
+  border-radius: 50%;
+  border: 3px solid white;
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.4);
+  position: relative;
+  z-index: 2;
+}
+
+.user-pulse {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(33, 150, 243, 0.3);
+  animation: userPulse 2s ease-out infinite;
+}
+
+@keyframes userPulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2.5);
+    opacity: 0;
+  }
+}
+
+/* 廟宇資訊卡片容器 */
+.temple-card-container {
+  position: absolute;
+  bottom: 100px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  padding: 0 20px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.temple-card {
+  width: 100%;
+  max-width: 400px;
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  pointer-events: auto;
+  animation: slideUpCard 0.5s ease-out;
+}
+
+@keyframes slideUpCard {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 廟宇圖片 */
+.temple-card-image {
+  width: 100%;
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.temple-card-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(0, 0, 0, 0.7) 100%
+  );
+  padding: 20px;
+}
+
+.temple-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 8px;
+}
+
+.temple-distance {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.temple-distance .anticon {
+  font-size: 16px;
+}
+
+/* 廟宇資訊內容 */
+.temple-card-content {
+  padding: 20px;
+}
+
+.temple-description {
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(0, 0, 0, 0.7);
+  margin-bottom: 16px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* 前往按鈕 */
+.navigate-button {
+  width: 100%;
+  height: 48px;
+  background: linear-gradient(135deg, #BDA138 0%, #D4B756 100%);
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  color: #242428;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(189, 161, 56, 0.3);
+}
+
+.navigate-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(189, 161, 56, 0.4);
+}
+
+.navigate-button:active {
+  transform: translateY(0);
+}
+
+.navigate-button .anticon {
+  font-size: 18px;
+}
+
+/* 搜尋欄 */
+.search-bar {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  max-width: 400px;
+  margin: 0 auto;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 12px;
+  padding: 12px 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.search-icon {
+  font-size: 20px;
+  color: #BDA138;
+  margin-right: 12px;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  color: #242428;
+}
+
+.search-input::placeholder {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+/* 響應式設計 */
+@media (max-width: 375px) {
+  .temple-card-image {
+    height: 160px;
+  }
+
+  .temple-name {
+    font-size: 18px;
+  }
+
+  .temple-card-content {
+    padding: 16px;
+  }
+
+  .navigate-button {
+    height: 44px;
+    font-size: 15px;
+  }
+
+  .marker-pin {
+    width: 36px;
+    height: 36px;
+  }
+
+  .marker-pin .anticon {
+    font-size: 18px;
+  }
+}
+
+@media (min-width: 768px) {
+  .map-page {
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .temple-card-image {
+    height: 240px;
+  }
+
+  .temple-name {
+    font-size: 22px;
+  }
+
+  .temple-description {
+    font-size: 15px;
+  }
+
+  .navigate-button {
+    height: 52px;
+    font-size: 17px;
+  }
+}

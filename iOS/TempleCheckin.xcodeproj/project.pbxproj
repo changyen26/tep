@@ -1,0 +1,54 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+		rootObject = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+			};
+			buildConfigurationList = {
+				isa = XCConfigurationList;
+				buildConfigurations = (
+					{
+						isa = XCBuildConfiguration;
+						buildSettings = {
+							PRODUCT_NAME = "TempleCheckin";
+							SWIFT_VERSION = 5.0;
+							TARGETED_DEVICE_FAMILY = "1";
+							IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+						};
+						name = Debug;
+					},
+					{
+						isa = XCBuildConfiguration;
+						buildSettings = {
+							PRODUCT_NAME = "TempleCheckin";
+							SWIFT_VERSION = 5.0;
+							TARGETED_DEVICE_FAMILY = "1";
+							IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+						};
+						name = Release;
+					},
+				);
+				defaultConfigurationIsVisible = 0;
+				defaultConfigurationName = Release;
+			};
+			compatibilityVersion = "Xcode 14.0";
+			productRefGroup = {
+				isa = PBXGroup;
+				children = (
+				);
+			};
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+			);
+		};
+	};
+}

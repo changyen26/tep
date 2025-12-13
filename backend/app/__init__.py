@@ -39,7 +39,7 @@ def create_app():
     from app.models import User, Amulet, Checkin, Energy, Temple, Product, Address, Redemption, TempleAnnouncement, TempleAdmin, CheckinReward, RewardClaim, SystemAdmin, TempleApplication, SystemSettings, SystemLog, UserReport, Notification, NotificationSettings
 
     # 註冊路由
-    from app.routes import auth, user, amulet, checkin, energy, temple, product, address, redemption, upload, stats, leaderboard, temple_announcement, temple_admin, temple_stats, reward, admin, notification
+    from app.routes import auth, user, amulet, checkin, energy, temple, product, address, redemption, upload, stats, leaderboard, temple_announcement, temple_admin, temple_stats, temple_revenue, temple_export, reward, admin, notification
     app.register_blueprint(auth.bp)
     app.register_blueprint(user.bp)
     app.register_blueprint(amulet.bp)
@@ -55,6 +55,8 @@ def create_app():
     app.register_blueprint(temple_announcement.bp)
     app.register_blueprint(temple_admin.bp)
     app.register_blueprint(temple_stats.bp)
+    app.register_blueprint(temple_revenue.bp)
+    app.register_blueprint(temple_export.bp)
     app.register_blueprint(reward.bp)
     app.register_blueprint(admin.bp)
     app.register_blueprint(notification.bp)

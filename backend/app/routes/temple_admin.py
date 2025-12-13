@@ -274,3 +274,94 @@ def get_my_managed_temples(current_user):
 
     except Exception as e:
         return error_response(f'獲取失敗: {str(e)}', 500)
+
+@bp.route('/temples/<int:temple_id>', methods=['PUT'])
+@token_required
+def update_temple_info(current_user, temple_id):
+    """
+    廟方管理員更新廟宇資訊
+    PUT /api/temple-admins/temples/<temple_id>
+    Header: Authorization: Bearer <token>
+    Body: {
+        "name": "廟宇名稱",
+        "main_deity": "主祀神明",
+        "description": "廟宇簡介",
+        "images": ["url1", "url2"],
+        "address": "地址",
+        "latitude": 25.0330,
+        "longitude": 121.5654,
+        "phone": "電話",
+        "email": "email@example.com",
+        "website": "https://example.com",
+        "opening_hours": "開放時間",
+        "checkin_radius": 100,
+        "checkin_merit_points": 10,
+        "nfc_uid": "NFC UID"
+    }
+    """
+    try:
+        # 驗證廟宇存在
+        temple = Temple.query.filter_by(id=temple_id, is_active=True).first()
+        if not temple:
+            return error_response('廟宇不存在或已停用', 404)
+
+        # 檢查權限：必須是該廟宇的管理員
+        temple_admin = TempleAdmin.query.filter_by(
+            temple_id=temple_id,
+            user_id=current_user.id,
+            is_active=True
+        ).first()
+
+        if not temple_admin:
+            return error_response('您沒有權限編輯此廟宇', 403)
+
+        # 檢查是否有管理廟宇資訊的權限
+        if not temple_admin.has_permission('manage_info'):
+            return error_response('您沒有管理廟宇資訊的權限，請聯繫廟宇擁有者', 403)
+
+        data = request.get_json()
+
+        # 可更新欄位白名單
+        allowed_fields = [
+            'name',
+            'main_deity',
+            'description',
+            'images',
+            'address',
+            'latitude',
+            'longitude',
+            'phone',
+            'email',
+            'website',
+            'opening_hours',
+            'checkin_radius',
+            'checkin_merit_points',
+            'nfc_uid'
+        ]
+
+        # 檢查 NFC UID 是否重複
+        if 'nfc_uid' in data and data['nfc_uid']:
+            existing_temple = Temple.query.filter(
+                Temple.nfc_uid == data['nfc_uid'],
+                Temple.id != temple_id
+            ).first()
+            if existing_temple:
+                return error_response('此 NFC UID 已被其他廟宇使用', 400)
+
+        # 更新允許的欄位
+        updated_fields = []
+        for field in allowed_fields:
+            if field in data:
+                setattr(temple, field, data[field])
+                updated_fields.append(field)
+
+        db.session.commit()
+
+        return success_response({
+            'temple': temple.to_dict(),
+            'updated_fields': updated_fields
+        }, '廟宇資訊更新成功', 200)
+
+    except Exception as e:
+        db.session.rollback()
+        return error_response(f'更新失敗: {str(e)}', 500)

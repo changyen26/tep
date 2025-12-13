@@ -1,0 +1,47 @@
+/**
+ * 主應用佈局樣式
+ */
+
+.app-layout {
+  width: 100%;
+  min-height: 100vh;
+  background: #F5F5F5;
+  position: relative;
+}
+
+.app-content {
+  width: 100%;
+  min-height: 100vh;
+  padding-bottom: 64px; /* 底部導航高度 */
+  overflow-x: hidden;
+}
+
+/* 手機優先設計 */
+@media (max-width: 767px) {
+  .app-content {
+    max-width: 100%;
+  }
+}
+
+/* 平板和桌面版本 - 限制最大寬度，居中顯示 */
+@media (min-width: 768px) {
+  .app-content {
+    max-width: 480px;
+    margin: 0 auto;
+    padding-bottom: 72px;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
+  }
+
+  .bottom-navigation {
+    max-width: 480px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+/* 桌面大螢幕 */
+@media (min-width: 1024px) {
+  .app-content {
+    max-width: 420px;
+  }
+}

@@ -1,0 +1,101 @@
+.temple-admin-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  min-height: 100vh;
+  background: #f6f7fb;
+  color: #1f2933;
+}
+
+.temple-admin-sidebar {
+  background: #1f2933;
+  color: #f6f7fb;
+  padding: 20px 16px;
+}
+
+.sidebar-brand {
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-bottom: 24px;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.nav-link {
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: #e5e7eb;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.nav-link.active {
+  background: #2563eb;
+  color: #fff;
+}
+
+.temple-admin-main {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.temple-admin-header {
+  height: 60px;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-title {
+  font-weight: 600;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-name {
+  font-size: 14px;
+  color: #4b5563;
+}
+
+.btn-ghost {
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  color: #111827;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-ghost:hover {
+  background: #f3f4f6;
+}
+
+.temple-admin-content {
+  padding: 24px;
+  flex: 1;
+}
+
+@media (max-width: 900px) {
+  .temple-admin-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .temple-admin-sidebar {
+    grid-row: 2;
+  }
+}

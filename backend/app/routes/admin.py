@@ -155,7 +155,7 @@ def get_user_detail(current_admin, user_id):
 
     # 最近活動
     recent_checkins = Checkin.query.filter_by(user_id=user_id).order_by(
-        Checkin.checkin_time.desc()
+        Checkin.timestamp.desc()
     ).limit(5).all()
 
     recent_redemptions = Redemption.query.filter_by(user_id=user_id).order_by(
@@ -165,8 +165,8 @@ def get_user_detail(current_admin, user_id):
     return success_response({
         'user': user.to_dict(),
         'statistics': stats,
-        'recent_checkins': [c.to_simple_dict() for c in recent_checkins],
-        'recent_redemptions': [r.to_simple_dict() for r in recent_redemptions]
+        'recent_checkins': [c.to_dict() for c in recent_checkins],
+        'recent_redemptions': [r.to_dict() for r in recent_redemptions]
     })
 
 @bp.route('/users/<int:user_id>/role', methods=['PUT'])
@@ -403,12 +403,12 @@ def review_temple_application(current_admin, application_id):
 @admin_permission_required('review_products')
 def get_pending_products(current_admin):
     """
-    獲取待審核產品列表
+    獲取未啟用產品列表
     """
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 20, type=int)
 
-    query = Product.query.filter_by(status='pending').order_by(Product.created_at.desc())
+    query = Product.query.filter_by(is_active=False).order_by(Product.created_at.desc())
     pagination = query.paginate(page=page, per_page=per_page, error_out=False)
 
     return success_response({
@@ -423,7 +423,7 @@ def get_pending_products(current_admin):
 @admin_permission_required('review_products')
 def review_product(current_admin, product_id):
     """
-    審核產品
+    審核產品（啟用或拒絕）
     """
     product = Product.query.get(product_id)
     if not product:
@@ -436,15 +436,15 @@ def review_product(current_admin, product_id):
     if action not in ['approve', 'reject']:
         return error_response('無效的操作類型', 400)
 
-    old_status = product.status
+    old_status = product.is_active
 
     if action == 'approve':
-        product.status = 'active'
+        product.is_active = True
         action_desc = '批准'
     else:  # reject
         if not note:
             return error_response('拒絕產品必須提供原因', 400)
-        product.status = 'rejected'
+        product.is_active = False
         action_desc = '拒絕'
 
     # 記錄日誌
@@ -456,7 +456,7 @@ def review_product(current_admin, product_id):
         target_id=product_id,
         description=f'管理員 {current_admin.name} {action_desc}了產品: {product.name}',
         ip_address=request.remote_addr,
-        changes={'status': {'old': old_status, 'new': product.status}, 'note': note}
+        changes={'is_active': {'old': old_status, 'new': product.is_active}, 'note': note}
     )
 
     db.session.commit()
@@ -542,6 +542,63 @@ def get_all_redemptions(current_admin):
         'pages': pagination.pages
     })
 
+@bp.route('/redemptions/<int:redemption_id>', methods=['GET'])
+@admin_permission_required('manage_orders')
+def get_redemption_detail(current_admin, redemption_id):
+    """
+    獲取兌換訂單詳情
+    """
+    redemption = Redemption.query.get(redemption_id)
+    if not redemption:
+        return error_response('兌換訂單不存在', 404)
+
+    return success_response({
+        'redemption': redemption.to_dict()
+    })
+
+@bp.route('/redemptions/<int:redemption_id>/status', methods=['PUT'])
+@admin_permission_required('manage_orders')
+def update_redemption_status(current_admin, redemption_id):
+    """
+    更新兌換訂單狀態
+    """
+    redemption = Redemption.query.get(redemption_id)
+    if not redemption:
+        return error_response('兌換訂單不存在', 404)
+
+    data = request.get_json()
+    new_status = data.get('status')
+    remarks = data.get('remarks', '')
+
+    if not new_status:
+        return error_response('缺少參數: status', 400)
+
+    # 驗證狀態值
+    valid_statuses = ['pending', 'processing', 'shipped', 'completed', 'cancelled']
+    if new_status not in valid_statuses:
+        return error_response(f'無效的狀態值，必須是: {", ".join(valid_statuses)}', 400)
+
+    old_status = redemption.status
+    redemption.status = new_status
+
+    # 記錄日誌
+    SystemLog.log_action(
+        admin_id=current_admin.id,
+        action_type='redemption_status_update',
+        action_category='order_mgmt',
+        target_type='redemption',
+        target_id=redemption_id,
+        description=f'管理員 {current_admin.name} 將兌換訂單 #{redemption_id} 狀態從 {old_status} 更新為 {new_status}' + (f'，備註：{remarks}' if remarks else ''),
+        ip_address=request.remote_addr,
+        changes={'status': {'old': old_status, 'new': new_status}, 'remarks': remarks}
+    )
+
+    db.session.commit()
+
+    return success_response({
+        'redemption': redemption.to_dict()
+    }, '兌換訂單狀態更新成功')
+
 # ===== 6. 進階統計分析 =====
 
 @bp.route('/analytics/overview', methods=['GET'])
@@ -565,7 +622,7 @@ def get_analytics_overview(current_admin):
     # 打卡統計
     total_checkins = Checkin.query.count()
     checkins_today = Checkin.query.filter(
-        Checkin.checkin_time >= datetime.utcnow().date()
+        Checkin.timestamp >= datetime.utcnow().date()
     ).count()
 
     # 兌換訂單統計
@@ -584,7 +641,7 @@ def get_analytics_overview(current_admin):
     ).scalar() or 0
 
     # 待處理事項
-    pending_product_reviews = Product.query.filter_by(status='pending').count()
+    pending_product_reviews = Product.query.filter_by(is_active=False).count()
     pending_reports = UserReport.query.filter_by(status='pending').count()
 
     return success_response({
@@ -636,7 +693,7 @@ def get_user_analytics(current_admin):
 
     # 用戶活躍度（最近30天有打卡或兌換）
     active_user_ids = db.session.query(Checkin.user_id.distinct()).filter(
-        Checkin.checkin_time >= start_date
+        Checkin.timestamp >= start_date
     ).union(
         db.session.query(Redemption.user_id.distinct()).filter(
             Redemption.redeemed_at >= start_date
@@ -744,12 +801,12 @@ def get_checkin_analytics(current_admin):
 
     # 每日打卡數
     daily_checkins = db.session.query(
-        func.date(Checkin.checkin_time).label('date'),
+        func.date(Checkin.timestamp).label('date'),
         func.count(Checkin.id).label('count')
     ).filter(
-        Checkin.checkin_time >= start_date
+        Checkin.timestamp >= start_date
     ).group_by(
-        func.date(Checkin.checkin_time)
+        func.date(Checkin.timestamp)
     ).all()
 
     # 打卡最活躍用戶
@@ -757,7 +814,7 @@ def get_checkin_analytics(current_admin):
         User.name,
         func.count(Checkin.id).label('checkin_count')
     ).join(Checkin).filter(
-        Checkin.checkin_time >= start_date
+        Checkin.timestamp >= start_date
     ).group_by(
         User.id, User.name
     ).order_by(

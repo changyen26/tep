@@ -1,0 +1,239 @@
+/**
+ * 福報累積歷史頁面樣式
+ * 參考：平安符打卡系統 PDF 第7頁第4張
+ */
+
+.amulet-history-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #BDA138 0%, #D4B756 50%, #BDA138 100%);
+  position: relative;
+  padding: 24px 20px 100px;
+}
+
+/* 頂部背景裝飾 */
+.history-header-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(
+    180deg,
+    rgba(36, 36, 40, 0.1) 0%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+/* 右上角資訊圖標 */
+.history-info-icon {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(36, 36, 40, 0.2);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  color: #242428;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.history-info-icon:hover {
+  transform: scale(1.1);
+  background: rgba(36, 36, 40, 0.3);
+}
+
+/* 頂部福報值顯示 */
+.history-header {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 32px;
+  padding-top: 40px;
+}
+
+.header-icon-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.header-icon {
+  width: 56px;
+  height: 56px;
+  background: rgba(36, 36, 40, 0.15);
+  border-radius: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.header-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #242428;
+}
+
+.header-value {
+  font-size: 56px;
+  font-weight: 700;
+  color: #242428;
+  line-height: 1;
+  margin-left: 68px;
+}
+
+.header-unit {
+  font-size: 24px;
+  font-weight: 500;
+  margin-left: 8px;
+}
+
+/* 柱狀圖區域 */
+.chart-section {
+  margin-bottom: 32px;
+  background: rgba(36, 36, 40, 0.1);
+  border-radius: 20px;
+  padding: 24px 20px;
+  backdrop-filter: blur(10px);
+}
+
+.chart-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 12px;
+  height: 200px;
+  padding-top: 40px;
+}
+
+.chart-bar-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+
+.chart-bar-container {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  padding: 0 4px;
+}
+
+.chart-bar {
+  width: 100%;
+  background: linear-gradient(
+    180deg,
+    rgba(36, 36, 40, 0.5) 0%,
+    rgba(36, 36, 40, 0.7) 100%
+  );
+  border-radius: 8px 8px 0 0;
+  position: relative;
+  min-height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 -2px 8px rgba(36, 36, 40, 0.2);
+}
+
+.chart-bar:hover {
+  background: linear-gradient(
+    180deg,
+    rgba(36, 36, 40, 0.6) 0%,
+    rgba(36, 36, 40, 0.8) 100%
+  );
+}
+
+.chart-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #BDA138;
+}
+
+.chart-label {
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #242428;
+  text-align: center;
+}
+
+/* 累積福報時間軸說明 */
+.timeline-section {
+  background: rgba(36, 36, 40, 0.15);
+  border-radius: 20px;
+  padding: 24px;
+  backdrop-filter: blur(10px);
+}
+
+.timeline-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #242428;
+  margin: 0 0 16px 0;
+  text-align: center;
+}
+
+.timeline-description {
+  font-size: 14px;
+  color: rgba(36, 36, 40, 0.8);
+  line-height: 1.8;
+  text-align: justify;
+}
+
+/* 響應式設計 */
+@media (max-width: 375px) {
+  .header-value {
+    font-size: 48px;
+  }
+
+  .chart-container {
+    height: 180px;
+    gap: 8px;
+  }
+
+  .chart-value {
+    font-size: 12px;
+  }
+}
+
+@media (min-width: 768px) {
+  .amulet-history-page {
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .chart-container {
+    height: 240px;
+  }
+
+  .chart-bar {
+    border-radius: 12px 12px 0 0;
+  }
+}
+
+/* 動畫效果 */
+.chart-bar {
+  animation: barGrow 0.6s ease-out;
+}
+
+@keyframes barGrow {
+  from {
+    height: 0;
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

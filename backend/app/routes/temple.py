@@ -247,6 +247,20 @@ def update_temple(current_user, temple_id):
             temple.main_deity = data['main_deity']
         if 'description' in data:
             temple.description = data['description']
+        if 'images' in data:
+            temple.images = data['images']
+        if 'phone' in data:
+            temple.phone = data['phone']
+        if 'email' in data:
+            temple.email = data['email']
+        if 'website' in data:
+            temple.website = data['website']
+        if 'opening_hours' in data:
+            temple.opening_hours = data['opening_hours']
+        if 'checkin_radius' in data:
+            temple.checkin_radius = data['checkin_radius']
+        if 'checkin_merit_points' in data:
+            temple.checkin_merit_points = data['checkin_merit_points']
         if 'nfc_uid' in data:
             temple.nfc_uid = data['nfc_uid']
         if 'is_active' in data:

@@ -1,0 +1,320 @@
+/**
+ * 祈福加持頁面樣式
+ * 參考：平安符打卡系統 PDF 第7頁第2張
+ */
+
+.prayer-process-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #BDA138 0%, #D4B756 50%, #BDA138 100%);
+  position: relative;
+  overflow: hidden;
+  padding: 24px 20px 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 背景裝飾圖案 */
+.process-bg-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><g opacity="0.05"><path d="M20,50 Q30,30 40,50 T60,50" stroke="%23242428" fill="none" stroke-width="2"/><circle cx="80" cy="30" r="8" fill="%23242428"/></g></svg>');
+  background-size: 100px 100px;
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+/* 右上角資訊圖標 */
+.process-info-icon {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(36, 36, 40, 0.2);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  color: #242428;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.process-info-icon:hover {
+  transform: scale(1.1);
+  background: rgba(36, 36, 40, 0.3);
+}
+
+/* 主要內容 */
+.process-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+}
+
+/* 標題 */
+.process-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #242428;
+  text-align: center;
+  margin: 0 0 48px 0;
+  letter-spacing: 4px;
+  text-shadow: 0 2px 4px rgba(255, 255, 255, 0.3);
+  animation: pulseFade 2s ease-in-out infinite;
+}
+
+@keyframes pulseFade {
+  0%, 100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* 香爐動畫區域 */
+.burner-animation-section {
+  position: relative;
+  width: 280px;
+  height: 280px;
+  margin-bottom: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 彩色光環 */
+.rainbow-ring {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  animation: rotateRing 8s linear infinite;
+}
+
+@keyframes rotateRing {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.ring-svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 20px rgba(255, 107, 157, 0.6));
+}
+
+.ring-progress {
+  transition: stroke-dashoffset 0.3s ease;
+  transform-origin: center;
+  transform: rotate(-90deg);
+}
+
+/* 香爐容器 */
+.burner-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 香爐光暈動畫 */
+.burner-glow-animation {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(
+    circle,
+    rgba(212, 183, 86, 0.4) 0%,
+    rgba(189, 161, 56, 0.2) 50%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  animation: pulseGlowBurner 2s ease-in-out infinite;
+}
+
+@keyframes pulseGlowBurner {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+/* 香爐模型 */
+.burner-model {
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 8px 16px rgba(36, 36, 40, 0.4));
+  animation: floatBurnerProcess 3s ease-in-out infinite;
+}
+
+@keyframes floatBurnerProcess {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-15px) scale(1.05);
+  }
+}
+
+/* 香煙動畫 */
+.incense-smoke {
+  animation: smokeRise 3s ease-in-out infinite;
+}
+
+@keyframes smokeRise {
+  0%, 100% {
+    opacity: 0.6;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 0.3;
+    transform: translateY(-5px);
+  }
+}
+
+/* 龜蛇裝飾動畫 */
+.turtle-snake-decoration {
+  animation: decorationPulse 2s ease-in-out infinite;
+}
+
+@keyframes decorationPulse {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+/* 提示文字 */
+.process-messages {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.message-main {
+  font-size: 16px;
+  font-weight: 600;
+  color: #242428;
+  margin-bottom: 12px;
+  letter-spacing: 1px;
+}
+
+.message-sub {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(36, 36, 40, 0.8);
+  margin-bottom: 8px;
+}
+
+.message-note {
+  font-size: 12px;
+  color: rgba(36, 36, 40, 0.6);
+  font-weight: 500;
+}
+
+/* 進度百分比 */
+.progress-percentage {
+  font-size: 24px;
+  font-weight: 700;
+  color: #242428;
+  text-shadow: 0 2px 4px rgba(255, 255, 255, 0.3);
+  animation: numberPulse 1s ease-in-out infinite;
+}
+
+@keyframes numberPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* 響應式設計 */
+@media (max-width: 375px) {
+  .process-title {
+    font-size: 24px;
+    margin-bottom: 36px;
+  }
+
+  .burner-animation-section {
+    width: 240px;
+    height: 240px;
+    margin-bottom: 36px;
+  }
+
+  .burner-model svg {
+    width: 140px;
+    height: 140px;
+  }
+
+  .message-main {
+    font-size: 14px;
+  }
+
+  .message-sub {
+    font-size: 13px;
+  }
+
+  .progress-percentage {
+    font-size: 20px;
+  }
+}
+
+@media (min-width: 768px) {
+  .prayer-process-page {
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .process-title {
+    font-size: 32px;
+  }
+
+  .burner-animation-section {
+    width: 320px;
+    height: 320px;
+  }
+
+  .burner-model svg {
+    width: 180px;
+    height: 180px;
+  }
+
+  .message-main {
+    font-size: 18px;
+  }
+
+  .message-sub {
+    font-size: 15px;
+  }
+
+  .message-note {
+    font-size: 13px;
+  }
+
+  .progress-percentage {
+    font-size: 28px;
+  }
+}

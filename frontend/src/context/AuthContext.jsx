@@ -1,7 +1,8 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { authAPI } from '../api';
+import { getErrorMessage } from '../utils/http';
 
-const AuthContext = createContext();
+const AuthContext = createContext(null);
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
@@ -13,61 +14,87 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [role, setRole] = useState(null);
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // 初始化：從 localStorage 載入用戶資訊
   useEffect(() => {
     const savedToken = localStorage.getItem('token');
     const savedUser = localStorage.getItem('user');
 
     if (savedToken && savedUser) {
+      const parsedUser = JSON.parse(savedUser);
       setToken(savedToken);
-      setUser(JSON.parse(savedUser));
+      setUser(parsedUser);
+      setRole(parsedUser?.role || null);
     }
 
     setLoading(false);
   }, []);
 
-  // 註冊
+  const persistAuth = (userData, userToken) => {
+    setUser(userData);
+    setToken(userToken);
+    setRole(userData?.role || null);
+
+    localStorage.setItem('token', userToken);
+    localStorage.setItem('user', JSON.stringify(userData));
+  };
+
   const register = async (data) => {
     try {
       const response = await authAPI.register(data);
-      const { user: userData, token: userToken } = response.data;
+      const payload = response.data?.data || response.data || {};
+      const userData = payload.user;
+      const userToken = payload.token;
 
-      setUser(userData);
-      setToken(userToken);
+      if (userData && userToken) {
+        persistAuth(userData, userToken);
+      }
 
-      localStorage.setItem('token', userToken);
-      localStorage.setItem('user', JSON.stringify(userData));
-
-      return { success: true, data: response.data };
+      return { success: true, data: payload };
     } catch (error) {
-      return { success: false, error: error.message || '註冊失敗' };
+      return { success: false, error: getErrorMessage(error, '註冊失敗') };
     }
   };
 
-  // 登入
   const login = async (data) => {
     try {
       const response = await authAPI.login(data);
-      const { user: userData, token: userToken } = response.data;
+      const payload = response.data?.data || response.data || {};
+      const userData = payload.user;
+      const userToken = payload.token;
 
-      setUser(userData);
-      setToken(userToken);
+      if (userData && userToken) {
+        persistAuth(userData, userToken);
+      }
 
-      localStorage.setItem('token', userToken);
-      localStorage.setItem('user', JSON.stringify(userData));
-
-      return { success: true, data: response.data };
+      return { success: true, data: payload };
     } catch (error) {
-      return { success: false, error: error.message || '登入失敗' };
+      return { success: false, error: getErrorMessage(error, '登入失敗') };
     }
   };
 
-  // 登出
+  const fetchMe = async () => {
+    if (!token) return null;
+    try {
+      const response = await authAPI.me();
+      const payload = response.data?.data || response.data || {};
+
+      if (payload) {
+        setUser(payload);
+        setRole(payload?.role || null);
+        localStorage.setItem('user', JSON.stringify(payload));
+      }
+      return payload;
+    } catch {
+      return null;
+    }
+  };
+
   const logout = () => {
     setUser(null);
+    setRole(null);
     setToken(null);
     localStorage.removeItem('token');
     localStorage.removeItem('user');
@@ -75,12 +102,14 @@ export const AuthProvider = ({ children }) => {
 
   const value = {
     user,
+    role,
     token,
     loading,
     isAuthenticated: !!token,
     register,
     login,
     logout,
+    fetchMe,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

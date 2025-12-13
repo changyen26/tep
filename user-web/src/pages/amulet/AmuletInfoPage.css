@@ -1,0 +1,332 @@
+/**
+ * 平安符資訊頁面樣式
+ * 參考：平安符打卡系統 PDF 第7頁第3張
+ */
+
+.amulet-info-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #242428 0%, #1A1A1D 100%);
+  position: relative;
+  overflow: hidden;
+  padding-bottom: 80px;
+}
+
+/* 頂部背景裝飾 */
+.amulet-header-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 300px;
+  background: radial-gradient(
+    ellipse at top,
+    rgba(189, 161, 56, 0.1) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+/* 右上角資訊圖標 */
+.amulet-info-icon {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(189, 161, 56, 0.2);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  color: #BDA138;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.amulet-info-icon:hover {
+  transform: scale(1.1);
+  background: rgba(189, 161, 56, 0.3);
+}
+
+/* 平安符展示區域 */
+.amulet-display-section {
+  position: relative;
+  padding: 60px 20px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1;
+}
+
+.amulet-model-container {
+  position: relative;
+  width: 240px;
+  height: 240px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+/* 平安符模型/卡片 */
+.amulet-model {
+  position: relative;
+  width: 180px;
+  height: 240px;
+  perspective: 1000px;
+  animation: floatAmulet 3s ease-in-out infinite;
+}
+
+@keyframes floatAmulet {
+  0%, 100% {
+    transform: translateY(0) rotateY(-5deg);
+  }
+  50% {
+    transform: translateY(-15px) rotateY(5deg);
+  }
+}
+
+.amulet-card {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #D4B756 0%, #BDA138 100%);
+  border-radius: 12px;
+  box-shadow:
+    0 20px 60px rgba(189, 161, 56, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  transform-style: preserve-3d;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.amulet-card::before {
+  content: '';
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  border: 2px solid rgba(36, 36, 40, 0.1);
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+.amulet-text {
+  font-size: 20px;
+  font-weight: 700;
+  color: #242428;
+  text-align: center;
+  letter-spacing: 2px;
+  text-shadow: 0 2px 4px rgba(255, 255, 255, 0.3);
+}
+
+/* 平安符光暈效果 */
+.amulet-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(
+    circle,
+    rgba(189, 161, 56, 0.3) 0%,
+    rgba(189, 161, 56, 0.1) 50%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+}
+
+/* 等級顯示 */
+.amulet-level {
+  font-size: 48px;
+  font-weight: 700;
+  color: #BDA138;
+  text-shadow: 0 4px 12px rgba(189, 161, 56, 0.6);
+  letter-spacing: 2px;
+}
+
+/* 福報值資訊區域 */
+.amulet-info-section {
+  background: rgba(36, 36, 40, 0.6);
+  backdrop-filter: blur(20px);
+  border-radius: 24px 24px 0 0;
+  padding: 32px 24px 24px;
+  margin-top: 20px;
+  border: 1px solid rgba(189, 161, 56, 0.2);
+  border-bottom: none;
+}
+
+/* 進度條區域 */
+.progress-section {
+  margin-bottom: 24px;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.progress-label-left,
+.progress-label-right {
+  font-size: 14px;
+  font-weight: 600;
+  color: #BDA138;
+}
+
+/* 進度條樣式覆蓋 */
+.amulet-progress {
+  margin-bottom: 0;
+}
+
+.amulet-progress .ant-progress-bg {
+  border-radius: 6px !important;
+  box-shadow: 0 2px 8px rgba(189, 161, 56, 0.4);
+}
+
+.amulet-progress .ant-progress-outer {
+  border-radius: 6px !important;
+  overflow: hidden;
+}
+
+/* 已累積福報值卡片 */
+.points-card {
+  background: linear-gradient(135deg, rgba(189, 161, 56, 0.1) 0%, rgba(189, 161, 56, 0.05) 100%);
+  border: 1px solid rgba(189, 161, 56, 0.3);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.points-icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  background: rgba(189, 161, 56, 0.15);
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.points-content {
+  flex: 1;
+}
+
+.points-label {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 4px;
+}
+
+.points-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: #BDA138;
+  line-height: 1;
+}
+
+.points-unit {
+  font-size: 18px;
+  font-weight: 500;
+  margin-left: 4px;
+}
+
+/* 說明文字 */
+.amulet-description {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+  line-height: 1.6;
+  margin-bottom: 24px;
+  padding: 0 16px;
+}
+
+/* 查看歷史按鈕 */
+.history-button {
+  height: 50px !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  border-radius: 12px !important;
+  background: transparent !important;
+  border: 2px solid rgba(189, 161, 56, 0.4) !important;
+  color: #BDA138 !important;
+  transition: all 0.3s ease !important;
+}
+
+.history-button:hover {
+  background: rgba(189, 161, 56, 0.1) !important;
+  border-color: #BDA138 !important;
+  transform: translateY(-2px) !important;
+}
+
+.history-button:active {
+  transform: translateY(0) !important;
+}
+
+/* 響應式設計 */
+@media (max-width: 375px) {
+  .amulet-model-container {
+    width: 200px;
+    height: 200px;
+  }
+
+  .amulet-model {
+    width: 150px;
+    height: 200px;
+  }
+
+  .amulet-level {
+    font-size: 40px;
+  }
+
+  .points-value {
+    font-size: 28px;
+  }
+}
+
+@media (min-width: 768px) {
+  .amulet-display-section {
+    padding: 80px 20px 60px;
+  }
+
+  .amulet-model-container {
+    width: 280px;
+    height: 280px;
+  }
+
+  .amulet-model {
+    width: 200px;
+    height: 260px;
+  }
+
+  .amulet-info-section {
+    max-width: 480px;
+    margin: 20px auto 0;
+    border-radius: 24px;
+    border-bottom: 1px solid rgba(189, 161, 56, 0.2);
+  }
+}

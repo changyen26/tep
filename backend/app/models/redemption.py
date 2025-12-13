@@ -10,6 +10,7 @@ class Redemption(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False, index=True)
     product_id = db.Column(db.Integer, db.ForeignKey('products.id'), nullable=False, index=True)
+    temple_id = db.Column(db.Integer, db.ForeignKey('temples.id'), nullable=True, index=True)  # 所屬廟宇（透過商品關聯）
     quantity = db.Column(db.Integer, default=1, nullable=False)
     merit_points_used = db.Column(db.Integer, nullable=False)  # 使用的功德值
 
@@ -45,6 +46,7 @@ class Redemption(db.Model):
             'id': self.id,
             'user_id': self.user_id,
             'product': self.product.to_simple_dict() if self.product else None,
+            'temple_id': self.temple_id,
             'quantity': self.quantity,
             'merit_points_used': self.merit_points_used,
             'status': self.status,
@@ -70,6 +72,7 @@ class Redemption(db.Model):
         """簡化版字典（列表頁使用）"""
         return {
             'id': self.id,
+            'temple_id': self.temple_id,
             'product_name': self.product.name if self.product else None,
             'product_image': self.product.image_url if self.product else None,
             'quantity': self.quantity,

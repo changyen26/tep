@@ -1,0 +1,234 @@
+/**
+ * 設定頁面樣式
+ * 參考：平安符打卡系統 PDF 第8頁第4張
+ */
+
+.settings-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #BDA138 0%, #D4B756 50%, #BDA138 100%);
+  position: relative;
+  overflow: hidden;
+  padding: 24px 20px 100px;
+}
+
+/* 背景裝飾圖案 */
+.settings-bg-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* 蛇圖案裝飾 */
+.snake-decoration {
+  position: absolute;
+  top: 80px;
+  right: 20px;
+  animation: snakeFloat 6s ease-in-out infinite;
+}
+
+@keyframes snakeFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(5deg);
+  }
+}
+
+/* 齒輪圖案裝飾 */
+.gear-decoration {
+  position: absolute;
+  bottom: 150px;
+  left: 20px;
+  animation: gearRotate 20s linear infinite;
+}
+
+@keyframes gearRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 主要內容 */
+.settings-content {
+  position: relative;
+  z-index: 1;
+  padding-top: 40px;
+}
+
+/* 標題 */
+.settings-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #242428;
+  text-align: center;
+  margin: 0 0 48px 0;
+  letter-spacing: 4px;
+  text-shadow: 0 2px 4px rgba(255, 255, 255, 0.3);
+}
+
+/* 設定選項列表 */
+.settings-list {
+  max-width: 400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* 設定項目 */
+.setting-item {
+  background: rgba(36, 36, 40, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(36, 36, 40, 0.3);
+  animation: slideInUp 0.6s ease-out backwards;
+}
+
+.setting-item:nth-child(1) { animation-delay: 0.1s; }
+.setting-item:nth-child(2) { animation-delay: 0.2s; }
+.setting-item:nth-child(3) { animation-delay: 0.3s; }
+.setting-item:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.setting-item:hover {
+  transform: translateY(-4px);
+  background: rgba(36, 36, 40, 0.9);
+  box-shadow: 0 8px 24px rgba(36, 36, 40, 0.4);
+}
+
+.setting-item:active {
+  transform: translateY(-2px);
+}
+
+/* 設定圖標 */
+.setting-icon {
+  width: 56px;
+  height: 56px;
+  background: rgba(189, 161, 56, 0.2);
+  border-radius: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 28px;
+  color: #BDA138;
+  flex-shrink: 0;
+}
+
+/* 設定內容 */
+.setting-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.setting-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #BDA138;
+  margin-bottom: 4px;
+}
+
+.setting-description {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.4;
+}
+
+/* 箭頭圖標 */
+.setting-arrow {
+  font-size: 18px;
+  color: rgba(189, 161, 56, 0.6);
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.setting-item:hover .setting-arrow {
+  color: #BDA138;
+  transform: translateX(4px);
+}
+
+/* 響應式設計 */
+@media (max-width: 375px) {
+  .settings-page {
+    padding: 20px 16px 100px;
+  }
+
+  .settings-title {
+    font-size: 28px;
+    margin-bottom: 36px;
+  }
+
+  .settings-list {
+    gap: 12px;
+  }
+
+  .setting-item {
+    padding: 16px;
+  }
+
+  .setting-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 24px;
+  }
+
+  .setting-title {
+    font-size: 16px;
+  }
+
+  .setting-description {
+    font-size: 12px;
+  }
+}
+
+@media (min-width: 768px) {
+  .settings-page {
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .settings-title {
+    font-size: 36px;
+  }
+
+  .setting-item {
+    padding: 24px;
+  }
+
+  .setting-icon {
+    width: 64px;
+    height: 64px;
+    font-size: 32px;
+  }
+
+  .setting-title {
+    font-size: 20px;
+  }
+
+  .setting-description {
+    font-size: 14px;
+  }
+}

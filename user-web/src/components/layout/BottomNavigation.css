@@ -1,0 +1,91 @@
+/**
+ * 底部導航列樣式
+ */
+
+.bottom-navigation {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: #242428;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0 8px;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  border-top: 1px solid rgba(189, 161, 56, 0.2);
+}
+
+.nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.nav-item:active {
+  transform: scale(0.95);
+}
+
+.nav-icon {
+  font-size: 22px;
+  color: rgba(255, 255, 255, 0.6);
+  transition: all 0.3s ease;
+  margin-bottom: 4px;
+}
+
+.nav-label {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.nav-item.active .nav-icon {
+  color: #BDA138;
+  transform: scale(1.1);
+}
+
+.nav-item.active .nav-label {
+  color: #BDA138;
+  font-weight: 600;
+}
+
+.nav-item::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) scaleX(0);
+  width: 30px;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #BDA138, transparent);
+  border-radius: 2px 2px 0 0;
+  transition: transform 0.3s ease;
+}
+
+.nav-item.active::after {
+  transform: translateX(-50%) scaleX(1);
+}
+
+/* 響應式設計 - 平板和桌面版本 */
+@media (min-width: 768px) {
+  .bottom-navigation {
+    height: 72px;
+  }
+
+  .nav-icon {
+    font-size: 24px;
+  }
+
+  .nav-label {
+    font-size: 12px;
+  }
+}

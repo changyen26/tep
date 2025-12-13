@@ -1,0 +1,274 @@
+/**
+ * 祈福說明頁面樣式
+ * 參考：平安符打卡系統 PDF 第7頁第1張
+ */
+
+.prayer-instruction-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #BDA138 0%, #D4B756 50%, #BDA138 100%);
+  position: relative;
+  overflow: hidden;
+  padding: 24px 20px 100px;
+}
+
+/* 背景裝飾圖案 */
+.prayer-bg-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><g opacity="0.05"><path d="M20,50 Q30,30 40,50 T60,50" stroke="%23242428" fill="none" stroke-width="2"/><circle cx="80" cy="30" r="8" fill="%23242428"/></g></svg>');
+  background-size: 100px 100px;
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+/* 右上角資訊圖標 */
+.prayer-info-icon {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(36, 36, 40, 0.2);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  color: #242428;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.prayer-info-icon:hover {
+  transform: scale(1.1);
+  background: rgba(36, 36, 40, 0.3);
+}
+
+/* 主要內容 */
+.prayer-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 40px;
+}
+
+/* 標題 */
+.prayer-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #242428;
+  text-align: center;
+  margin: 0 0 32px 0;
+  letter-spacing: 2px;
+  text-shadow: 0 2px 4px rgba(255, 255, 255, 0.3);
+}
+
+/* 步驟列表 */
+.instruction-list {
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 48px;
+}
+
+.instruction-item {
+  background: rgba(36, 36, 40, 0.15);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #242428;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(36, 36, 40, 0.1);
+  transition: all 0.3s ease;
+  animation: slideInLeft 0.6s ease-out backwards;
+}
+
+.instruction-item:nth-child(1) { animation-delay: 0.1s; }
+.instruction-item:nth-child(2) { animation-delay: 0.2s; }
+.instruction-item:nth-child(3) { animation-delay: 0.3s; }
+.instruction-item:nth-child(4) { animation-delay: 0.4s; }
+.instruction-item:nth-child(5) { animation-delay: 0.5s; }
+.instruction-item:nth-child(6) { animation-delay: 0.6s; }
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.instruction-item:hover {
+  transform: translateX(4px);
+  background: rgba(36, 36, 40, 0.2);
+}
+
+/* 香爐按鈕區域 */
+.incense-burner-section {
+  position: relative;
+  margin-bottom: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.burner-glow {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(
+    circle,
+    rgba(36, 36, 40, 0.3) 0%,
+    rgba(36, 36, 40, 0.15) 40%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  animation: pulseGlow 2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+.burner-button {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(
+    circle at 50% 40%,
+    rgba(36, 36, 40, 0.4) 0%,
+    rgba(36, 36, 40, 0.6) 100%
+  );
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow:
+    0 10px 30px rgba(36, 36, 40, 0.4),
+    inset 0 -2px 10px rgba(255, 255, 255, 0.2);
+  animation: floatBurner 3s ease-in-out infinite;
+}
+
+@keyframes floatBurner {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.burner-button:hover {
+  transform: scale(1.05) translateY(-5px);
+  box-shadow:
+    0 15px 40px rgba(36, 36, 40, 0.5),
+    inset 0 -2px 10px rgba(255, 255, 255, 0.3);
+}
+
+.burner-button:active {
+  transform: scale(0.98);
+}
+
+.burner-icon {
+  margin-bottom: 8px;
+  filter: drop-shadow(0 4px 8px rgba(189, 161, 56, 0.4));
+}
+
+.burner-text {
+  font-size: 20px;
+  font-weight: 700;
+  color: #BDA138;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  letter-spacing: 2px;
+}
+
+/* 注意事項 */
+.prayer-note {
+  max-width: 400px;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.8;
+  color: rgba(36, 36, 40, 0.8);
+  padding: 0 20px;
+  font-weight: 500;
+}
+
+/* 響應式設計 */
+@media (max-width: 375px) {
+  .prayer-title {
+    font-size: 20px;
+  }
+
+  .instruction-item {
+    font-size: 13px;
+    padding: 14px 16px;
+  }
+
+  .burner-button {
+    width: 180px;
+    height: 180px;
+  }
+
+  .burner-icon svg {
+    width: 100px;
+    height: 100px;
+  }
+
+  .burner-text {
+    font-size: 18px;
+  }
+}
+
+@media (min-width: 768px) {
+  .prayer-instruction-page {
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .prayer-title {
+    font-size: 28px;
+  }
+
+  .instruction-item {
+    font-size: 15px;
+    padding: 18px 24px;
+  }
+
+  .burner-button {
+    width: 220px;
+    height: 220px;
+  }
+
+  .burner-icon svg {
+    width: 140px;
+    height: 140px;
+  }
+
+  .burner-text {
+    font-size: 22px;
+  }
+}
