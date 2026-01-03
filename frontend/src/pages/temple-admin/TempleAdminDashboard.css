@@ -258,6 +258,36 @@
   font-size: 14px;
 }
 
+/* Admin 提示區塊 */
+.admin-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 24px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  margin-top: 24px;
+}
+
+.notice-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.notice-content h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e40af;
+  margin: 0 0 8px 0;
+}
+
+.notice-content p {
+  font-size: 14px;
+  color: #3b82f6;
+  margin: 0;
+}
+
 /* 響應式設計 */
 @media (max-width: 768px) {
   .stats-grid {

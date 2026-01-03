@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { templeOrderAPI } from '../../api/templeOrder';
-import { templeExportAPI } from '../../api/templeExport';
+import templeAdminApi from '../../services/templeAdminApi';
 import './OrderManagement.css';
 
 const OrderManagement = () => {
@@ -64,7 +63,7 @@ const OrderManagement = () => {
       if (startDate) params.start_date = startDate;
       if (endDate) params.end_date = endDate;
 
-      const response = await templeOrderAPI.list(templeId, params);
+      const response = await templeAdminApi.orders.list(templeId, params);
 
       if (response.success) {
         setOrders(response.data.orders || []);
@@ -94,7 +93,7 @@ const OrderManagement = () => {
     setOrderDetail(null);
 
     try {
-      const response = await templeOrderAPI.detail(order.id);
+      const response = await templeAdminApi.orders.get(templeId, order.id);
       if (response.success) {
         setOrderDetail(response.data);
         setNewStatus(response.data.status || '');
@@ -136,7 +135,7 @@ const OrderManagement = () => {
       if (statusNote) data.note = statusNote;
       if (trackingNumber) data.tracking_number = trackingNumber;
 
-      const response = await templeOrderAPI.updateStatus(templeId, currentOrder.id, data);
+      const response = await templeAdminApi.orders.updateStatus(templeId, currentOrder.id, data.status, data.note);
 
       if (response.success) {
         alert('訂單狀態更新成功');
@@ -166,11 +165,12 @@ const OrderManagement = () => {
     setCurrentPage(1);
   };
 
-  // 匯出 CSV
+  // 匯出 CSV（TODO: 待後端實作）
   const handleExport = async () => {
     try {
       setExporting(true);
-      await templeExportAPI.exportOrders(templeId, startDate, endDate, selectedStatus);
+      // await templeAdminApi.orders.export(templeId, { start_date: startDate, end_date: endDate, status: selectedStatus });
+      alert('匯出功能尚未開放，敬請期待');
     } catch (err) {
       console.error('匯出失敗:', err);
       alert('匯出失敗，請稍後再試');

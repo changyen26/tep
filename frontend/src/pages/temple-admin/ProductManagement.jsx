@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { templeProductAPI } from '../../api/templeProduct';
+import templeAdminApi from '../../services/templeAdminApi';
 import { uploadAPI } from '../../api/upload';
 import './ProductManagement.css';
 
@@ -71,7 +71,7 @@ const ProductManagement = () => {
       if (keyword) params.keyword = keyword;
       if (selectedCategory) params.category = selectedCategory;
 
-      const response = await templeProductAPI.list(templeId, params);
+      const response = await templeAdminApi.products.list(templeId, params);
 
       if (response.success) {
         setProducts(response.data.products || []);
@@ -253,9 +253,9 @@ const ProductManagement = () => {
 
       let response;
       if (modalMode === 'create') {
-        response = await templeProductAPI.create(templeId, data);
+        response = await templeAdminApi.products.create(templeId, data);
       } else {
-        response = await templeProductAPI.update(templeId, currentProduct.id, data);
+        response = await templeAdminApi.products.update(templeId, currentProduct.id, data);
       }
 
       if (response.success) {
@@ -282,7 +282,7 @@ const ProductManagement = () => {
     if (!productToDelete) return;
 
     try {
-      const response = await templeProductAPI.delete(templeId, productToDelete.id);
+      const response = await templeAdminApi.products.delete(templeId, productToDelete.id);
       if (response.success) {
         setShowDeleteConfirm(false);
         setProductToDelete(null);

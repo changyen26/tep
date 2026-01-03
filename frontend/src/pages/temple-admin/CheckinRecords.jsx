@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { templeStatsAPI } from '../../api/templeStats';
-import { templeExportAPI } from '../../api/templeExport';
-import { client } from '../../api/client';
+import templeAdminApi from '../../services/templeAdminApi';
 import './CheckinRecords.css';
 
 const CheckinRecords = () => {
@@ -31,10 +29,12 @@ const CheckinRecords = () => {
   // 載入打卡統計（時段圖表用）
   const fetchCheckinStats = async () => {
     try {
-      const response = await templeStatsAPI.checkins(templeId, period);
-      if (response.success) {
-        setCheckinStats(response.data);
-      }
+      // TODO: 後端尚未實作統計 API，暫時使用空資料
+      setCheckinStats({ daily_stats: [], hourly_stats: [] });
+      // const response = await templeAdminApi.checkins.getStats(templeId, period);
+      // if (response.success) {
+      //   setCheckinStats(response.data);
+      // }
     } catch (err) {
       console.error('載入打卡統計失敗:', err);
     }
@@ -47,18 +47,18 @@ const CheckinRecords = () => {
       setError(null);
 
       const params = {
-        temple_id: templeId,
         page: currentPage,
         per_page: pageSize,
+        period: 'all',
       };
 
       if (startDate) params.start_date = startDate;
       if (endDate) params.end_date = endDate;
 
-      const response = await client.get('/checkin/history', { params });
+      const response = await templeAdminApi.checkins.list(templeId, params);
 
-      if (response.data.success) {
-        const data = response.data.data;
+      if (response.success) {
+        const data = response.data;
         setCheckinRecords(data.checkins || []);
 
         // 計算統計摘要
@@ -105,11 +105,12 @@ const CheckinRecords = () => {
     setCurrentPage(1);
   };
 
-  // 匯出 CSV
+  // 匯出 CSV（TODO: 待後端實作）
   const handleExport = async () => {
     try {
       setExporting(true);
-      await templeExportAPI.exportCheckins(templeId, startDate, endDate);
+      // await templeAdminApi.checkins.export(templeId, { start_date: startDate, end_date: endDate });
+      alert('匯出功能尚未開放，敬請期待');
     } catch (err) {
       console.error('匯出失敗:', err);
       alert('匯出失敗，請稍後再試');

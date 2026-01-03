@@ -1,3 +1,14 @@
+/**
+ * @deprecated 此檔案已棄用，請改用 services/templeAdminApi.js
+ *
+ * 移轉指引：
+ * - templeExportAPI.exportCheckins(templeId, ...) → templeAdminApi.checkins.export(templeId, params)
+ * - templeExportAPI.exportOrders(templeId, ...) → templeAdminApi.orders.export(templeId, params)
+ * - templeExportAPI.exportRevenue(templeId, ...) → 待後端實作 revenue export API
+ *
+ * 此檔案暫時保留以維持向後相容性，未來版本將移除
+ */
+
 import { client } from './client';
 
 /**

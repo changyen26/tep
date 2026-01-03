@@ -1,3 +1,18 @@
+/**
+ * @deprecated 此檔案已棄用，請改用 services/templeAdminApi.js
+ *
+ * 移轉指引：
+ * - templeStatsAPI.dashboard(templeId) → templeAdminApi.temples.getStats(templeId)
+ * - templeStatsAPI.recentOrders(templeId) → templeAdminApi.orders.list(templeId, { limit, sort: 'recent' })
+ * - templeStatsAPI.topProducts(templeId) → 待後端實作統計 API
+ * - templeStatsAPI.lowStockAlerts(templeId) → 待後端實作統計 API
+ * - templeStatsAPI.visitors(templeId) → 待後端實作統計 API
+ * - templeStatsAPI.checkins(templeId) → templeAdminApi.checkins.list(templeId, params)
+ * - templeStatsAPI.topUsers(templeId) → 待後端實作統計 API
+ *
+ * 此檔案暫時保留以維持向後相容性，未來版本將移除
+ */
+
 import { client } from './client';
 
 /**

@@ -1,0 +1,503 @@
+/* 活動管理共用樣式 */
+
+.events-container {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ===== 頁面標題與操作 ===== */
+.events-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.events-header h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+/* ===== 按鈕樣式 ===== */
+.btn-primary {
+  padding: 10px 20px;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+  background-color: #2563eb;
+}
+
+.btn-secondary {
+  padding: 10px 20px;
+  background-color: #6b7280;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-secondary:hover {
+  background-color: #4b5563;
+}
+
+.btn-danger {
+  padding: 10px 20px;
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-danger:hover {
+  background-color: #dc2626;
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-view {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.btn-view:hover {
+  background-color: #2563eb;
+}
+
+.btn-edit {
+  background-color: #10b981;
+  color: white;
+}
+
+.btn-edit:hover {
+  background-color: #059669;
+}
+
+/* ===== 篩選與搜尋 ===== */
+.events-filters {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.status-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 8px 16px;
+  background-color: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filter-btn:hover {
+  background-color: #e5e7eb;
+}
+
+.filter-btn.active {
+  background-color: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+.search-input {
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  min-width: 200px;
+  max-width: 300px;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+/* ===== 狀態 Badge ===== */
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-draft {
+  background-color: #f3f4f6;
+  color: #6b7280;
+}
+
+.status-published {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.status-closed {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.status-canceled {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.status-registered {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.status-waitlist {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+/* ===== 表格 ===== */
+.events-table-wrapper {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+  background: white;
+  margin-bottom: 20px;
+}
+
+.events-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.events-table thead {
+  background-color: #f9fafb;
+}
+
+.events-table th {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+  font-weight: 600;
+  font-size: 13px;
+  color: #374151;
+}
+
+.events-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 14px;
+  color: #1f2937;
+}
+
+.events-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.events-table tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+.event-title {
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+/* ===== 分頁 ===== */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.btn-pagination {
+  padding: 8px 16px;
+  border: 1px solid #d1d5db;
+  background-color: white;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-pagination:hover:not(:disabled) {
+  background-color: #f3f4f6;
+}
+
+.btn-pagination:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-info {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+/* ===== 狀態顯示 ===== */
+.loading-state,
+.error-state,
+.empty-state {
+  padding: 40px 20px;
+  text-align: center;
+  font-size: 16px;
+  color: #6b7280;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.error-state {
+  color: #dc2626;
+}
+
+/* ===== 表單樣式 ===== */
+.event-form {
+  background: white;
+  padding: 24px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.form-label.required::after {
+  content: ' *';
+  color: #ef4444;
+}
+
+.form-input,
+.form-textarea,
+.form-select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+.form-textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.form-error {
+  margin-top: 4px;
+  font-size: 13px;
+  color: #ef4444;
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* ===== 活動詳情 ===== */
+.event-detail-container {
+  padding: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.event-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.event-detail-title {
+  flex: 1;
+}
+
+.event-detail-title h2 {
+  margin: 0 0 8px 0;
+  font-size: 28px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.event-detail-meta {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.event-detail-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.event-detail-content {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.event-cover-image {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  background-color: #f3f4f6;
+}
+
+.event-detail-info {
+  padding: 24px;
+}
+
+.info-row {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.info-value {
+  color: #1f2937;
+}
+
+.info-value.description {
+  white-space: pre-wrap;
+  line-height: 1.6;
+}
+
+/* ===== 報名名單頁 ===== */
+.registrations-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.registrations-header h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.registrations-filters {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+/* ===== 確認 Modal ===== */
+.confirm-modal-content {
+  padding: 20px 0;
+}
+
+.confirm-modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+/* ===== 響應式設計 ===== */
+@media (max-width: 768px) {
+  .events-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-input {
+    max-width: 100%;
+  }
+
+  .events-table-wrapper {
+    overflow-x: auto;
+  }
+
+  .events-table {
+    min-width: 800px;
+  }
+
+  .event-detail-header {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .event-detail-actions {
+    width: 100%;
+  }
+
+  .info-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}

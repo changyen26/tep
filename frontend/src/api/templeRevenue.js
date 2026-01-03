@@ -1,3 +1,13 @@
+/**
+ * @deprecated 此檔案已棄用，請改用 services/templeAdminApi.js
+ *
+ * 移轉指引：
+ * - templeRevenueAPI.getRevenue(templeId, params) → templeAdminApi.revenue.getReport(templeId, params)
+ * - templeRevenueAPI.getSummary(templeId) → templeAdminApi.revenue.getSummary(templeId)
+ *
+ * 此檔案暫時保留以維持向後相容性，未來版本將移除
+ */
+
 import { client } from './client';
 
 /**

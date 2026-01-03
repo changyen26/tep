@@ -8,7 +8,7 @@ import request from './request';
  * @param {Object} params - 查詢參數
  */
 export const getCheckinList = (params) => {
-  return request.get('/checkin', { params });
+  return request.get('/admin/checkins/', { params });
 };
 
 /**
@@ -16,5 +16,5 @@ export const getCheckinList = (params) => {
  * @param {number} checkinId - 打卡 ID
  */
 export const getCheckinDetail = (checkinId) => {
-  return request.get(`/checkin/${checkinId}`);
+  return request.get(`/admin/checkins/${checkinId}/`);
 };

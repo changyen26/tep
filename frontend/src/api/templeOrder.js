@@ -1,3 +1,14 @@
+/**
+ * @deprecated 此檔案已棄用，請改用 services/templeAdminApi.js
+ *
+ * 移轉指引：
+ * - templeOrderAPI.list(templeId, params) → templeAdminApi.orders.list(templeId, params)
+ * - templeOrderAPI.detail(redemptionId) → templeAdminApi.orders.get(templeId, redemptionId)
+ * - templeOrderAPI.updateStatus(templeId, redemptionId, status, notes) → templeAdminApi.orders.updateStatus(templeId, redemptionId, status, notes)
+ *
+ * 此檔案暫時保留以維持向後相容性，未來版本將移除
+ */
+
 import { client } from './client';
 
 /**

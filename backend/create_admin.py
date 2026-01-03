@@ -1,42 +1,40 @@
-"""
-創建測試系統管理員帳號
-"""
-from app import create_app, db
-from app.models.system_admin import SystemAdmin
+import pymysql
+from werkzeug.security import generate_password_hash
 
-app = create_app()
+DB_CONFIG = {
+    'host': 'localhost',
+    'user': 'root',
+    'password': '',
+    'database': 'amulet_system',
+    'charset': 'utf8mb4'
+}
 
-with app.app_context():
-    # 檢查是否已存在
-    existing = SystemAdmin.query.filter_by(username='admin').first()
-    if existing:
-        print(f'Admin already exists: {existing.username}')
-    else:
-        # 創建超級管理員
-        admin = SystemAdmin(
-            username='admin',
-            name='Super Administrator',
-            email='admin@temple.com',
-            phone='0912345678',
-            role='super_admin',
-            permissions={
-                'manage_users': True,
-                'review_temples': True,
-                'review_products': True,
-                'manage_orders': True,
-                'view_analytics': True,
-                'manage_settings': True,
-                'handle_reports': True,
-                'manage_admins': True,
-                'view_logs': True
-            }
-        )
-        admin.set_password('admin123')
+conn = pymysql.connect(**DB_CONFIG)
+cursor = conn.cursor()
 
-        db.session.add(admin)
-        db.session.commit()
+cursor.execute("DELETE FROM users WHERE email = 'admin@test.com'")
+password_hash = generate_password_hash('admin123')
 
-        print(f'Admin created successfully!')
-        print(f'Username: {admin.username}')
-        print(f'ID: {admin.id}')
-        print(f'Role: {admin.role}')
+cursor.execute("""
+    INSERT INTO users (name, email, password_hash, role, is_active, blessing_points, created_at)
+    VALUES (%s, %s, %s, %s, %s, %s, NOW())
+""", ('Admin', 'admin@test.com', password_hash, 'admin', 1, 0))
+
+user_id = cursor.lastrowid
+print(f"Created admin user (ID: {user_id}, role: admin)")
+
+cursor.execute("SHOW TABLES LIKE 'temple_admins'")
+if cursor.fetchone():
+    cursor.execute("""
+        INSERT INTO temple_admins (user_id, temple_id, role, is_active, created_at)
+        VALUES (%s, %s, %s, %s, NOW())
+    """, (user_id, 1, 'admin', 1))
+    print("Added to temple_admins for temple_id=1")
+
+conn.commit()
+cursor.close()
+conn.close()
+
+print("\nEmail: admin@test.com")
+print("Password: admin123")
+print("Role: admin (can create temples)")

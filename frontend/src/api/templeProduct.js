@@ -1,3 +1,16 @@
+/**
+ * @deprecated 此檔案已棄用，請改用 services/templeAdminApi.js
+ *
+ * 移轉指引：
+ * - templeProductAPI.list(templeId, params) → templeAdminApi.products.list(templeId, params)
+ * - templeProductAPI.create(templeId, data) → templeAdminApi.products.create(templeId, data)
+ * - templeProductAPI.update(templeId, productId, data) → templeAdminApi.products.update(templeId, productId, data)
+ * - templeProductAPI.delete(templeId, productId) → templeAdminApi.products.delete(templeId, productId)
+ * - templeProductAPI.detail(productId) → templeAdminApi.products.get(templeId, productId)
+ *
+ * 此檔案暫時保留以維持向後相容性，未來版本將移除
+ */
+
 import { client } from './client';
 
 /**

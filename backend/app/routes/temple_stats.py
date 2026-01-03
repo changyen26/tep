@@ -1,7 +1,7 @@
 """
 廟方數據儀表板 API
 """
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
 from app import db
 from app.models.temple import Temple
 from app.models.temple_admin import TempleAdmin
@@ -194,10 +194,18 @@ def get_temple_visitors_stats(current_user, temple_id):
         return error_response(f'獲取失敗: {str(e)}', 500)
 
 @bp.route('/<int:temple_id>/checkins', methods=['GET'])
-@token_required
-def get_temple_checkins_stats(current_user, temple_id):
+def get_temple_checkins_stats(temple_id):
     """
-    打卡統計（需管理員權限）
+    [DEPRECATED] 打卡統計（需管理員權限）
+    此 API 已廢棄，請改用: GET /api/temple-admin/temples/:templeId/checkins
+    """
+    return jsonify({
+        'status': 'error',
+        'message': 'Deprecated endpoint. Please use /api/temple-admin/temples/:templeId/checkins',
+        'data': None
+    }), 410
+
+    """
     GET /api/temple-stats/<temple_id>/checkins
     Header: Authorization: Bearer <token>
     Query Parameters:

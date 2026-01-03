@@ -47,7 +47,7 @@ const Temples = () => {
     queryKey: ['temples', queryParams],
     queryFn: async () => {
       const res = await templeAPI.list(queryParams);
-      return res.data;
+      return res.data.data;
     },
     keepPreviousData: true,
     enabled: !isTempleAdmin || !!userTempleId,

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { templeRevenueAPI } from '../../api/templeRevenue';
+import templeAdminApi from '../../services/templeAdminApi';
 import './RevenueReport.css';
 
 const RevenueReport = () => {
@@ -31,7 +31,7 @@ const RevenueReport = () => {
     setError(null);
 
     try {
-      const response = await templeRevenueAPI.getRevenue(templeId, {
+      const response = await templeAdminApi.revenue.getReport(templeId, {
         start_date: dateRange.start,
         end_date: dateRange.end,
         group_by: groupBy,

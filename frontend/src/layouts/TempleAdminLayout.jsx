@@ -2,7 +2,7 @@ import { NavLink, Outlet, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import './TempleAdminLayout.css';
 import { useAuth } from '../context/AuthContext';
-import { getTempleById } from '../api/temple';
+import templeAdminApi from '../services/templeAdminApi';
 
 const TempleAdminLayout = () => {
   const { templeId } = useParams();
@@ -13,23 +13,54 @@ const TempleAdminLayout = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // 載入廟宇資料
+  // 載入廟宇資料（帶快取）
   useEffect(() => {
     const fetchTemple = async () => {
       try {
         setLoading(true);
         setError(null);
-        const response = await getTempleById(templeId);
 
-        // 根據後端 API 回應結構取得廟宇資料
-        if (response.success && response.data) {
-          setTemple(response.data);
+        // 嘗試從快取讀取
+        const cacheKey = `temple_${templeId}`;
+        const cached = localStorage.getItem(cacheKey);
+        if (cached) {
+          try {
+            const cachedData = JSON.parse(cached);
+            const cacheTime = cachedData.timestamp || 0;
+            const now = Date.now();
+            // 快取有效期 5 分鐘
+            if (now - cacheTime < 5 * 60 * 1000) {
+              setTemple(cachedData.data);
+              setLoading(false);
+              return;
+            }
+          } catch (e) {
+            // 快取解析失敗，繼續從 API 取得
+            console.warn('快取解析失敗:', e);
+          }
+        }
+
+        // 從 API 取得資料
+        const response = await templeAdminApi.temples.getTemple(templeId);
+
+        if (response.data) {
+          const templeData = response.data.data || response.data;
+          setTemple(templeData);
+
+          // 儲存到快取
+          localStorage.setItem(
+            cacheKey,
+            JSON.stringify({
+              data: templeData,
+              timestamp: Date.now(),
+            })
+          );
         } else {
           setError('無法取得廟宇資訊');
         }
       } catch (err) {
         console.error('取得廟宇資料失敗:', err);
-        setError('無法取得廟宇資訊');
+        setError(err.message || '無法取得廟宇資訊');
       } finally {
         setLoading(false);
       }
@@ -40,16 +71,17 @@ const TempleAdminLayout = () => {
     }
   }, [templeId]);
 
-  // 側邊選單項目（純文字，無 icon）
+  // 側邊選單項目 - 廟方管理專用（與 templeAdminRoutes 對齊）
   const navItems = [
     { path: 'dashboard', label: '儀表板' },
-    { path: 'temple/edit', label: '廟宇資訊' },
-    { path: 'checkins', label: '打卡紀錄' },
+    { path: 'events', label: '活動報名管理' },
+    { path: 'lamps', label: '點燈管理' },
     { path: 'products', label: '商品管理' },
     { path: 'orders', label: '訂單管理' },
+    { path: 'checkins', label: '打卡紀錄' },
     { path: 'revenue', label: '收入報表' },
-    { path: 'rewards', label: '獎勵規則' },
-    { path: 'settings', label: '系統設定' },
+    { path: 'devotees', label: '信眾管理' },
+    { path: 'temple/edit', label: '廟宇設定' },
   ];
 
   // 決定 Header 顯示的標題
@@ -72,6 +104,7 @@ const TempleAdminLayout = () => {
               className={({ isActive }) =>
                 isActive ? 'nav-link active' : 'nav-link'
               }
+              onClick={() => console.log('Navigating to:', item.path)}
             >
               {item.label}
             </NavLink>
@@ -81,7 +114,15 @@ const TempleAdminLayout = () => {
 
       <div className="temple-admin-main">
         <header className="temple-admin-header">
-          <div className="header-title">{getHeaderTitle()}</div>
+          <div className="header-info">
+            <div className="header-title">{getHeaderTitle()}</div>
+            <div className="header-meta">
+              <span className="temple-id">廟宇 ID: {templeId}</span>
+              <span className="user-role">
+                角色: {user?.role === 'admin' ? '系統管理員' : '廟方管理員'}
+              </span>
+            </div>
+          </div>
           <div className="header-actions">
             <span className="user-name">{user?.name || '管理員'}</span>
             <button type="button" className="btn-ghost" onClick={logout}>

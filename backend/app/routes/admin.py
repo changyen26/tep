@@ -263,6 +263,26 @@ def adjust_user_points(current_admin, user_id):
         'new_points': new_points
     }, '功德點數調整成功')
 
+@bp.route('/users/<int:user_id>/toggle', methods=['PUT'])
+@admin_permission_required('manage_users')
+def toggle_user_status(current_admin, user_id):
+    """
+    啟用/停用使用者
+    """
+    user = User.query.get(user_id)
+    if not user:
+        return error_response('用戶不存在', 404)
+
+    # 切換使用者啟用狀態
+    user.is_active = not user.is_active
+    db.session.commit()
+
+    status_text = '啟用' if user.is_active else '停用'
+    return success_response(
+        user.to_dict(),
+        f'使用者已{status_text}'
+    )
+
 @bp.route('/users/bulk-action', methods=['POST'])
 @admin_permission_required('manage_users')
 def bulk_user_action(current_admin):
@@ -598,6 +618,284 @@ def update_redemption_status(current_admin, redemption_id):
     return success_response({
         'redemption': redemption.to_dict()
     }, '兌換訂單狀態更新成功')
+
+# ===== 5.5. 打卡記錄管理 =====
+
+@bp.route('/checkins', methods=['GET'])
+@admin_permission_required('manage_users')
+def get_checkin_list(current_admin):
+    """
+    獲取打卡記錄列表（系統管理員專用）
+    """
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 20, type=int)
+    start_date = request.args.get('start_date')
+    end_date = request.args.get('end_date')
+
+    # 基礎查詢
+    query = Checkin.query
+
+    # 日期篩選
+    if start_date:
+        try:
+            start = datetime.strptime(start_date, '%Y-%m-%d')
+            query = query.filter(Checkin.timestamp >= start)
+        except ValueError:
+            pass
+
+    if end_date:
+        try:
+            end = datetime.strptime(end_date, '%Y-%m-%d') + timedelta(days=1)
+            query = query.filter(Checkin.timestamp < end)
+        except ValueError:
+            pass
+
+    # 排序：最新的在前
+    query = query.order_by(Checkin.timestamp.desc())
+
+    # 分頁
+    pagination = query.paginate(page=page, per_page=per_page, error_out=False)
+
+    return success_response({
+        'checkins': [checkin.to_dict() for checkin in pagination.items],
+        'total': pagination.total,
+        'page': page,
+        'per_page': per_page,
+        'pages': pagination.pages
+    })
+
+@bp.route('/checkins/<int:checkin_id>', methods=['GET'])
+@admin_permission_required('manage_users')
+def get_checkin_detail(current_admin, checkin_id):
+    """
+    獲取打卡記錄詳情
+    """
+    checkin = Checkin.query.get(checkin_id)
+    if not checkin:
+        return error_response('打卡記錄不存在', 404)
+
+    return success_response({
+        'checkin': checkin.to_dict()
+    })
+
+# ===== 5.6. 平安符管理 =====
+
+@bp.route('/amulets', methods=['GET'])
+@admin_permission_required('manage_users')
+def get_amulet_list(current_admin):
+    """
+    獲取平安符列表（系統管理員專用）
+    """
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 20, type=int)
+    search = request.args.get('search', '').strip()
+
+    # 基礎查詢
+    from app.models.amulet import Amulet
+    query = Amulet.query
+
+    # 搜索：根據用戶名或 ID
+    if search:
+        query = query.join(User).filter(
+            or_(
+                User.name.like(f'%{search}%'),
+                User.email.like(f'%{search}%')
+            )
+        )
+
+    # 排序：最新的在前
+    query = query.order_by(Amulet.created_at.desc())
+
+    # 分頁
+    pagination = query.paginate(page=page, per_page=per_page, error_out=False)
+
+    return success_response({
+        'amulets': [amulet.to_dict() for amulet in pagination.items],
+        'total': pagination.total,
+        'page': page,
+        'per_page': per_page,
+        'pages': pagination.pages
+    })
+
+@bp.route('/amulets/<int:amulet_id>', methods=['GET'])
+@admin_permission_required('manage_users')
+def get_amulet_detail(current_admin, amulet_id):
+    """
+    獲取平安符詳情
+    """
+    from app.models.amulet import Amulet
+    amulet = Amulet.query.get(amulet_id)
+    if not amulet:
+        return error_response('平安符不存在', 404)
+
+    return success_response({
+        'amulet': amulet.to_dict()
+    })
+
+@bp.route('/amulets/<int:amulet_id>', methods=['DELETE'])
+@admin_permission_required('manage_users')
+def delete_amulet(current_admin, amulet_id):
+    """
+    刪除平安符
+    """
+    from app.models.amulet import Amulet
+    amulet = Amulet.query.get(amulet_id)
+    if not amulet:
+        return error_response('平安符不存在', 404)
+
+    # 記錄日誌
+    SystemLog.log_action(
+        admin_id=current_admin.id,
+        action_type='amulet_delete',
+        action_category='user_mgmt',
+        target_type='amulet',
+        target_id=amulet_id,
+        description=f'管理員 {current_admin.name} 刪除了用戶 {amulet.owner.name} 的平安符 #{amulet_id}',
+        ip_address=request.remote_addr
+    )
+
+    db.session.delete(amulet)
+    db.session.commit()
+
+    return success_response(None, '平安符刪除成功')
+
+@bp.route('/amulets/<int:amulet_id>/energy', methods=['PUT'])
+@admin_permission_required('manage_users')
+def adjust_amulet_energy(current_admin, amulet_id):
+    """
+    調整平安符能量
+    """
+    from app.models.amulet import Amulet
+    amulet = Amulet.query.get(amulet_id)
+    if not amulet:
+        return error_response('平安符不存在', 404)
+
+    data = request.get_json()
+    adjustment = data.get('adjustment', 0)  # 正數增加，負數減少
+
+    if not isinstance(adjustment, int):
+        return error_response('調整值必須是整數', 400)
+
+    old_energy = amulet.energy
+    if adjustment > 0:
+        amulet.add_energy(adjustment)
+    else:
+        amulet.reduce_energy(abs(adjustment))
+
+    new_energy = amulet.energy
+
+    # 記錄日誌
+    SystemLog.log_action(
+        admin_id=current_admin.id,
+        action_type='amulet_energy_adjust',
+        action_category='user_mgmt',
+        target_type='amulet',
+        target_id=amulet_id,
+        description=f'管理員 {current_admin.name} 調整了平安符 #{amulet_id} 的能量：{old_energy} -> {new_energy} (調整 {adjustment})',
+        ip_address=request.remote_addr
+    )
+
+    db.session.commit()
+
+    return success_response({
+        'amulet': amulet.to_dict(),
+        'old_energy': old_energy,
+        'new_energy': new_energy,
+        'adjustment': adjustment
+    }, '能量調整成功')
+
+@bp.route('/amulets/<int:amulet_id>/status', methods=['PUT'])
+@admin_permission_required('manage_users')
+def update_amulet_status(current_admin, amulet_id):
+    """
+    更新平安符狀態
+    """
+    from app.models.amulet import Amulet
+    amulet = Amulet.query.get(amulet_id)
+    if not amulet:
+        return error_response('平安符不存在', 404)
+
+    data = request.get_json()
+    new_status = data.get('status')
+
+    # 驗證狀態
+    valid_statuses = ['active', 'inactive', 'expired']
+    if new_status not in valid_statuses:
+        return error_response(f'無效的狀態，必須是：{", ".join(valid_statuses)}', 400)
+
+    old_status = amulet.status
+    amulet.status = new_status
+
+    # 記錄日誌
+    SystemLog.log_action(
+        admin_id=current_admin.id,
+        action_type='amulet_status_update',
+        action_category='user_mgmt',
+        target_type='amulet',
+        target_id=amulet_id,
+        description=f'管理員 {current_admin.name} 將平安符 #{amulet_id} 的狀態從 {old_status} 改為 {new_status}',
+        ip_address=request.remote_addr
+    )
+
+    db.session.commit()
+
+    return success_response({
+        'amulet': amulet.to_dict(),
+        'old_status': old_status,
+        'new_status': new_status
+    }, '狀態更新成功')
+
+@bp.route('/amulets', methods=['POST'])
+@admin_permission_required('manage_users')
+def create_amulet(current_admin):
+    """
+    為使用者創建平安符
+    """
+    data = request.get_json()
+    user_id = data.get('user_id')
+    initial_energy = data.get('energy', 0)
+    status = data.get('status', 'active')
+
+    # 驗證使用者
+    user = User.query.get(user_id)
+    if not user:
+        return error_response('使用者不存在', 404)
+
+    # 檢查該使用者是否已有平安符
+    from app.models.amulet import Amulet
+    existing_amulet = Amulet.query.filter_by(user_id=user_id).first()
+    if existing_amulet:
+        return error_response('該使用者已擁有平安符', 400)
+
+    # 驗證狀態
+    valid_statuses = ['active', 'inactive', 'expired']
+    if status not in valid_statuses:
+        return error_response(f'無效的狀態，必須是：{", ".join(valid_statuses)}', 400)
+
+    # 創建平安符
+    amulet = Amulet(
+        user_id=user_id,
+        energy=initial_energy,
+        status=status
+    )
+    db.session.add(amulet)
+
+    # 記錄日誌
+    SystemLog.log_action(
+        admin_id=current_admin.id,
+        action_type='amulet_create',
+        action_category='user_mgmt',
+        target_type='amulet',
+        target_id=None,
+        description=f'管理員 {current_admin.name} 為使用者 {user.name} (ID: {user_id}) 創建了平安符，初始能量：{initial_energy}',
+        ip_address=request.remote_addr
+    )
+
+    db.session.commit()
+
+    return success_response({
+        'amulet': amulet.to_dict()
+    }, '平安符創建成功')
 
 # ===== 6. 進階統計分析 =====
 

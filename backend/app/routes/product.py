@@ -1,7 +1,7 @@
 """
 商品 API
 """
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
 from app import db
 from app.models.product import Product
 from app.models.redemption import Redemption
@@ -23,7 +23,8 @@ def get_products():
         - per_page: 每頁數量 (default: 20)
         - category: 商品分類篩選
         - sort: 排序方式 (newest/price_asc/price_desc/popular)
-        - is_active: 是否啟用 (true/false)
+        - is_active: 是否啟用 (true/false/all)
+        - keyword: 關鍵詞搜索（商品名稱）
     """
     try:
         page = request.args.get('page', default=1, type=int)
@@ -31,12 +32,20 @@ def get_products():
         category = request.args.get('category')
         sort = request.args.get('sort', default='newest')
         is_active = request.args.get('is_active', default='true')
+        keyword = request.args.get('keyword', '').strip()
 
         query = Product.query
 
         # 篩選啟用狀態
-        if is_active.lower() == 'true':
-            query = query.filter_by(is_active=True)
+        if is_active and is_active.lower() != 'all':
+            if is_active.lower() == 'true':
+                query = query.filter_by(is_active=True)
+            elif is_active.lower() == 'false':
+                query = query.filter_by(is_active=False)
+
+        # 關鍵詞搜索
+        if keyword:
+            query = query.filter(Product.name.like(f'%{keyword}%'))
 
         # 篩選分類
         if category:
@@ -257,18 +266,17 @@ def delete_product(current_user, product_id):
 # ===== 廟方管理員商品 API =====
 
 @bp.route('/temple/<int:temple_id>', methods=['GET'])
-@token_required
-def get_temple_products(current_user, temple_id):
+def get_temple_products(temple_id):
     """
-    廟方管理員：取得該廟宇的商品列表
-    GET /api/products/temple/<temple_id>
-    Header: Authorization: Bearer <token> (需要廟方管理員權限)
-    Query Parameters:
-        - page: 頁碼 (default: 1)
-        - per_page: 每頁數量 (default: 20)
-        - category: 商品分類篩選
-        - is_active: 是否啟用 (true/false/all, default: all)
+    [DEPRECATED] 廟方管理員：取得該廟宇的商品列表
+    此 API 已廢棄，請改用: GET /api/temple-admin/temples/:templeId/products
     """
+    return jsonify({
+        'status': 'error',
+        'message': 'Deprecated endpoint. Please use /api/temple-admin/temples/:templeId/products',
+        'data': None
+    }), 410
+
     try:
         # 驗證廟宇存在
         temple = Temple.query.filter_by(id=temple_id, is_active=True).first()
@@ -327,10 +335,18 @@ def get_temple_products(current_user, temple_id):
         return error_response(f'獲取失敗: {str(e)}', 500)
 
 @bp.route('/temple/<int:temple_id>', methods=['POST'])
-@token_required
-def create_temple_product(current_user, temple_id):
+def create_temple_product(temple_id):
     """
-    廟方管理員：新增廟宇專屬商品
+    [DEPRECATED] 廟方管理員：新增廟宇專屬商品
+    此 API 已廢棄，請改用: POST /api/temple-admin/temples/:templeId/products
+    """
+    return jsonify({
+        'status': 'error',
+        'message': 'Deprecated endpoint. Please use /api/temple-admin/temples/:templeId/products',
+        'data': None
+    }), 410
+
+    """
     POST /api/products/temple/<temple_id>
     Header: Authorization: Bearer <token> (需要廟方管理員權限)
     Body: {
@@ -391,10 +407,18 @@ def create_temple_product(current_user, temple_id):
         return error_response(f'創建失敗: {str(e)}', 500)
 
 @bp.route('/temple/<int:temple_id>/<int:product_id>', methods=['PUT'])
-@token_required
-def update_temple_product(current_user, temple_id, product_id):
+def update_temple_product(temple_id, product_id):
     """
-    廟方管理員：更新商品
+    [DEPRECATED] 廟方管理員：更新商品
+    此 API 已廢棄，請改用: PUT /api/temple-admin/temples/:templeId/products/:productId
+    """
+    return jsonify({
+        'status': 'error',
+        'message': 'Deprecated endpoint. Please use /api/temple-admin/temples/:templeId/products/:productId',
+        'data': None
+    }), 410
+
+    """
     PUT /api/products/temple/<temple_id>/<product_id>
     Header: Authorization: Bearer <token> (需要廟方管理員權限)
     """
@@ -458,8 +482,16 @@ def update_temple_product(current_user, temple_id, product_id):
         return error_response(f'更新失敗: {str(e)}', 500)
 
 @bp.route('/temple/<int:temple_id>/<int:product_id>', methods=['DELETE'])
-@token_required
-def delete_temple_product(current_user, temple_id, product_id):
+def delete_temple_product(temple_id, product_id):
+    """
+    [DEPRECATED] 廟方管理員：刪除商品
+    此 API 已廢棄，請改用: DELETE /api/temple-admin/temples/:templeId/products/:productId
+    """
+    return jsonify({
+        'status': 'error',
+        'message': 'Deprecated endpoint. Please use /api/temple-admin/temples/:templeId/products/:productId',
+        'data': None
+    }), 410
     """
     廟方管理員：刪除商品（軟刪除，設為不啟用）
     DELETE /api/products/temple/<temple_id>/<product_id>

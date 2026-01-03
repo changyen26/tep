@@ -9,7 +9,7 @@ import { API_ENDPOINTS } from './config';
  * @param {Object} params - 查詢參數
  */
 export const getProductList = (params) => {
-  return request.get('/products', { params });
+  return request.get('/products/', { params });
 };
 
 /**
@@ -17,7 +17,7 @@ export const getProductList = (params) => {
  * @param {number} productId - 商品 ID
  */
 export const getProductDetail = (productId) => {
-  return request.get(`/products/${productId}`);
+  return request.get(`/products/${productId}/`);
 };
 
 /**
@@ -47,7 +47,7 @@ export const reviewProduct = (productId, action, remarks) => {
  * @param {boolean} isActive - 是否啟用
  */
 export const toggleProductStatus = (productId, isActive) => {
-  return request.put(`/admin/products/${productId}/toggle-status`, {
+  return request.put(`/admin/products/${productId}/toggle-status/`, {
     is_active: isActive
   });
 };
@@ -57,7 +57,7 @@ export const toggleProductStatus = (productId, isActive) => {
  * @param {Object} data - 商品資料
  */
 export const createProduct = (data) => {
-  return request.post('/products/admin/products', data);
+  return request.post('/products/admin/products/', data);
 };
 
 /**
@@ -66,7 +66,7 @@ export const createProduct = (data) => {
  * @param {Object} data - 商品資料
  */
 export const updateProduct = (productId, data) => {
-  return request.put(`/products/admin/products/${productId}`, data);
+  return request.put(`/products/admin/products/${productId}/`, data);
 };
 
 /**
@@ -74,5 +74,5 @@ export const updateProduct = (productId, data) => {
  * @param {number} productId - 商品 ID
  */
 export const deleteProduct = (productId) => {
-  return request.delete(`/products/admin/products/${productId}`);
+  return request.delete(`/products/admin/products/${productId}/`);
 };
