@@ -1,0 +1,1323 @@
+/**
+ * Staff Management Styles
+ * 服務人員帳號與權限管理樣式
+ */
+
+/* ===== 容器與標題 ===== */
+.staff-container {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.staff-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.header-left h2 {
+  margin: 0;
+  font-size: 24px;
+  color: #1a1a2e;
+}
+
+.header-subtitle {
+  color: #666;
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn-back {
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.btn-back:hover {
+  background: #f0f0f0;
+  color: #333;
+}
+
+/* ===== 統計卡片 ===== */
+.staff-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.stat-icon {
+  font-size: 32px;
+}
+
+.stat-content {
+  flex: 1;
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: #666;
+  margin-top: 2px;
+}
+
+/* ===== 篩選區 ===== */
+.staff-filters {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.status-filters {
+  display: flex;
+  gap: 8px;
+}
+
+.filter-btn {
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  background: white;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.filter-btn:hover {
+  border-color: #b8860b;
+}
+
+.filter-btn.active {
+  background: #b8860b;
+  color: white;
+  border-color: #b8860b;
+}
+
+.role-select {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  min-width: 140px;
+}
+
+.search-input {
+  padding: 10px 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  min-width: 260px;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #b8860b;
+}
+
+/* ===== 表格 ===== */
+.staff-table-wrapper {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.staff-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.staff-table th,
+.staff-table td {
+  padding: 14px 16px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.staff-table th {
+  background: #f8f9fa;
+  font-weight: 600;
+  font-size: 13px;
+  color: #666;
+}
+
+.staff-table tbody tr:hover {
+  background: #fafafa;
+}
+
+.staff-table tbody tr.row-inactive {
+  opacity: 0.6;
+}
+
+/* 姓名欄 */
+.staff-name {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #b8860b, #daa520);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+/* 聯絡資訊 */
+.contact-info {
+  font-size: 13px;
+}
+
+.contact-info .email {
+  color: #333;
+  margin-bottom: 2px;
+}
+
+.contact-info .phone {
+  color: #666;
+}
+
+/* 建立資訊 */
+.created-info {
+  font-size: 13px;
+  color: #666;
+}
+
+.created-by {
+  color: #999;
+  font-size: 12px;
+}
+
+/* 最後登入 */
+.last-login {
+  font-size: 13px;
+  color: #666;
+}
+
+/* ===== 狀態與角色標籤 ===== */
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-active {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status-inactive {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.role-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  background: #e9ecef;
+  color: #495057;
+}
+
+.role-manager { background: #fce4ec; color: #c62828; }
+.role-staff { background: #e3f2fd; color: #1565c0; }
+.role-cashier { background: #e8f5e9; color: #2e7d32; }
+.role-event { background: #f3e5f5; color: #7b1fa2; }
+.role-viewer { background: #eceff1; color: #546e7a; }
+
+/* ===== 操作按鈕 ===== */
+.quick-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-icon {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: #f0f0f0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s;
+}
+
+.btn-icon:hover {
+  background: #e0e0e0;
+}
+
+.btn-icon.btn-danger:hover {
+  background: #ffebee;
+}
+
+.btn-icon.btn-success:hover {
+  background: #e8f5e9;
+}
+
+/* ===== 按鈕樣式 ===== */
+.btn-primary {
+  padding: 10px 20px;
+  background: #b8860b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.btn-primary:hover {
+  background: #996e09;
+}
+
+.btn-primary:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  padding: 10px 20px;
+  background: white;
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+  background: #f5f5f5;
+}
+
+.btn-danger {
+  color: #dc3545;
+  border-color: #dc3545;
+}
+
+.btn-danger:hover {
+  background: #fff5f5;
+}
+
+/* ===== 表單樣式 ===== */
+.staff-form {
+  max-width: 800px;
+}
+
+.form-section {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.form-section h3 {
+  margin: 0 0 20px 0;
+  font-size: 18px;
+  color: #1a1a2e;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #333;
+  font-size: 14px;
+}
+
+.required {
+  color: #dc3545;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #b8860b;
+}
+
+.form-group input.error,
+.form-group textarea.error,
+.form-group select.error {
+  border-color: #dc3545;
+}
+
+.error-msg {
+  display: block;
+  color: #dc3545;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.form-hint {
+  color: #666;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.password-input-wrapper {
+  display: flex;
+  gap: 8px;
+}
+
+.password-input-wrapper input {
+  flex: 1;
+}
+
+.btn-generate {
+  padding: 10px 16px;
+  background: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.btn-generate:hover {
+  background: #e0e0e0;
+}
+
+.checkbox-group {
+  margin-top: 8px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.checkbox-label input {
+  width: auto;
+}
+
+/* ===== 角色選擇卡片 ===== */
+.role-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.role-card {
+  position: relative;
+  background: white;
+  border: 2px solid #eee;
+  border-radius: 12px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.role-card:hover {
+  border-color: #ddd;
+}
+
+.role-card.selected {
+  border-color: var(--role-color, #b8860b);
+  background: #fffdf5;
+}
+
+.role-card input {
+  position: absolute;
+  opacity: 0;
+}
+
+.role-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.role-name {
+  font-weight: 600;
+  font-size: 16px;
+  color: #333;
+}
+
+.role-desc {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.5;
+}
+
+/* ===== 權限預覽 ===== */
+.permission-preview {
+  margin-top: 20px;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.permission-preview h4 {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.permission-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.permission-tag {
+  display: inline-block;
+  padding: 4px 12px;
+  background: #e9ecef;
+  color: #495057;
+  border-radius: 16px;
+  font-size: 13px;
+}
+
+.permission-tag.all {
+  background: #d4edda;
+  color: #155724;
+}
+
+.permission-tag.readonly {
+  background: #fff3cd;
+  color: #856404;
+}
+
+/* ===== 表單操作區 ===== */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 20px;
+}
+
+/* ===== 人員詳情卡片 ===== */
+.staff-profile-card {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.profile-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #b8860b, #daa520);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.profile-info {
+  flex: 1;
+}
+
+.profile-info h3 {
+  margin: 0 0 8px 0;
+  font-size: 24px;
+}
+
+.profile-badges {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.profile-contact {
+  display: flex;
+  gap: 20px;
+  color: #666;
+  font-size: 14px;
+}
+
+.profile-stats {
+  display: flex;
+  gap: 32px;
+}
+
+.profile-stats .stat-item {
+  text-align: center;
+}
+
+.profile-stats .stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #b8860b;
+}
+
+.profile-stats .stat-label {
+  font-size: 12px;
+  color: #666;
+}
+
+/* ===== Tabs ===== */
+.detail-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #eee;
+}
+
+.tab-btn {
+  padding: 12px 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #666;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: all 0.2s;
+}
+
+.tab-btn:hover {
+  color: #333;
+}
+
+.tab-btn.active {
+  color: #b8860b;
+  border-bottom-color: #b8860b;
+}
+
+/* ===== 詳情區塊 ===== */
+.detail-section {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.info-item label {
+  display: block;
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 4px;
+}
+
+.info-item div {
+  font-size: 15px;
+  color: #333;
+}
+
+.info-note {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+.info-note label {
+  display: block;
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 8px;
+}
+
+.permission-section {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #eee;
+}
+
+.permission-section h4 {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+/* ===== 操作時間線 ===== */
+.logs-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.logs-header h4 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.logs-count {
+  color: #666;
+  font-size: 13px;
+}
+
+.activity-timeline {
+  position: relative;
+  padding-left: 32px;
+}
+
+.activity-timeline::before {
+  content: '';
+  position: absolute;
+  left: 12px;
+  top: 24px;
+  bottom: 24px;
+  width: 2px;
+  background: #eee;
+}
+
+.timeline-item {
+  position: relative;
+  padding-bottom: 24px;
+}
+
+.timeline-item:last-child {
+  padding-bottom: 0;
+}
+
+.timeline-icon {
+  position: absolute;
+  left: -32px;
+  top: 0;
+  width: 24px;
+  height: 24px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  border: 2px solid #eee;
+  z-index: 1;
+}
+
+.timeline-content {
+  background: #f8f9fa;
+  padding: 12px 16px;
+  border-radius: 8px;
+}
+
+.timeline-header {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.timeline-action {
+  font-weight: 500;
+  color: #333;
+}
+
+.timeline-target {
+  color: #b8860b;
+}
+
+.timeline-target a {
+  color: #b8860b;
+  text-decoration: none;
+}
+
+.timeline-target a:hover {
+  text-decoration: underline;
+}
+
+.timeline-detail {
+  font-size: 13px;
+  color: #666;
+  margin-top: 4px;
+}
+
+.timeline-meta {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+  font-size: 12px;
+  color: #999;
+}
+
+/* ===== 角色管理佈局 ===== */
+.role-management-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 24px;
+}
+
+.role-list-panel {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  height: fit-content;
+}
+
+.role-list-panel h3 {
+  margin: 0 0 16px 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.role-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.role-list-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.role-list-item:hover {
+  background: #f5f5f5;
+}
+
+.role-list-item.active {
+  background: #fff8e1;
+}
+
+.role-color-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.role-list-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.role-list-name {
+  font-weight: 500;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.system-badge {
+  font-size: 10px;
+  padding: 2px 6px;
+  background: #e9ecef;
+  color: #666;
+  border-radius: 4px;
+}
+
+.role-list-count {
+  font-size: 12px;
+  color: #999;
+  margin-top: 2px;
+}
+
+/* 角色詳情面板 */
+.role-detail-panel {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.role-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.role-detail-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.role-detail-title h3 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.role-name-input {
+  font-size: 20px;
+  font-weight: 600;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+.role-detail-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.role-description {
+  margin-bottom: 24px;
+}
+
+.role-description p {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.role-description textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  resize: vertical;
+}
+
+/* 權限矩陣 */
+.permission-matrix h4 {
+  margin: 0 0 16px 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.all-permissions-notice {
+  padding: 16px;
+  background: #d4edda;
+  color: #155724;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.permission-modules {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.permission-module {
+  border: 1px solid #eee;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.module-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #f8f9fa;
+  font-weight: 500;
+}
+
+.module-header input {
+  margin: 0;
+}
+
+.module-icon {
+  font-size: 18px;
+}
+
+.module-name {
+  flex: 1;
+}
+
+.module-count {
+  font-size: 12px;
+  color: #999;
+}
+
+.module-permissions {
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.permission-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #666;
+  cursor: pointer;
+}
+
+.permission-item.checked {
+  color: #333;
+}
+
+.permission-item input {
+  margin: 0;
+}
+
+.permission-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ddd;
+}
+
+.permission-dot.active {
+  background: #27ae60;
+}
+
+/* ===== 操作日誌頁面 ===== */
+.log-filters {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.filter-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.filter-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.filter-item label {
+  font-size: 12px;
+  color: #666;
+}
+
+.filter-item select,
+.filter-item input {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  min-width: 140px;
+}
+
+.filter-item.flex-grow {
+  flex: 1;
+  min-width: 200px;
+}
+
+.filter-item.flex-grow input {
+  width: 100%;
+}
+
+.log-summary {
+  margin-bottom: 16px;
+  color: #666;
+  font-size: 14px;
+}
+
+.log-table-wrapper {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.log-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.log-table th,
+.log-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.log-table th {
+  background: #f8f9fa;
+  font-weight: 600;
+  font-size: 13px;
+  color: #666;
+}
+
+.log-table tbody tr:hover {
+  background: #fafafa;
+}
+
+.log-time {
+  font-size: 13px;
+  color: #666;
+  font-family: monospace;
+}
+
+.staff-link {
+  background: none;
+  border: none;
+  color: #b8860b;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0;
+}
+
+.staff-link:hover {
+  text-decoration: underline;
+}
+
+.action-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  background: #e9ecef;
+  color: #495057;
+}
+
+.action-badge.action-create {
+  background: #d4edda;
+  color: #155724;
+}
+
+.action-badge.action-update {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.action-badge.action-delete {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.action-badge.action-auth {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.action-badge.action-view {
+  background: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.log-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.log-target {
+  font-weight: 500;
+  color: #333;
+}
+
+.log-detail {
+  font-size: 13px;
+  color: #666;
+}
+
+.log-ua {
+  font-size: 12px;
+  color: #999;
+}
+
+.log-ip {
+  font-family: monospace;
+  font-size: 13px;
+  color: #666;
+}
+
+/* ===== 分頁 ===== */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.btn-pagination {
+  padding: 8px 16px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-pagination:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-pagination:not(:disabled):hover {
+  background: #f5f5f5;
+}
+
+.pagination-info {
+  color: #666;
+  font-size: 14px;
+}
+
+/* ===== 狀態提示 ===== */
+.loading-state,
+.error-state,
+.empty-state {
+  padding: 60px 20px;
+  text-align: center;
+  color: #666;
+  background: white;
+  border-radius: 12px;
+}
+
+.error-state {
+  color: #dc3545;
+}
+
+/* ===== 響應式 ===== */
+@media (max-width: 768px) {
+  .staff-container {
+    padding: 16px;
+  }
+
+  .staff-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .header-actions {
+    justify-content: flex-end;
+  }
+
+  .staff-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .status-filters {
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+
+  .search-input {
+    min-width: auto;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .role-management-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .staff-profile-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .profile-contact {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .filter-row {
+    flex-direction: column;
+  }
+
+  .filter-item {
+    width: 100%;
+  }
+}

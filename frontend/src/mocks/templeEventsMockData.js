@@ -7,18 +7,18 @@
 let eventIdCounter = 1;
 let registrationIdCounter = 1;
 
-// Mock 活動資料（至少 10 筆，各狀態都有）
+// Mock 活動資料（三官寶殿專屬活動）
 export const mockEvents = [
   {
     id: eventIdCounter++,
     templeId: 1,
-    title: '新春祈福法會',
-    description: '農曆新年期間舉辦的祈福法會，歡迎信眾參加。法會內容包含誦經、祈福儀式等。',
-    location: '大殿',
-    startAt: '2026-02-01T09:00',
-    endAt: '2026-02-01T12:00',
-    signupEndAt: '2026-01-25T23:59',
-    capacity: 100,
+    title: '上元天官賜福法會',
+    description: '農曆正月十五上元節，恭祝天官大帝聖誕，祈求天官賜福、消災解厄。法會內容包含誦經、祈福儀式、過火等。',
+    location: '三官寶殿正殿',
+    startAt: '2026-02-12T08:00',
+    endAt: '2026-02-12T12:00',
+    signupEndAt: '2026-02-10T23:59',
+    capacity: 150,
     fee: 0,
     coverImageUrl: 'https://picsum.photos/800/400?random=1',
     status: 'published',
@@ -28,109 +28,109 @@ export const mockEvents = [
   {
     id: eventIdCounter++,
     templeId: 1,
-    title: '平安符製作體驗活動',
-    description: '親手製作專屬平安符，體驗傳統文化。由資深師傅指導，適合親子參加。',
-    location: '文化教室',
-    startAt: '2026-01-15T14:00',
-    endAt: '2026-01-15T17:00',
-    signupEndAt: '2026-01-10T23:59',
-    capacity: 30,
-    fee: 300,
+    title: '白河蓮花季祈福活動',
+    description: '結合白河蓮花季，舉辦蓮花供佛祈福活動。參加者可獲得開光蓮花平安符一枚。',
+    location: '三官寶殿廣場',
+    startAt: '2026-06-20T09:00',
+    endAt: '2026-06-20T16:00',
+    signupEndAt: '2026-06-15T23:59',
+    capacity: 200,
+    fee: 0,
     coverImageUrl: 'https://picsum.photos/800/400?random=2',
-    status: 'published',
+    status: 'draft',
     createdAt: '2025-12-01T10:00:00',
     updatedAt: '2025-12-01T10:00:00',
   },
   {
     id: eventIdCounter++,
     templeId: 1,
-    title: '中秋祭月活動',
-    description: '傳統中秋祭月儀式，包含祭月、賞月、品茗等活動。',
-    location: '廣場',
-    startAt: '2025-09-15T18:00',
-    endAt: '2025-09-15T21:00',
-    signupEndAt: '2025-09-10T23:59',
-    capacity: 200,
-    fee: 0,
+    title: '中元地官赦罪法會',
+    description: '農曆七月十五中元節，恭祝地官大帝聖誕，超度祖先亡靈、祈求地官赦罪。提供普度法會服務。',
+    location: '三官寶殿正殿',
+    startAt: '2025-08-29T07:00',
+    endAt: '2025-08-29T17:00',
+    signupEndAt: '2025-08-25T23:59',
+    capacity: 300,
+    fee: 500,
     coverImageUrl: 'https://picsum.photos/800/400?random=3',
     status: 'closed',
-    createdAt: '2025-08-01T10:00:00',
-    updatedAt: '2025-09-10T18:00:00',
+    createdAt: '2025-07-01T10:00:00',
+    updatedAt: '2025-08-25T18:00:00',
   },
   {
     id: eventIdCounter++,
     templeId: 1,
-    title: '週末禪修課程',
-    description: '靜坐禪修課程，適合初學者。課程包含基礎禪修教學、實作練習。',
-    location: '禪修室',
-    startAt: '2026-02-10T09:00',
-    endAt: '2026-02-10T12:00',
-    signupEndAt: '2026-02-05T23:59',
-    capacity: 25,
-    fee: 500,
+    title: '三官大帝文化講座',
+    description: '邀請專家講解三官大帝信仰由來、祭祀禮儀、道教文化等，適合對傳統文化有興趣的信眾參加。',
+    location: '活動中心',
+    startAt: '2026-02-22T14:00',
+    endAt: '2026-02-22T17:00',
+    signupEndAt: '2026-02-18T23:59',
+    capacity: 50,
+    fee: 0,
     coverImageUrl: 'https://picsum.photos/800/400?random=4',
-    status: 'draft',
+    status: 'published',
     createdAt: '2026-01-01T10:00:00',
     updatedAt: '2026-01-01T10:00:00',
   },
   {
     id: eventIdCounter++,
     templeId: 1,
-    title: '端午節包粽子活動',
-    description: '端午節應景活動，一起學習包粽子。材料費用已包含在報名費中。',
+    title: '親子手作香包活動',
+    description: '端午節前夕，帶領親子一同製作傳統香包，內含艾草、菖蒲等避邪植物。材料費已包含。',
     location: '活動中心',
-    startAt: '2025-06-05T09:00',
-    endAt: '2025-06-05T13:00',
-    signupEndAt: '2025-05-30T23:59',
-    capacity: 50,
-    fee: 200,
+    startAt: '2025-05-28T09:00',
+    endAt: '2025-05-28T12:00',
+    signupEndAt: '2025-05-25T23:59',
+    capacity: 30,
+    fee: 150,
     coverImageUrl: 'https://picsum.photos/800/400?random=5',
     status: 'canceled',
     createdAt: '2025-05-01T10:00:00',
-    updatedAt: '2025-05-25T14:20:00',
+    updatedAt: '2025-05-20T14:20:00',
   },
   {
     id: eventIdCounter++,
     templeId: 1,
-    title: '兒童讀經班',
-    description: '專為兒童設計的讀經課程，培養品德與文化素養。需家長陪同。',
-    location: '國學教室',
-    startAt: '2026-02-20T10:00',
-    endAt: '2026-02-20T12:00',
-    signupEndAt: '2026-02-15T23:59',
-    capacity: 40,
+    title: '下元水官解厄法會',
+    description: '農曆十月十五下元節，恭祝水官大帝聖誕，祈求水官解厄、消災祈福。',
+    location: '三官寶殿正殿',
+    startAt: '2026-11-23T08:00',
+    endAt: '2026-11-23T12:00',
+    signupEndAt: '2026-11-20T23:59',
+    capacity: 120,
     fee: 0,
     coverImageUrl: 'https://picsum.photos/800/400?random=6',
-    status: 'published',
+    status: 'draft',
     createdAt: '2026-01-05T10:00:00',
     updatedAt: '2026-01-05T10:00:00',
   },
   {
     id: eventIdCounter++,
     templeId: 1,
-    title: '年度會員大會',
-    description: '一年一度的會員大會，討論廟宇發展事項，歡迎所有會員參加。',
-    location: '會議廳',
-    startAt: '2026-03-01T14:00',
-    endAt: '2026-03-01T17:00',
-    signupEndAt: '2026-02-25T23:59',
-    capacity: 150,
+    title: '白河關子嶺進香團',
+    description: '本殿組團前往關子嶺火王爺廟進香，車資、午餐由廟方提供。名額有限，報名從速。',
+    location: '三官寶殿集合出發',
+    startAt: '2026-03-15T06:30',
+    endAt: '2026-03-15T18:00',
+    signupEndAt: '2026-03-10T23:59',
+    capacity: 45,
     fee: 0,
     coverImageUrl: 'https://picsum.photos/800/400?random=7',
-    status: 'draft',
+    status: 'published',
     createdAt: '2026-01-02T10:00:00',
     updatedAt: '2026-01-02T10:00:00',
   },
   {
     id: eventIdCounter++,
     templeId: 1,
-    title: '茶道體驗課程',
-    description: '學習傳統茶道文化，包含茶葉知識、泡茶技巧、品茶禮儀等。',
-    location: '茶藝室',
-    startAt: '2026-01-25T15:00',
-    endAt: '2026-01-25T18:00',
-    signupEndAt: '2026-01-20T23:59',
-    capacity: 20,
+    title: '安太歲點燈法會',
+    description: '新年安太歲、點光明燈服務。為信眾祈求新的一年平安順利、事業順遂。',
+    location: '三官寶殿太歲殿',
+    startAt: '2026-01-30T09:00',
+    endAt: '2026-01-30T17:00',
+    signupEndAt: '2026-01-28T23:59',
+    capacity: 200,
     fee: 600,
     coverImageUrl: 'https://picsum.photos/800/400?random=8',
     status: 'published',
@@ -140,30 +140,30 @@ export const mockEvents = [
   {
     id: eventIdCounter++,
     templeId: 1,
-    title: '義工培訓課程',
-    description: '針對新進義工的培訓課程，講解廟宇文化、服務禮儀等。',
-    location: '會議室',
-    startAt: '2026-02-28T09:00',
-    endAt: '2026-02-28T16:00',
-    signupEndAt: '2026-02-20T23:59',
-    capacity: 60,
+    title: '廟務義工招募說明會',
+    description: '招募熱心信眾加入義工行列，協助廟務運作、活動辦理等。歡迎有志者報名參加。',
+    location: '活動中心',
+    startAt: '2026-02-08T14:00',
+    endAt: '2026-02-08T16:00',
+    signupEndAt: '2026-02-05T23:59',
+    capacity: 40,
     fee: 0,
     coverImageUrl: 'https://picsum.photos/800/400?random=9',
-    status: 'draft',
+    status: 'published',
     createdAt: '2026-01-10T10:00:00',
     updatedAt: '2026-01-10T10:00:00',
   },
   {
     id: eventIdCounter++,
     templeId: 1,
-    title: '點燈祈福法會',
-    description: '為親友點燈祈福，祈求平安順遂。法會後可領取祝福小禮。',
-    location: '大殿',
-    startAt: '2025-12-25T19:00',
-    endAt: '2025-12-25T21:00',
+    title: '冬至湯圓祈福活動',
+    description: '冬至團圓日，廟方準備湯圓與信眾共享，並舉行簡單祈福儀式。免費參加，歡迎闔家蒞臨。',
+    location: '三官寶殿廣場',
+    startAt: '2025-12-22T10:00',
+    endAt: '2025-12-22T14:00',
     signupEndAt: '2025-12-20T23:59',
-    capacity: 120,
-    fee: 100,
+    capacity: 100,
+    fee: 0,
     coverImageUrl: 'https://picsum.photos/800/400?random=10',
     status: 'closed',
     createdAt: '2025-11-01T10:00:00',
@@ -193,17 +193,38 @@ mockEvents.forEach((event) => {
       }
     }
 
+    // 隨機決定是否已簽到（已完成活動的報名者有較高簽到率）
+    const isClosedEvent = event.status === 'closed';
+    const checkedIn = status === 'registered' && (isClosedEvent ? Math.random() < 0.8 : Math.random() < 0.3);
+
+    // 台灣常見姓名
+    const surnames = ['陳', '林', '黃', '張', '李', '王', '吳', '劉', '蔡', '楊', '許', '鄭', '謝', '郭', '洪'];
+    const maleNames = ['建宏', '志豪', '俊傑', '冠宇', '家豪', '宗翰', '承恩', '柏翰', '彥廷', '宥辰'];
+    const femaleNames = ['淑芬', '美玲', '雅婷', '怡君', '佳蓉', '詩涵', '宜靜', '惠如', '雅雯', '靜宜'];
+    const isFemale = Math.random() > 0.5;
+    const surname = surnames[Math.floor(Math.random() * surnames.length)];
+    const givenName = isFemale
+      ? femaleNames[Math.floor(Math.random() * femaleNames.length)]
+      : maleNames[Math.floor(Math.random() * maleNames.length)];
+    const fullName = surname + givenName;
+
+    const notes = ['', '', '', '', '素食', '行動不便需協助', '攜帶長輩參加', '第一次參加'][Math.floor(Math.random() * 8)];
+
     mockRegistrations.push({
       id: registrationIdCounter++,
       eventId: event.id,
-      name: `參加者${i + 1}`,
+      name: fullName,
       phone: `09${String(Math.floor(Math.random() * 100000000)).padStart(8, '0')}`,
-      email: `user${i + 1}@example.com`,
+      email: `${surname.toLowerCase()}${Math.floor(Math.random() * 1000)}@gmail.com`,
       status,
       registeredAt: new Date(
         Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000
       ).toISOString(),
-      notes: i % 5 === 0 ? '有特殊需求：素食' : '',
+      notes,
+      checkedIn,
+      checkedInAt: checkedIn
+        ? new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000).toISOString()
+        : null,
     });
   }
 });
@@ -256,10 +277,21 @@ export const mockTempleEventsAPI = {
     const end = start + pageSize;
     const paginatedEvents = filtered.slice(start, end);
 
+    // 為每個活動計算已報名人數
+    const eventsWithCount = paginatedEvents.map((event) => {
+      const regs = registrationsData.filter(
+        (r) => r.eventId === event.id && r.status === 'registered'
+      );
+      return {
+        ...event,
+        registeredCount: regs.length,
+      };
+    });
+
     return {
       success: true,
       data: {
-        events: paginatedEvents,
+        events: eventsWithCount,
         total,
         page,
         pageSize,

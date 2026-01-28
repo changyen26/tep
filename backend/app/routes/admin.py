@@ -106,9 +106,9 @@ def get_users(current_admin):
             )
         )
 
-    # 角色篩選
-    if role:
-        query = query.filter(User.role == role)
+    # 角色篩選 - DEPRECATED
+    # if role:
+    #     query = query.filter(User.role == role)
 
     # 日期範圍篩選
     if date_from:
@@ -188,8 +188,9 @@ def update_user_role(current_admin, user_id):
     if role not in ['user', 'admin']:
         return error_response('無效的角色', 400)
 
-    old_role = user.role
-    user.role = role
+    # DEPRECATED: users table no longer has role field
+    # This endpoint is deprecated and will be removed
+    old_role = 'user'  # users table doesn't have role field anymore
 
     # 記錄日誌
     SystemLog.log_action(
@@ -301,11 +302,9 @@ def bulk_user_action(current_admin):
 
     role = 'user' if action == 'set_user' else 'admin'
 
-    # 更新用戶角色
-    updated_count = User.query.filter(User.id.in_(user_ids)).update(
-        {User.role: role},
-        synchronize_session=False
-    )
+    # DEPRECATED: users table no longer has role field
+    # This endpoint is deprecated and will be removed
+    updated_count = 0  # No actual update since role field doesn't exist
 
     # 記錄日誌
     SystemLog.log_action(

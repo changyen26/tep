@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import templeAdminApi from '../../services/templeAdminApi';
+import { getDevoteeDetail } from '../../mocks/templeAdminMockData';
 import './DevoteeDetail.css';
+
+const USE_MOCK = true; // 設為 false 使用真實 API
 
 const DevoteeDetail = () => {
   const { templeId, publicUserId } = useParams();
@@ -20,13 +22,28 @@ const DevoteeDetail = () => {
       setLoading(true);
       setError(null);
 
-      const response = await templeAdminApi.devotees.get(templeId, publicUserId);
+      if (USE_MOCK) {
+        // 使用 Mock 資料
+        await new Promise(resolve => setTimeout(resolve, 300));
+        const detail = getDevoteeDetail(publicUserId);
 
-      if (response.success || response.data) {
-        const data = response.data || response;
-        setProfile(data.profile || {});
-        setSummary(data.summary || {});
-        setTimeline(data.timeline || []);
+        if (detail) {
+          setProfile(detail.profile || {});
+          setSummary(detail.summary || {});
+          setTimeline(detail.timeline || []);
+        } else {
+          setError('找不到此信眾資料');
+        }
+      } else {
+        const templeAdminApi = await import('../../services/templeAdminApi').then(m => m.default);
+        const response = await templeAdminApi.devotees.get(templeId, publicUserId);
+
+        if (response.success || response.data) {
+          const data = response.data || response;
+          setProfile(data.profile || {});
+          setSummary(data.summary || {});
+          setTimeline(data.timeline || []);
+        }
       }
     } catch (err) {
       console.error('載入信眾詳情失敗:', err);

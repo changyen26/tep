@@ -78,8 +78,8 @@ def create_app():
             'data': str(error) if app.debug else None
         }), 500
 
-    # 導入模型（讓 Flask-Migrate 能夠偵測）- 包含三表帳號系統
-    from app.models import User, PublicUser, TempleAdminUser, SuperAdminUser, Amulet, Checkin, Energy, Temple, Product, Address, Redemption, TempleAnnouncement, TempleAdmin, CheckinReward, RewardClaim, SystemAdmin, TempleApplication, SystemSettings, SystemLog, UserReport, Notification, NotificationSettings, TempleEvent, EventRegistration
+    # 導入模型（讓 Flask-Migrate 能夠偵測）- 三表帳號系統
+    from app.models import User, PublicUser, TempleAdminUser, SuperAdminUser, Amulet, Checkin, Energy, Temple, Product, Address, Redemption, TempleAnnouncement, CheckinReward, RewardClaim, TempleApplication, SystemSettings, SystemLog, UserReport, Notification, NotificationSettings, TempleEvent, EventRegistration
 
     # 註冊路由（新增 temple_admin_api 為主要廟方後台 API）
     from app.routes import auth, user, amulet, checkin, energy, temple, product, address, redemption, upload, stats, leaderboard, temple_announcement, temple_admin, temple_stats, temple_revenue, temple_export, reward, admin, notification, temple_event_admin, temple_admin_api

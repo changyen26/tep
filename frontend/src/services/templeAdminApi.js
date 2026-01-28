@@ -408,6 +408,84 @@ export const devotees = {
 };
 
 /**
+ * ========================================
+ * 進香登記管理
+ * ========================================
+ */
+export const pilgrimageVisits = {
+  /**
+   * 取得進香登記列表
+   * GET /temple-admin/temples/:templeId/pilgrimage-visits
+   */
+  list: (templeId, params = {}) => {
+    return http.get(`/temple-admin/temples/${templeId}/pilgrimage-visits`, { params });
+  },
+
+  /**
+   * 新增進香登記
+   * POST /temple-admin/temples/:templeId/pilgrimage-visits
+   */
+  create: (templeId, data) => {
+    return http.post(`/temple-admin/temples/${templeId}/pilgrimage-visits`, data);
+  },
+
+  /**
+   * 取得進香登記詳情
+   * GET /temple-admin/temples/:templeId/pilgrimage-visits/:visitId
+   */
+  get: (templeId, visitId) => {
+    return http.get(`/temple-admin/temples/${templeId}/pilgrimage-visits/${visitId}`);
+  },
+
+  /**
+   * 更新進香登記
+   * PUT /temple-admin/temples/:templeId/pilgrimage-visits/:visitId
+   */
+  update: (templeId, visitId, data) => {
+    return http.put(`/temple-admin/temples/${templeId}/pilgrimage-visits/${visitId}`, data);
+  },
+};
+
+/**
+ * ========================================
+ * 數據分析
+ * ========================================
+ */
+export const analytics = {
+  /**
+   * 取得會員分析資料
+   * GET /temple-admin/temples/:templeId/analytics/members
+   *
+   * @param {number} templeId - 廟宇 ID
+   * @param {object} params - 查詢參數
+   * @param {string} params.period - 分析期間 (7d/30d/90d/365d)
+   * @param {boolean} params.compare - 是否包含上期對比
+   */
+  getMemberAnalytics: (templeId, params = {}) => {
+    return http.get(`/temple-admin/temples/${templeId}/analytics/members`, { params });
+  },
+};
+
+/**
+ * ========================================
+ * 經營診斷
+ * ========================================
+ */
+export const business = {
+  /**
+   * 取得經營診斷儀表板
+   * GET /temple-admin/temples/:templeId/business/dashboard
+   *
+   * @param {number} templeId - 廟宇 ID
+   * @param {object} params - 查詢參數
+   * @param {string} params.month - 報告月份 (YYYY-MM)
+   */
+  getDashboard: (templeId, params = {}) => {
+    return http.get(`/temple-admin/temples/${templeId}/business/dashboard`, { params });
+  },
+};
+
+/**
  * 預設匯出所有 API
  */
 export default {
@@ -420,4 +498,7 @@ export default {
   revenue,
   settings,
   devotees,
+  pilgrimageVisits,
+  analytics,
+  business,
 };

@@ -2,7 +2,16 @@ import { NavLink, Outlet, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import './TempleAdminLayout.css';
 import { useAuth } from '../context/AuthContext';
-import templeAdminApi from '../services/templeAdminApi';
+
+// 開發模式：使用 Mock 資料
+const USE_MOCK = true;
+
+// Mock 廟宇資料
+const mockTempleInfo = {
+  id: 1,
+  name: '三官寶殿',
+  address: '台南市白河區昇安里三間厝31號',
+};
 
 const TempleAdminLayout = () => {
   const { templeId } = useParams();
@@ -19,6 +28,14 @@ const TempleAdminLayout = () => {
       try {
         setLoading(true);
         setError(null);
+
+        if (USE_MOCK) {
+          // 使用 Mock 資料
+          await new Promise(resolve => setTimeout(resolve, 200));
+          setTemple(mockTempleInfo);
+          setLoading(false);
+          return;
+        }
 
         // 嘗試從快取讀取
         const cacheKey = `temple_${templeId}`;
@@ -41,6 +58,7 @@ const TempleAdminLayout = () => {
         }
 
         // 從 API 取得資料
+        const templeAdminApi = await import('../services/templeAdminApi').then(m => m.default);
         const response = await templeAdminApi.temples.getTemple(templeId);
 
         if (response.data) {
@@ -73,15 +91,22 @@ const TempleAdminLayout = () => {
 
   // 側邊選單項目 - 廟方管理專用（與 templeAdminRoutes 對齊）
   const navItems = [
-    { path: 'dashboard', label: '儀表板' },
-    { path: 'events', label: '活動報名管理' },
-    { path: 'lamps', label: '點燈管理' },
-    { path: 'products', label: '商品管理' },
-    { path: 'orders', label: '訂單管理' },
-    { path: 'checkins', label: '打卡紀錄' },
-    { path: 'revenue', label: '收入報表' },
-    { path: 'devotees', label: '信眾管理' },
-    { path: 'temple/edit', label: '廟宇設定' },
+    { path: 'dashboard', label: '儀表板', icon: '📊' },
+    { path: 'business', label: '經營診斷', icon: '🏢' },
+    { path: 'analytics', label: '數據分析', icon: '📈' },
+    { path: 'events', label: '活動報名管理', icon: '📅' },
+    { path: 'pilgrimage-visits', label: '進香登記管理', icon: '🚌' },
+    { path: 'lamps', label: '點燈管理', icon: '🏮' },
+    { path: 'products', label: '商品管理', icon: '🛍️' },
+    { path: 'orders', label: '訂單管理', icon: '📦' },
+    { path: 'checkins', label: '打卡紀錄', icon: '📍' },
+    { path: 'revenue', label: '收入報表', icon: '💰' },
+    { path: 'donations', label: '捐款管理', icon: '💝' },
+    { path: 'devotees', label: '信眾管理', icon: '👥' },
+    { path: 'notifications', label: '推播通知', icon: '📢' },
+    { path: 'certificates', label: '感謝狀管理', icon: '📜' },
+    { path: 'staff', label: '帳號管理', icon: '👤' },
+    { path: 'temple-settings', label: '廟宇設定', icon: '⚙️' },
   ];
 
   // 決定 Header 顯示的標題
@@ -95,7 +120,10 @@ const TempleAdminLayout = () => {
   return (
     <div className="temple-admin-layout">
       <aside className="temple-admin-sidebar">
-        <div className="sidebar-brand">廟方管理後台</div>
+        <div className="sidebar-brand">
+          <span className="brand-icon">🏛️</span>
+          <span className="brand-text">廟方管理後台</span>
+        </div>
         <nav className="sidebar-nav">
           {navItems.map((item) => (
             <NavLink
@@ -104,9 +132,9 @@ const TempleAdminLayout = () => {
               className={({ isActive }) =>
                 isActive ? 'nav-link active' : 'nav-link'
               }
-              onClick={() => console.log('Navigating to:', item.path)}
             >
-              {item.label}
+              <span className="nav-icon">{item.icon}</span>
+              <span className="nav-text">{item.label}</span>
             </NavLink>
           ))}
         </nav>
@@ -125,6 +153,12 @@ const TempleAdminLayout = () => {
           </div>
           <div className="header-actions">
             <span className="user-name">{user?.name || '管理員'}</span>
+            <NavLink
+              to={`/temple-admin/${templeId}/change-password`}
+              className="btn-ghost"
+            >
+              修改密碼
+            </NavLink>
             <button type="button" className="btn-ghost" onClick={logout}>
               登出
             </button>

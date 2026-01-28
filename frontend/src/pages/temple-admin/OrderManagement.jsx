@@ -1,7 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import templeAdminApi from '../../services/templeAdminApi';
+import { mockOrders as initialMockOrders } from '../../mocks/templeAdminMockData';
 import './OrderManagement.css';
+
+const USE_MOCK = true; // 設為 false 使用真實 API
+
+// 本地 mock 資料（可修改）
+let mockOrdersData = [...initialMockOrders];
 
 const OrderManagement = () => {
   const { templeId } = useParams();
@@ -63,12 +68,49 @@ const OrderManagement = () => {
       if (startDate) params.start_date = startDate;
       if (endDate) params.end_date = endDate;
 
-      const response = await templeAdminApi.orders.list(templeId, params);
+      if (USE_MOCK) {
+        // 使用 Mock 資料
+        await new Promise(resolve => setTimeout(resolve, 300));
+        let filtered = [...mockOrdersData];
 
-      if (response.success) {
-        setOrders(response.data.orders || []);
-        setTotal(response.data.total || 0);
-        setTotalPages(Math.ceil((response.data.total || 0) / pageSize));
+        if (params.keyword) {
+          const kw = params.keyword.toLowerCase();
+          filtered = filtered.filter(o =>
+            o.user_name.toLowerCase().includes(kw) ||
+            String(o.id).includes(kw)
+          );
+        }
+
+        if (params.status) {
+          filtered = filtered.filter(o => o.status === params.status);
+        }
+
+        if (params.start_date) {
+          filtered = filtered.filter(o => new Date(o.redeemed_at) >= new Date(params.start_date));
+        }
+
+        if (params.end_date) {
+          filtered = filtered.filter(o => new Date(o.redeemed_at) <= new Date(params.end_date + 'T23:59:59'));
+        }
+
+        // 按時間排序
+        filtered.sort((a, b) => new Date(b.redeemed_at) - new Date(a.redeemed_at));
+
+        const start = (params.page - 1) * params.per_page;
+        const paginated = filtered.slice(start, start + params.per_page);
+
+        setOrders(paginated);
+        setTotal(filtered.length);
+        setTotalPages(Math.ceil(filtered.length / pageSize));
+      } else {
+        const templeAdminApi = await import('../../services/templeAdminApi').then(m => m.default);
+        const response = await templeAdminApi.orders.list(templeId, params);
+
+        if (response.success) {
+          setOrders(response.data.orders || []);
+          setTotal(response.data.total || 0);
+          setTotalPages(Math.ceil((response.data.total || 0) / pageSize));
+        }
       }
     } catch (err) {
       console.error('載入訂單列表失敗:', err);
@@ -93,12 +135,24 @@ const OrderManagement = () => {
     setOrderDetail(null);
 
     try {
-      const response = await templeAdminApi.orders.get(templeId, order.id);
-      if (response.success) {
-        setOrderDetail(response.data);
-        setNewStatus(response.data.status || '');
-        setStatusNote(response.data.temple_note || '');
-        setTrackingNumber(response.data.tracking_number || '');
+      if (USE_MOCK) {
+        await new Promise(resolve => setTimeout(resolve, 300));
+        const detail = mockOrdersData.find(o => o.id === order.id);
+        if (detail) {
+          setOrderDetail(detail);
+          setNewStatus(detail.status || '');
+          setStatusNote(detail.temple_note || '');
+          setTrackingNumber(detail.tracking_number || '');
+        }
+      } else {
+        const templeAdminApi = await import('../../services/templeAdminApi').then(m => m.default);
+        const response = await templeAdminApi.orders.get(templeId, order.id);
+        if (response.success) {
+          setOrderDetail(response.data);
+          setNewStatus(response.data.status || '');
+          setStatusNote(response.data.temple_note || '');
+          setTrackingNumber(response.data.tracking_number || '');
+        }
       }
     } catch (err) {
       console.error('載入訂單詳情失敗:', err);
@@ -135,12 +189,41 @@ const OrderManagement = () => {
       if (statusNote) data.note = statusNote;
       if (trackingNumber) data.tracking_number = trackingNumber;
 
-      const response = await templeAdminApi.orders.updateStatus(templeId, currentOrder.id, data.status, data.note);
+      if (USE_MOCK) {
+        await new Promise(resolve => setTimeout(resolve, 300));
+        const index = mockOrdersData.findIndex(o => o.id === currentOrder.id);
+        if (index !== -1) {
+          mockOrdersData[index] = {
+            ...mockOrdersData[index],
+            status: newStatus,
+            temple_note: statusNote,
+            tracking_number: trackingNumber,
+          };
 
-      if (response.success) {
+          // 更新相關時間戳
+          if (newStatus === 'processing') {
+            mockOrdersData[index].processed_at = new Date().toISOString();
+          } else if (newStatus === 'shipped') {
+            mockOrdersData[index].shipped_at = new Date().toISOString();
+          } else if (newStatus === 'completed') {
+            mockOrdersData[index].completed_at = new Date().toISOString();
+          } else if (newStatus === 'cancelled') {
+            mockOrdersData[index].cancelled_at = new Date().toISOString();
+          }
+        }
+
         alert('訂單狀態更新成功');
         handleCloseDetail();
         fetchOrders();
+      } else {
+        const templeAdminApi = await import('../../services/templeAdminApi').then(m => m.default);
+        const response = await templeAdminApi.orders.updateStatus(templeId, currentOrder.id, data.status, data.note);
+
+        if (response.success) {
+          alert('訂單狀態更新成功');
+          handleCloseDetail();
+          fetchOrders();
+        }
       }
     } catch (err) {
       console.error('更新訂單狀態失敗:', err);

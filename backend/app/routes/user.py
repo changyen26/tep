@@ -187,7 +187,7 @@ def delete_account(current_user):
             return error_response('確認字串錯誤，請輸入 DELETE', 400)
 
         # 不允許刪除管理員帳號
-        if current_user.role == 'admin':
+        if account_type == 'super_admin':
             return error_response('管理員帳號無法刪除', 403)
 
         # 刪除用戶（級聯刪除關聯資料）

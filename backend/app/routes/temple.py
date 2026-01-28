@@ -301,7 +301,7 @@ def delete_temple(current_user, temple_id):
 
 @bp.route('/<int:temple_id>/checkin', methods=['POST'])
 @token_required
-def temple_checkin(current_user, temple_id):
+def temple_checkin(current_user, account_type, temple_id):
     """
     在廟宇簽到
     POST /api/temples/<temple_id>/checkin
@@ -428,7 +428,7 @@ def temple_checkin(current_user, temple_id):
 
 @bp.route('/<int:temple_id>/my-checkins', methods=['GET'])
 @token_required
-def get_my_temple_checkins(current_user, temple_id):
+def get_my_temple_checkins(current_user, account_type, temple_id):
     """
     獲取我在此廟宇的簽到記錄
     GET /api/temples/<temple_id>/my-checkins
@@ -479,7 +479,7 @@ def get_my_temple_checkins(current_user, temple_id):
 
 @bp.route('/nearby/available', methods=['GET'])
 @token_required
-def get_nearby_available_temples(current_user):
+def get_nearby_available_temples(current_user, account_type):
     """
     獲取附近可簽到的廟宇（排除今日已簽到的）
     GET /api/temples/nearby/available

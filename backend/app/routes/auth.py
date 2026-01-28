@@ -152,3 +152,47 @@ def get_current_user(current_user, account_type):
         'user': current_user.to_dict(),
         'account_type': account_type
     }, '獲取成功', 200)
+
+
+@bp.route('/change-password', methods=['PUT', 'OPTIONS'])
+@token_required
+def change_password(current_user, account_type):
+    """
+    修改密碼（需要 Token）- 三表版本
+    PUT /api/auth/change-password
+    Header: Authorization: Bearer <token>
+    Body: {
+        "old_password": "舊密碼",
+        "new_password": "新密碼"
+    }
+    """
+    if request.method == 'OPTIONS':
+        return '', 204
+
+    try:
+        data = request.get_json()
+
+        # 驗證必填欄位
+        if not data or 'old_password' not in data or 'new_password' not in data:
+            return error_response('缺少必填欄位', 400)
+
+        old_password = data['old_password']
+        new_password = data['new_password']
+
+        # 驗證新密碼長度
+        if len(new_password) < 6:
+            return error_response('新密碼至少需要 6 個字元', 400)
+
+        # 驗證舊密碼
+        if not current_user.check_password(old_password):
+            return error_response('舊密碼錯誤', 400)
+
+        # 設定新密碼
+        current_user.set_password(new_password)
+        db.session.commit()
+
+        return success_response(None, '密碼修改成功', 200)
+
+    except Exception as e:
+        db.session.rollback()
+        return error_response(f'修改密碼失敗: {str(e)}', 500)

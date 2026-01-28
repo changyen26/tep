@@ -1,0 +1,716 @@
+/* 感謝狀管理樣式 */
+
+.certificates-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.certificates-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.certificates-header h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+/* 統計卡片 */
+.cert-stats-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 900px) {
+  .cert-stats-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.cert-stat-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+}
+
+.cert-stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.cert-stat-label {
+  font-size: 13px;
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+/* 篩選 */
+.certificates-filters {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  gap: 8px;
+}
+
+.filter-btn {
+  padding: 8px 16px;
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filter-btn:hover {
+  background: #e5e7eb;
+}
+
+.filter-btn.active {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  color: white;
+}
+
+.search-input {
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  min-width: 250px;
+}
+
+/* 表格 */
+.certificates-table-wrapper {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.certificates-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.certificates-table th {
+  background: #f9fafb;
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 13px;
+  color: #374151;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.certificates-table td {
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #1f2937;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.certificates-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.certificates-table tbody tr:hover {
+  background: #f9fafb;
+}
+
+.cert-number {
+  font-family: monospace;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.cert-recipient {
+  font-weight: 500;
+}
+
+.cert-reason {
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cert-type-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.cert-type-badge.donation {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.cert-type-badge.volunteer {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.cert-type-badge.sponsor {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.cert-type-badge.other {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.cert-type-badge.receipt {
+  background: #e0e7ff;
+  color: #3730a3;
+}
+
+/* 表單 */
+.certificate-form {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 24px;
+  max-width: 700px;
+}
+
+.form-section {
+  margin-bottom: 24px;
+}
+
+.form-section h3 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.form-label.required::after {
+  content: ' *';
+  color: #ef4444;
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.form-error {
+  color: #ef4444;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 600px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* 按鈕 */
+.btn-primary {
+  padding: 10px 20px;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-primary:hover {
+  background: #2563eb;
+}
+
+.btn-primary:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  padding: 10px 20px;
+  background: white;
+  color: #374151;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+  background: #f3f4f6;
+}
+
+.btn-icon {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s;
+}
+
+.btn-icon:hover {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+/* 狀態 */
+.loading-state,
+.empty-state {
+  padding: 60px 20px;
+  text-align: center;
+  color: #6b7280;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+/* ==================== 感謝狀預覽樣式 ==================== */
+.certificate-preview {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  background: #f3f4f6;
+  min-height: 600px;
+}
+
+.certificate-paper {
+  width: 210mm;
+  min-height: 297mm;
+  background: #fffef5;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: 15mm;
+}
+
+.certificate-border {
+  border: 3px double #b8860b;
+  height: 100%;
+  padding: 20mm;
+  position: relative;
+}
+
+.certificate-content {
+  text-align: center;
+  font-family: '標楷體', 'DFKai-SB', 'KaiTi', serif;
+}
+
+.certificate-title {
+  font-size: 48px;
+  font-weight: bold;
+  color: #8b0000;
+  letter-spacing: 24px;
+  margin-bottom: 30px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.certificate-temple {
+  font-size: 28px;
+  color: #1a1a1a;
+  margin-bottom: 40px;
+  letter-spacing: 8px;
+}
+
+.certificate-recipient {
+  font-size: 32px;
+  margin-bottom: 40px;
+}
+
+.recipient-name {
+  font-weight: bold;
+  color: #000;
+  border-bottom: 2px solid #b8860b;
+  padding: 0 20px 5px;
+}
+
+.recipient-suffix {
+  font-size: 24px;
+  color: #333;
+}
+
+.certificate-body {
+  font-size: 20px;
+  line-height: 2;
+  color: #1a1a1a;
+  text-align: justify;
+  text-justify: inter-ideograph;
+  margin: 0 20px 50px;
+}
+
+.certificate-body .highlight {
+  font-weight: bold;
+  color: #8b0000;
+  font-size: 24px;
+}
+
+.certificate-footer {
+  margin-top: 60px;
+  font-size: 16px;
+  color: #333;
+}
+
+.certificate-number {
+  font-family: monospace;
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.certificate-date {
+  font-size: 18px;
+}
+
+.certificate-seal {
+  position: absolute;
+  bottom: 60px;
+  right: 60px;
+}
+
+.seal-placeholder {
+  width: 80px;
+  height: 80px;
+  border: 3px solid #8b0000;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #8b0000;
+  text-align: center;
+  line-height: 1.3;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+/* ==================== 傳統收據樣式 ==================== */
+.receipt-paper {
+  width: 200mm;
+  background: #fffff8;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: 8mm;
+  font-family: '標楷體', 'DFKai-SB', 'KaiTi', serif;
+}
+
+.receipt-outer-border {
+  border: 3px solid #c41e3a;
+  padding: 3mm;
+}
+
+.receipt-inner-border {
+  border: 1px solid #c41e3a;
+  padding: 5mm;
+}
+
+.receipt-header {
+  text-align: center;
+  margin-bottom: 5mm;
+  padding-bottom: 3mm;
+  border-bottom: 2px solid #333;
+}
+
+.receipt-title {
+  font-size: 32px;
+  font-weight: bold;
+  letter-spacing: 16px;
+  color: #c41e3a;
+  margin-bottom: 3mm;
+}
+
+.receipt-temple-name {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  letter-spacing: 4px;
+}
+
+.receipt-temple-address {
+  font-size: 12px;
+  color: #666;
+  margin-top: 2mm;
+}
+
+.receipt-number-date {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #333;
+  margin: 4mm 0;
+  padding: 2mm 0;
+  border-bottom: 1px dashed #999;
+}
+
+/* 收據表格 */
+.receipt-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 4mm 0;
+}
+
+.receipt-table th,
+.receipt-table td {
+  border: 1px solid #333;
+  padding: 3mm 4mm;
+  text-align: center;
+  font-size: 14px;
+}
+
+.receipt-table th {
+  background: #f5f5f0;
+  font-weight: bold;
+  color: #333;
+  width: 25%;
+}
+
+.receipt-table td {
+  background: white;
+  color: #1a1a1a;
+}
+
+.receipt-table .amount-cell {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.receipt-table .chinese-amount {
+  color: #c41e3a;
+  letter-spacing: 2px;
+}
+
+.receipt-table .numeric-amount {
+  font-family: 'Courier New', monospace;
+  font-size: 18px;
+}
+
+/* 收據底部 */
+.receipt-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 5mm;
+  padding-top: 3mm;
+}
+
+.receipt-note {
+  font-size: 12px;
+  color: #666;
+  line-height: 1.6;
+}
+
+.receipt-note-item {
+  margin-bottom: 1mm;
+}
+
+.receipt-seal-area {
+  text-align: center;
+  min-width: 80px;
+}
+
+.receipt-seal-label {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 2mm;
+}
+
+.receipt-seal-box {
+  width: 70px;
+  height: 70px;
+  border: 2px solid #c41e3a;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: #c41e3a;
+  text-align: center;
+  line-height: 1.3;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+/* 存根聯樣式 */
+.receipt-stub {
+  border-top: 2px dashed #999;
+  margin-top: 5mm;
+  padding-top: 4mm;
+}
+
+.receipt-stub-title {
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 3mm;
+}
+
+.receipt-stub-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #333;
+}
+
+.receipt-stub-item {
+  display: flex;
+  gap: 2mm;
+}
+
+.receipt-stub-label {
+  color: #666;
+}
+
+.receipt-stub-value {
+  font-weight: bold;
+}
+
+/* 列印樣式 */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .certificates-container {
+    padding: 0;
+  }
+
+  .certificate-preview {
+    padding: 0;
+    background: none;
+    min-height: auto;
+  }
+
+  .certificate-paper {
+    box-shadow: none;
+    width: 100%;
+    min-height: auto;
+    margin: 0;
+  }
+
+  .receipt-paper {
+    box-shadow: none;
+    width: 100%;
+    min-height: auto;
+    margin: 0;
+  }
+
+  @page {
+    size: A4;
+    margin: 0;
+  }
+}
+
+/* 響應式 */
+@media (max-width: 768px) {
+  .certificates-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-input {
+    min-width: 100%;
+  }
+
+  .certificate-paper {
+    width: 100%;
+    min-height: auto;
+    padding: 10mm;
+  }
+
+  .certificate-border {
+    padding: 10mm;
+  }
+
+  .certificate-title {
+    font-size: 32px;
+    letter-spacing: 12px;
+  }
+
+  .certificate-temple {
+    font-size: 20px;
+  }
+
+  .certificate-recipient {
+    font-size: 24px;
+  }
+
+  .certificate-body {
+    font-size: 16px;
+  }
+}

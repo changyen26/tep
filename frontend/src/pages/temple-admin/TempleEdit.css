@@ -1,89 +1,170 @@
-/* 廟宇資訊編輯樣式 */
+/* ========================================
+   Temple Settings - 廟宇設定頁面
+   ======================================== */
 
 .temple-edit {
   max-width: 1000px;
   margin: 0 auto;
-  padding: 24px;
 }
 
-/* 頁面標題 */
+/* ========================================
+   Page Header 頁面標題
+   ======================================== */
 .page-header {
   margin-bottom: 32px;
 }
 
 .page-title {
   font-size: 28px;
-  font-weight: 700;
-  color: #1f2933;
-  margin: 0 0 8px 0;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin: 0 0 12px 0;
+  position: relative;
+  display: inline-block;
+}
+
+.page-title::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(135deg, #e94560 0%, #ff6b6b 100%);
+  border-radius: 2px;
 }
 
 .page-subtitle {
   font-size: 15px;
-  color: #6b7280;
-  margin: 0;
+  color: #64748b;
+  margin: 16px 0 0 0;
 }
 
-/* 成功與錯誤訊息 */
+/* ========================================
+   Alerts 訊息提示
+   ======================================== */
 .success-banner,
 .error-banner {
-  padding: 16px 20px;
-  border-radius: 8px;
+  padding: 18px 24px;
+  border-radius: 16px;
   margin-bottom: 24px;
   font-size: 15px;
-  font-weight: 500;
+  font-weight: 600;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .success-banner {
-  background: #d1fae5;
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
   color: #065f46;
-  border: 1px solid #6ee7b7;
+  border: none;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+}
+
+.success-banner::before {
+  content: '✓';
+  width: 28px;
+  height: 28px;
+  background: #10b981;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
 }
 
 .error-banner {
-  background: #fee2e2;
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
   color: #991b1b;
-  border: 1px solid #fca5a5;
+  border: none;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2);
 }
 
-/* 表單 */
+.error-banner::before {
+  content: '✕';
+  width: 28px;
+  height: 28px;
+  background: #ef4444;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+/* ========================================
+   Form 表單
+   ======================================== */
 .edit-form {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 28px;
 }
 
-/* 表單區塊 */
+/* ========================================
+   Form Section 表單區塊
+   ======================================== */
 .form-section {
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 28px;
+  background: white;
+  border: none;
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.form-section:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
 }
 
 .section-title {
   font-size: 18px;
-  font-weight: 600;
-  color: #1f2933;
-  margin: 0 0 24px 0;
-  padding-bottom: 12px;
-  border-bottom: 2px solid #f3f4f6;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0 0 28px 0;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-/* 表單網格 */
+.section-title::before {
+  content: '';
+  width: 4px;
+  height: 24px;
+  background: linear-gradient(135deg, #e94560 0%, #ff6b6b 100%);
+  border-radius: 2px;
+}
+
+/* ========================================
+   Form Grid 表單網格
+   ======================================== */
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
+  gap: 24px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
 .form-group.full-width {
@@ -92,65 +173,100 @@
 
 .form-group label {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .field-hint {
   font-size: 13px;
-  color: #9ca3af;
-  margin-top: 4px;
+  color: #94a3b8;
+  margin-top: 6px;
+  padding-left: 2px;
 }
 
-/* 輸入欄位 */
+/* ========================================
+   Form Inputs 輸入欄位
+   ======================================== */
 .form-input,
 .form-textarea {
-  padding: 10px 14px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
+  padding: 14px 18px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
   font-size: 15px;
-  color: #1f2933;
-  transition: all 0.2s ease;
+  color: #1a1a2e;
+  transition: all 0.3s ease;
   font-family: inherit;
+  background: #f8fafc;
+}
+
+.form-input:hover,
+.form-textarea:hover {
+  border-color: #cbd5e1;
+  background: #fff;
 }
 
 .form-input:focus,
 .form-textarea:focus {
   outline: none;
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  border-color: #e94560;
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(233, 69, 96, 0.1);
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: #94a3b8;
 }
 
 .form-textarea {
   resize: vertical;
-  min-height: 80px;
+  min-height: 100px;
+  line-height: 1.6;
 }
 
-/* 圖片上傳區塊 */
+/* Number input styling */
+.form-input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.form-input[type="number"]::-webkit-outer-spin-button,
+.form-input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* ========================================
+   Image Upload 圖片上傳
+   ======================================== */
 .image-upload-section {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
 }
 
 .image-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
 }
 
 .image-preview {
   position: relative;
   aspect-ratio: 4 / 3;
-  border-radius: 8px;
+  border-radius: 16px;
   overflow: hidden;
-  border: 2px solid #e5e7eb;
-  transition: all 0.2s ease;
+  border: 3px solid #e2e8f0;
+  transition: all 0.3s ease;
+  background: #f8fafc;
 }
 
 .image-preview:hover {
-  border-color: #2563eb;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: #e94560;
+  box-shadow: 0 8px 25px rgba(233, 69, 96, 0.2);
+  transform: translateY(-4px);
 }
 
 .image-preview img {
@@ -161,24 +277,31 @@
 
 .remove-image-btn {
   position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 28px;
-  height: 28px;
-  background: rgba(0, 0, 0, 0.7);
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
   color: #fff;
   border: none;
   border-radius: 50%;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.image-preview:hover .remove-image-btn {
+  opacity: 1;
+  transform: scale(1);
 }
 
 .remove-image-btn:hover {
-  background: #dc2626;
+  background: linear-gradient(135deg, #e94560 0%, #ff6b6b 100%);
   transform: scale(1.1);
 }
 
@@ -192,49 +315,64 @@
 }
 
 .btn-upload {
-  padding: 12px 24px;
-  background: #f3f4f6;
-  color: #374151;
-  border: 2px dashed #d1d5db;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: inline-block;
-}
-
-.btn-upload:hover {
-  background: #e5e7eb;
-  border-color: #2563eb;
-  color: #2563eb;
-}
-
-/* 提交按鈕區 */
-.form-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  padding-top: 24px;
-  border-top: 1px solid #e5e7eb;
-}
-
-.btn-primary {
-  padding: 12px 32px;
-  background: #2563eb;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
+  padding: 20px 32px;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  color: #64748b;
+  border: 3px dashed #cbd5e1;
+  border-radius: 16px;
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-upload::before {
+  content: '📷';
+  font-size: 20px;
+}
+
+.btn-upload:hover {
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  border-color: #e94560;
+  color: #e94560;
+  transform: translateY(-2px);
+}
+
+/* ========================================
+   Form Actions 提交按鈕
+   ======================================== */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  padding: 32px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.btn-primary {
+  padding: 16px 40px;
+  background: linear-gradient(135deg, #e94560 0%, #ff6b6b 100%);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(233, 69, 96, 0.3);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: #1d4ed8;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(233, 69, 96, 0.4);
+}
+
+.btn-primary:active:not(:disabled) {
   transform: translateY(-1px);
 }
 
@@ -242,30 +380,57 @@
   opacity: 0.6;
   cursor: not-allowed;
   transform: none;
+  box-shadow: none;
 }
 
-/* 載入與錯誤狀態 */
+/* ========================================
+   Loading & Error States
+   ======================================== */
 .loading-message,
 .error-message {
   text-align: center;
-  padding: 60px 20px;
+  padding: 80px 20px;
   font-size: 16px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
 .loading-message {
-  color: #6b7280;
+  color: #64748b;
+}
+
+.loading-message::before {
+  content: '';
+  display: block;
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 20px;
+  border: 4px solid #e2e8f0;
+  border-top-color: #e94560;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 .error-message {
   color: #dc2626;
 }
 
-/* 響應式設計 */
-@media (max-width: 768px) {
-  .temple-edit {
-    padding: 16px;
-  }
+.error-message::before {
+  content: '⚠️';
+  display: block;
+  font-size: 48px;
+  margin-bottom: 16px;
+}
 
+/* ========================================
+   Responsive Design
+   ======================================== */
+@media (max-width: 768px) {
   .page-title {
     font-size: 24px;
   }
@@ -275,12 +440,13 @@
   }
 
   .form-section {
-    padding: 20px;
+    padding: 24px;
+    border-radius: 16px;
   }
 
   .form-grid {
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 20px;
   }
 
   .form-group.full-width {
@@ -288,34 +454,55 @@
   }
 
   .image-grid {
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 16px;
   }
 
   .form-actions {
     flex-direction: column;
+    padding: 24px;
   }
 
   .btn-primary {
     width: 100%;
+    padding: 16px;
+  }
+
+  .btn-upload {
+    width: 100%;
+    justify-content: center;
   }
 }
 
 @media (max-width: 480px) {
   .form-section {
-    padding: 16px;
+    padding: 20px;
   }
 
   .section-title {
     font-size: 16px;
   }
 
-  .image-grid {
-    grid-template-columns: 1fr;
+  .form-input,
+  .form-textarea {
+    padding: 12px 14px;
+    font-size: 14px;
   }
 
-  .btn-upload {
-    width: 100%;
-    text-align: center;
+  .image-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .image-preview {
+    border-radius: 12px;
+  }
+
+  .remove-image-btn {
+    opacity: 1;
+    transform: scale(1);
+    width: 32px;
+    height: 32px;
+    top: 8px;
+    right: 8px;
   }
 }

@@ -3,6 +3,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider, useAuth } from '../context/AuthContext';
 import { queryClient } from '../queryClient';
 import Login from '../pages/Login';
+import TempleAdminLogin from '../pages/TempleAdminLogin';
 import Register from '../pages/Register';
 import Shop from '../pages/Shop';
 import Temples from '../pages/Temples';
@@ -54,6 +55,7 @@ const AppRoutes = () => (
   <Routes>
     <Route path="/" element={<Navigate to="/dashboard" replace />} />
     <Route path="/login" element={<Login />} />
+    <Route path="/temple-admin/login" element={<TempleAdminLogin />} />
     <Route path="/register" element={<Register />} />
 
     <Route

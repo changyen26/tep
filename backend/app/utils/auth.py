@@ -81,43 +81,16 @@ def token_required(f):
 
         try:
             if account_type == 'public' or account_type == 'user':
-                # 嘗試從新表查詢
-                try:
-                    from app.models.public_user import PublicUser
-                    current_user = PublicUser.query.get(user_id)
-                except Exception:
-                    pass
-
-                # 向後兼容：如果新表不存在或查不到，使用舊表
-                if not current_user:
-                    from app.models.user import User
-                    current_user = User.query.filter_by(id=user_id, role='user').first()
+                from app.models.public_user import PublicUser
+                current_user = PublicUser.query.get(user_id)
 
             elif account_type == 'temple_admin':
-                # 嘗試從新表查詢
-                try:
-                    from app.models.temple_admin_user import TempleAdminUser
-                    current_user = TempleAdminUser.query.get(user_id)
-                except Exception:
-                    pass
-
-                # 向後兼容：如果新表不存在或查不到，使用舊表
-                if not current_user:
-                    from app.models.user import User
-                    current_user = User.query.filter_by(id=user_id, role='temple_admin').first()
+                from app.models.temple_admin_user import TempleAdminUser
+                current_user = TempleAdminUser.query.get(user_id)
 
             elif account_type == 'super_admin' or account_type == 'admin':
-                # 嘗試從新表查詢
-                try:
-                    from app.models.super_admin_user import SuperAdminUser
-                    current_user = SuperAdminUser.query.get(user_id)
-                except Exception:
-                    pass
-
-                # 向後兼容：如果新表不存在或查不到，使用舊表
-                if not current_user:
-                    from app.models.user import User
-                    current_user = User.query.filter_by(id=user_id, role='admin').first()
+                from app.models.super_admin_user import SuperAdminUser
+                current_user = SuperAdminUser.query.get(user_id)
 
         except Exception as e:
             # 詳細記錄錯誤（開發環境）
@@ -172,12 +145,8 @@ def public_user_required(f):
         if account_type not in ['public', 'user']:
             return error_response('此功能僅限一般使用者', 403)
 
-        try:
-            from app.models.public_user import PublicUser
-            current_user = PublicUser.query.get(payload['user_id'])
-        except Exception:
-            from app.models.user import User
-            current_user = User.query.filter_by(id=payload['user_id'], role='user').first()
+        from app.models.public_user import PublicUser
+        current_user = PublicUser.query.get(payload['user_id'])
 
         if not current_user or (hasattr(current_user, 'is_active') and not current_user.is_active):
             return error_response('用戶不存在或已停用', 401)
@@ -215,12 +184,8 @@ def temple_admin_token_required(f):
         if account_type != 'temple_admin':
             return error_response('此功能僅限廟方管理員', 403)
 
-        try:
-            from app.models.temple_admin_user import TempleAdminUser
-            current_user = TempleAdminUser.query.get(payload['user_id'])
-        except Exception:
-            from app.models.user import User
-            current_user = User.query.filter_by(id=payload['user_id'], role='temple_admin').first()
+        from app.models.temple_admin_user import TempleAdminUser
+        current_user = TempleAdminUser.query.get(payload['user_id'])
 
         if not current_user or (hasattr(current_user, 'is_active') and not current_user.is_active):
             return error_response('廟方管理員不存在或已停用', 401)
@@ -258,12 +223,8 @@ def super_admin_token_required(f):
         if account_type not in ['super_admin', 'admin']:
             return error_response('此功能僅限系統管理員', 403)
 
-        try:
-            from app.models.super_admin_user import SuperAdminUser
-            current_user = SuperAdminUser.query.get(payload['user_id'])
-        except Exception:
-            from app.models.user import User
-            current_user = User.query.filter_by(id=payload['user_id'], role='admin').first()
+        from app.models.super_admin_user import SuperAdminUser
+        current_user = SuperAdminUser.query.get(payload['user_id'])
 
         if not current_user or (hasattr(current_user, 'is_active') and not current_user.is_active):
             return error_response('系統管理員不存在或已停用', 401)
@@ -311,9 +272,9 @@ def admin_required(f):
             current_user = None
 
         if not current_user:
-            from app.models.user import User
-            current_user = User.query.get(payload['user_id'])
-            if not current_user or current_user.role != 'admin':
+            from app.models.super_admin_user import SuperAdminUser
+            current_user = SuperAdminUser.query.get(payload['user_id'])
+            if not current_user:
                 return error_response('管理員不存在', 401)
 
         return f(current_user=current_user, *args, **kwargs)

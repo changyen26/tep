@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import templeAdminApi from '../../services/templeAdminApi';
+import { generateRevenueReport } from '../../mocks/templeAdminMockData';
 import './RevenueReport.css';
+
+const USE_MOCK = true; // 設為 false 使用真實 API
 
 const RevenueReport = () => {
   const { templeId } = useParams();
@@ -31,14 +33,22 @@ const RevenueReport = () => {
     setError(null);
 
     try {
-      const response = await templeAdminApi.revenue.getReport(templeId, {
-        start_date: dateRange.start,
-        end_date: dateRange.end,
-        group_by: groupBy,
-      });
+      if (USE_MOCK) {
+        // 使用 Mock 資料
+        await new Promise(resolve => setTimeout(resolve, 300));
+        const report = generateRevenueReport(dateRange.start, dateRange.end, groupBy);
+        setRevenueData(report);
+      } else {
+        const templeAdminApi = await import('../../services/templeAdminApi').then(m => m.default);
+        const response = await templeAdminApi.revenue.getReport(templeId, {
+          start_date: dateRange.start,
+          end_date: dateRange.end,
+          group_by: groupBy,
+        });
 
-      if (response.success) {
-        setRevenueData(response.data);
+        if (response.success) {
+          setRevenueData(response.data);
+        }
       }
     } catch (err) {
       console.error('載入收入報表失敗:', err);

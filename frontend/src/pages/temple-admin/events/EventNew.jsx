@@ -1,11 +1,15 @@
-import { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { createEvent } from '../../../services/templeEventsService';
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { createEvent, getEvent } from '../../../services/templeEventsService';
 import './Events.css';
 
 const EventNew = () => {
   const { templeId } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  // 複製來源活動 ID
+  const copyFromId = searchParams.get('copyFrom');
 
   // 表單狀態
   const [formData, setFormData] = useState({
@@ -23,6 +27,40 @@ const EventNew = () => {
 
   const [formErrors, setFormErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
+  const [loadingCopy, setLoadingCopy] = useState(false);
+
+  // 載入要複製的活動資料
+  useEffect(() => {
+    const loadSourceEvent = async () => {
+      if (!copyFromId) return;
+
+      setLoadingCopy(true);
+      try {
+        const response = await getEvent(copyFromId);
+        if (response.success && response.data) {
+          const source = response.data;
+          setFormData({
+            title: `${source.title} (複製)`,
+            description: source.description || '',
+            location: source.location || '',
+            startAt: '', // 清空時間讓用戶重新設定
+            endAt: '',
+            signupEndAt: '',
+            capacity: source.capacity?.toString() || '',
+            fee: source.fee?.toString() || '0',
+            coverImageUrl: source.coverImageUrl || '',
+            templeId: parseInt(templeId),
+          });
+        }
+      } catch (error) {
+        console.error('載入複製來源失敗:', error);
+      } finally {
+        setLoadingCopy(false);
+      }
+    };
+
+    loadSourceEvent();
+  }, [copyFromId, templeId]);
 
   // 處理欄位變更
   const handleChange = (e) => {
@@ -115,10 +153,23 @@ const EventNew = () => {
     navigate(`/temple-admin/${templeId}/events`);
   };
 
+  if (loadingCopy) {
+    return (
+      <div className="events-container">
+        <div className="loading-state">載入活動資料中...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="events-container">
       <div className="events-header">
-        <h2>新增活動</h2>
+        <h2>{copyFromId ? '複製活動' : '新增活動'}</h2>
+        {copyFromId && (
+          <div style={{ fontSize: '14px', color: '#6b7280' }}>
+            已從現有活動複製基本資料，請設定新的時間
+          </div>
+        )}
       </div>
 
       <form className="event-form" onSubmit={handleSubmit}>

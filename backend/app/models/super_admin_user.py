@@ -12,7 +12,6 @@ class SuperAdminUser(db.Model):
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False, index=True)
     password_hash = db.Column(db.String(255), nullable=False)
-    permission_scope = db.Column(db.JSON, nullable=True)  # 權限範圍（JSON）
     is_active = db.Column(db.Boolean, default=True, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     last_login_at = db.Column(db.DateTime, nullable=True)
@@ -31,7 +30,6 @@ class SuperAdminUser(db.Model):
             'id': self.id,
             'name': self.name,
             'email': self.email,
-            'permission_scope': self.permission_scope,
             'is_active': self.is_active,
             'created_at': self.created_at.isoformat(),
             'last_login_at': self.last_login_at.isoformat() if self.last_login_at else None,

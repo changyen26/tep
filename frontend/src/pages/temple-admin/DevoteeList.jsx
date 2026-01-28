@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import templeAdminApi from '../../services/templeAdminApi';
+import { mockDevotees } from '../../mocks/templeAdminMockData';
 import './DevoteeList.css';
+
+const USE_MOCK = true; // 設為 false 使用真實 API
 
 const DevoteeList = () => {
   const { templeId } = useParams();
@@ -38,13 +40,44 @@ const DevoteeList = () => {
         params.keyword = keyword.trim();
       }
 
-      const response = await templeAdminApi.devotees.list(templeId, params);
+      if (USE_MOCK) {
+        // 使用 Mock 資料
+        await new Promise(resolve => setTimeout(resolve, 300));
+        let filtered = [...mockDevotees];
 
-      if (response.success || response.data) {
-        const data = response.data || response;
-        setDevotees(data.items || []);
-        setTotal(data.total || 0);
-        setTotalPages(Math.ceil((data.total || 0) / pageSize));
+        if (params.keyword) {
+          const kw = params.keyword.toLowerCase();
+          filtered = filtered.filter(d =>
+            d.name.toLowerCase().includes(kw) ||
+            d.email.toLowerCase().includes(kw)
+          );
+        }
+
+        // 排序
+        if (params.sort === 'checkins') {
+          filtered.sort((a, b) => b.checkins_count - a.checkins_count);
+        } else if (params.sort === 'spend') {
+          filtered.sort((a, b) => b.spend_total - a.spend_total);
+        } else {
+          filtered.sort((a, b) => new Date(b.last_seen_at) - new Date(a.last_seen_at));
+        }
+
+        const start = (params.page - 1) * params.per_page;
+        const paginated = filtered.slice(start, start + params.per_page);
+
+        setDevotees(paginated);
+        setTotal(filtered.length);
+        setTotalPages(Math.ceil(filtered.length / pageSize));
+      } else {
+        const templeAdminApi = await import('../../services/templeAdminApi').then(m => m.default);
+        const response = await templeAdminApi.devotees.list(templeId, params);
+
+        if (response.success || response.data) {
+          const data = response.data || response;
+          setDevotees(data.items || []);
+          setTotal(data.total || 0);
+          setTotalPages(Math.ceil((data.total || 0) / pageSize));
+        }
       }
     } catch (err) {
       console.error('載入信眾列表失敗:', err);

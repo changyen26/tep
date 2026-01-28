@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { listEvents } from '../../../services/templeEventsService';
 import './Events.css';
@@ -19,6 +19,68 @@ const EventList = () => {
   const [total, setTotal] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
   const pageSize = 20;
+
+  // 計算進度條樣式類別
+  const getProgressClass = (registered, capacity) => {
+    if (!capacity || capacity === 0) return 'low';
+    const percentage = (registered / capacity) * 100;
+    if (percentage >= 100) return 'full';
+    if (percentage >= 90) return 'high';
+    if (percentage >= 70) return 'medium';
+    return 'low';
+  };
+
+  // 計算剩餘時間
+  const getTimeRemaining = (dateStr) => {
+    if (!dateStr) return null;
+    const now = new Date();
+    const target = new Date(dateStr);
+    const diff = target - now;
+
+    if (diff <= 0) return { text: '已截止', type: 'expired' };
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+
+    if (days > 7) return { text: `${days} 天後截止`, type: 'normal' };
+    if (days > 1) return { text: `剩 ${days} 天`, type: 'warning' };
+    if (days === 1) return { text: '明天截止', type: 'warning' };
+    if (hours > 0) return { text: `剩 ${hours} 小時`, type: 'urgent' };
+    return { text: '即將截止', type: 'urgent' };
+  };
+
+  // 產生活動狀態標籤
+  const getEventTags = (event) => {
+    const tags = [];
+    const registered = event.registeredCount || 0;
+    const capacity = event.capacity || 0;
+    const percentage = capacity > 0 ? (registered / capacity) * 100 : 0;
+
+    // 名額相關標籤
+    if (percentage >= 100) {
+      tags.push({ label: '已額滿', type: 'urgent', icon: '🔴' });
+    } else if (percentage >= 90) {
+      tags.push({ label: '即將額滿', type: 'warning', icon: '🟡' });
+    }
+
+    // 時間相關標籤
+    if (event.status === 'published' && event.signupEndAt) {
+      const timeInfo = getTimeRemaining(event.signupEndAt);
+      if (timeInfo && timeInfo.type === 'urgent') {
+        tags.push({ label: '快截止', type: 'urgent', icon: '⏰' });
+      }
+    }
+
+    // 活動即將開始
+    if (event.status === 'published' && event.startAt) {
+      const startTime = getTimeRemaining(event.startAt);
+      if (startTime && startTime.type === 'warning') {
+        tags.push({ label: '即將開始', type: 'info', icon: '📅' });
+      }
+    }
+
+    return tags;
+  };
 
   // 載入活動列表
   const fetchEvents = async () => {
@@ -96,6 +158,16 @@ const EventList = () => {
   // 處理編輯
   const handleEdit = (eventId) => {
     navigate(`/temple-admin/${templeId}/events/${eventId}/edit`);
+  };
+
+  // 處理簽到頁面
+  const handleCheckin = (eventId) => {
+    navigate(`/temple-admin/${templeId}/events/${eventId}/registrations?mode=checkin`);
+  };
+
+  // 處理複製活動
+  const handleCopy = (eventId) => {
+    navigate(`/temple-admin/${templeId}/events/new?copyFrom=${eventId}`);
   };
 
   // 處理搜尋
@@ -189,46 +261,110 @@ const EventList = () => {
                 <tr>
                   <th>狀態</th>
                   <th>活動名稱</th>
-                  <th>地點</th>
+                  <th>報名進度</th>
                   <th>活動時間</th>
                   <th>報名截止</th>
-                  <th>名額</th>
                   <th>費用</th>
                   <th>操作</th>
                 </tr>
               </thead>
               <tbody>
-                {events.map((event) => (
-                  <tr key={event.id}>
-                    <td>{getStatusBadge(event.status)}</td>
-                    <td>
-                      <span className="event-title">{event.title}</span>
-                    </td>
-                    <td>{event.location}</td>
-                    <td>{formatDateTime(event.startAt)}</td>
-                    <td>{formatDateTime(event.signupEndAt)}</td>
-                    <td>{event.capacity}</td>
-                    <td>{event.fee === 0 ? '免費' : `$${event.fee}`}</td>
-                    <td>
-                      <div className="action-buttons">
-                        <button
-                          className="btn-sm btn-view"
-                          onClick={() => handleView(event.id)}
-                        >
-                          查看
-                        </button>
-                        {event.status === 'draft' && (
-                          <button
-                            className="btn-sm btn-edit"
-                            onClick={() => handleEdit(event.id)}
-                          >
-                            編輯
-                          </button>
+                {events.map((event) => {
+                  const registered = event.registeredCount || 0;
+                  const capacity = event.capacity || 0;
+                  const percentage = capacity > 0 ? Math.min((registered / capacity) * 100, 100) : 0;
+                  const progressClass = getProgressClass(registered, capacity);
+                  const eventTags = getEventTags(event);
+                  const signupTimeInfo = event.signupEndAt ? getTimeRemaining(event.signupEndAt) : null;
+
+                  return (
+                    <tr key={event.id}>
+                      <td>{getStatusBadge(event.status)}</td>
+                      <td className="event-info-cell">
+                        <div className="event-title-row">
+                          <span className="event-title">{event.title}</span>
+                        </div>
+                        {event.location && (
+                          <div className="event-subtitle">📍 {event.location}</div>
                         )}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                        {eventTags.length > 0 && (
+                          <div className="event-tags">
+                            {eventTags.map((tag, idx) => (
+                              <span key={idx} className={`event-tag ${tag.type}`}>
+                                {tag.icon} {tag.label}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </td>
+                      <td className="progress-cell">
+                        <div className="progress-bar-container">
+                          <div className="progress-bar">
+                            <div
+                              className={`progress-bar-fill ${progressClass}`}
+                              style={{ width: `${percentage}%` }}
+                            />
+                          </div>
+                          <span className="progress-text">
+                            {registered}/{capacity}
+                          </span>
+                        </div>
+                      </td>
+                      <td>
+                        <div className="time-display">
+                          <span>{formatDateTime(event.startAt)}</span>
+                        </div>
+                      </td>
+                      <td>
+                        <div className="time-display">
+                          <span>{formatDateTime(event.signupEndAt)}</span>
+                          {signupTimeInfo && event.status === 'published' && (
+                            <span className={`time-countdown ${signupTimeInfo.type}`}>
+                              {signupTimeInfo.text}
+                            </span>
+                          )}
+                        </div>
+                      </td>
+                      <td>{event.fee === 0 ? '免費' : `$${event.fee}`}</td>
+                      <td>
+                        <div className="quick-actions">
+                          <button
+                            className="btn-icon"
+                            onClick={() => handleView(event.id)}
+                            title="查看詳情"
+                          >
+                            👁️
+                          </button>
+                          {event.status === 'draft' && (
+                            <button
+                              className="btn-icon"
+                              onClick={() => handleEdit(event.id)}
+                              title="編輯活動"
+                            >
+                              ✏️
+                            </button>
+                          )}
+                          {(event.status === 'published' || event.status === 'closed') && (
+                            <button
+                              className="btn-icon btn-checkin"
+                              onClick={() => handleCheckin(event.id)}
+                              title="報到簽到"
+                            >
+                              ✅
+                            </button>
+                          )}
+                          <button
+                            className="btn-icon btn-copy"
+                            onClick={() => handleCopy(event.id)}
+                            title="複製活動"
+                          >
+                            📋
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

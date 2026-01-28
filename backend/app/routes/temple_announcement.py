@@ -47,15 +47,8 @@ def create_announcement(current_user):
         if not temple:
             return error_response('廟宇不存在或已停用', 404)
 
-        # 檢查使用者是否為該廟宇的管理員
-        from app.models.temple_admin import TempleAdmin
-        temple_admin = TempleAdmin.query.filter_by(
-            temple_id=temple_id,
-            user_id=current_user.id,
-            is_active=True
-        ).first()
-
-        if not temple_admin or not temple_admin.has_permission('manage_announcements'):
+        # 檢查使用者是否為該廟宇的管理員（一帳號一廟）
+        if not hasattr(current_user, 'temple_id') or current_user.temple_id != temple_id:
             return error_response('您沒有權限在此廟宇發布公告', 403)
 
         # 驗證公告類型
@@ -229,15 +222,8 @@ def update_announcement(current_user, announcement_id):
         if not announcement:
             return error_response('公告不存在', 404)
 
-        # 檢查權限
-        from app.models.temple_admin import TempleAdmin
-        temple_admin = TempleAdmin.query.filter_by(
-            temple_id=announcement.temple_id,
-            user_id=current_user.id,
-            is_active=True
-        ).first()
-
-        if not temple_admin or not temple_admin.has_permission('manage_announcements'):
+        # 檢查權限（一帳號一廟）
+        if not hasattr(current_user, 'temple_id') or current_user.temple_id != announcement.temple_id:
             return error_response('您沒有權限修改此公告', 403)
 
         data = request.get_json()
@@ -306,15 +292,8 @@ def delete_announcement(current_user, announcement_id):
         if not announcement:
             return error_response('公告不存在', 404)
 
-        # 檢查權限
-        from app.models.temple_admin import TempleAdmin
-        temple_admin = TempleAdmin.query.filter_by(
-            temple_id=announcement.temple_id,
-            user_id=current_user.id,
-            is_active=True
-        ).first()
-
-        if not temple_admin or not temple_admin.has_permission('manage_announcements'):
+        # 檢查權限（一帳號一廟）
+        if not hasattr(current_user, 'temple_id') or current_user.temple_id != announcement.temple_id:
             return error_response('您沒有權限刪除此公告', 403)
 
         db.session.delete(announcement)

@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import templeAdminApi from '../../services/templeAdminApi';
+import { mockCheckins } from '../../mocks/templeAdminMockData';
 import './CheckinRecords.css';
+
+const USE_MOCK = true; // 設為 false 使用真實 API
 
 const CheckinRecords = () => {
   const { templeId } = useParams();
@@ -29,12 +31,37 @@ const CheckinRecords = () => {
   // 載入打卡統計（時段圖表用）
   const fetchCheckinStats = async () => {
     try {
-      // TODO: 後端尚未實作統計 API，暫時使用空資料
-      setCheckinStats({ daily_stats: [], hourly_stats: [] });
-      // const response = await templeAdminApi.checkins.getStats(templeId, period);
-      // if (response.success) {
-      //   setCheckinStats(response.data);
-      // }
+      if (USE_MOCK) {
+        // 生成 Mock 統計資料
+        await new Promise(resolve => setTimeout(resolve, 200));
+
+        if (period === 'day') {
+          // 今日每小時統計
+          const hourlyStats = [];
+          for (let h = 6; h <= 20; h++) {
+            hourlyStats.push({
+              hour: h,
+              count: Math.floor(Math.random() * 10) + 1,
+            });
+          }
+          setCheckinStats({ hourly_stats: hourlyStats, daily_stats: [] });
+        } else {
+          // 每日統計
+          const dailyStats = [];
+          const days = period === 'week' ? 7 : 30;
+          for (let d = days - 1; d >= 0; d--) {
+            const date = new Date();
+            date.setDate(date.getDate() - d);
+            dailyStats.push({
+              date: date.toISOString().split('T')[0],
+              count: Math.floor(Math.random() * 50) + 10,
+            });
+          }
+          setCheckinStats({ daily_stats: dailyStats, hourly_stats: [] });
+        }
+      } else {
+        setCheckinStats({ daily_stats: [], hourly_stats: [] });
+      }
     } catch (err) {
       console.error('載入打卡統計失敗:', err);
     }
@@ -55,26 +82,53 @@ const CheckinRecords = () => {
       if (startDate) params.start_date = startDate;
       if (endDate) params.end_date = endDate;
 
-      const response = await templeAdminApi.checkins.list(templeId, params);
+      if (USE_MOCK) {
+        // 使用 Mock 資料
+        await new Promise(resolve => setTimeout(resolve, 300));
+        let filtered = [...mockCheckins];
 
-      if (response.success) {
-        const data = response.data;
-        setCheckinRecords(data.checkins || []);
+        if (params.start_date) {
+          filtered = filtered.filter(c => new Date(c.timestamp) >= new Date(params.start_date));
+        }
 
-        // 計算統計摘要
-        const totalCheckins = data.total || 0;
-        const uniqueUsers = new Set(
-          (data.checkins || []).map((c) => c.user_id)
-        ).size;
+        if (params.end_date) {
+          filtered = filtered.filter(c => new Date(c.timestamp) <= new Date(params.end_date + 'T23:59:59'));
+        }
+
+        const totalCheckins = filtered.length;
+        const uniqueUsers = new Set(filtered.map(c => c.user_id)).size;
 
         setSummary({
           total_checkins: totalCheckins,
           total_visitors: uniqueUsers,
         });
 
-        // 設定分頁
-        const total = data.total || 0;
-        setTotalPages(Math.ceil(total / pageSize));
+        const start = (params.page - 1) * params.per_page;
+        const paginated = filtered.slice(start, start + params.per_page);
+
+        setCheckinRecords(paginated);
+        setTotalPages(Math.ceil(totalCheckins / pageSize));
+      } else {
+        const templeAdminApi = await import('../../services/templeAdminApi').then(m => m.default);
+        const response = await templeAdminApi.checkins.list(templeId, params);
+
+        if (response.success) {
+          const data = response.data;
+          setCheckinRecords(data.checkins || []);
+
+          const totalCheckins = data.total || 0;
+          const uniqueUsers = new Set(
+            (data.checkins || []).map((c) => c.user_id)
+          ).size;
+
+          setSummary({
+            total_checkins: totalCheckins,
+            total_visitors: uniqueUsers,
+          });
+
+          const total = data.total || 0;
+          setTotalPages(Math.ceil(total / pageSize));
+        }
       }
     } catch (err) {
       console.error('載入打卡記錄失敗:', err);

@@ -13,7 +13,6 @@ class TempleAdminUser(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False, index=True)
     password_hash = db.Column(db.String(255), nullable=False)
     temple_id = db.Column(db.Integer, db.ForeignKey('temples.id'), nullable=False)
-    permission_scope = db.Column(db.JSON, nullable=True)  # 權限範圍（JSON）
     is_active = db.Column(db.Boolean, default=True, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     last_login_at = db.Column(db.DateTime, nullable=True)
@@ -36,7 +35,6 @@ class TempleAdminUser(db.Model):
             'name': self.name,
             'email': self.email,
             'temple_id': self.temple_id,
-            'permission_scope': self.permission_scope,
             'is_active': self.is_active,
             'created_at': self.created_at.isoformat(),
             'last_login_at': self.last_login_at.isoformat() if self.last_login_at else None,

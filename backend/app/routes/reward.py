@@ -6,7 +6,7 @@ from app import db
 from app.models.checkin_reward import CheckinReward
 from app.models.reward_claim import RewardClaim
 from app.models.temple import Temple
-from app.models.temple_admin import TempleAdmin
+from app.models.temple_admin_user import TempleAdminUser
 from app.models.user import User
 from app.models.checkin import Checkin
 from app.utils.auth import token_required
@@ -18,7 +18,7 @@ bp = Blueprint('reward', __name__, url_prefix='/api/rewards')
 
 @bp.route('/', methods=['POST'])
 @token_required
-def create_reward(current_user):
+def create_reward(current_user, account_type):
     """
     創建獎勵規則（需廟方管理員權限）
     POST /api/rewards/
@@ -52,18 +52,15 @@ def create_reward(current_user):
             if not temple:
                 return error_response('廟宇不存在或已停用', 404)
 
-            # 檢查是否為該廟宇的管理員
-            temple_admin = TempleAdmin.query.filter_by(
-                temple_id=temple_id,
-                user_id=current_user.id,
-                is_active=True
-            ).first()
+            # 檢查是否為該廟宇的管理員（一帳號一廟）
+            if account_type != 'temple_admin':
+                return error_response('需要廟方管理員權限', 403)
 
-            if not temple_admin or not temple_admin.has_permission('manage_rewards'):
+            if not hasattr(current_user, 'temple_id') or current_user.temple_id != temple_id:
                 return error_response('您沒有權限管理此廟宇的獎勵', 403)
         else:
             # 全站獎勵需要系統管理員權限
-            if current_user.role != 'admin':
+            if account_type != 'super_admin':
                 return error_response('只有系統管理員可以創建全站獎勵', 403)
 
         # 驗證獎勵類型
@@ -177,20 +174,16 @@ def get_reward_detail(current_user, reward_id):
         if not reward:
             return error_response('獎勵規則不存在', 404)
 
-        # 檢查權限
+        # 檢查權限（一帳號一廟）
         if reward.temple_id:
             # 廟宇專屬獎勵，檢查是否為該廟宇管理員
-            temple_admin = TempleAdmin.query.filter_by(
-                temple_id=reward.temple_id,
-                user_id=current_user.id,
-                is_active=True
-            ).first()
-
-            if not temple_admin:
+            if account_type != 'temple_admin':
+                return error_response('需要廟方管理員權限', 403)
+            if not hasattr(current_user, 'temple_id') or current_user.temple_id != reward.temple_id:
                 return error_response('您沒有權限查看此獎勵', 403)
         else:
             # 全站獎勵，需要系統管理員權限
-            if current_user.role != 'admin':
+            if account_type != 'super_admin':
                 return error_response('只有系統管理員可以查看全站獎勵', 403)
 
         # 獲取領取統計
@@ -230,18 +223,14 @@ def update_reward(current_user, reward_id):
         if not reward:
             return error_response('獎勵規則不存在', 404)
 
-        # 檢查權限
+        # 檢查權限（一帳號一廟）
         if reward.temple_id:
-            temple_admin = TempleAdmin.query.filter_by(
-                temple_id=reward.temple_id,
-                user_id=current_user.id,
-                is_active=True
-            ).first()
-
-            if not temple_admin or not temple_admin.has_permission('manage_rewards'):
+            if account_type != 'temple_admin':
+                return error_response('需要廟方管理員權限', 403)
+            if not hasattr(current_user, 'temple_id') or current_user.temple_id != reward.temple_id:
                 return error_response('您沒有權限修改此獎勵', 403)
         else:
-            if current_user.role != 'admin':
+            if account_type != 'super_admin':
                 return error_response('只有系統管理員可以修改全站獎勵', 403)
 
         data = request.get_json()
@@ -314,18 +303,14 @@ def delete_reward(current_user, reward_id):
         if not reward:
             return error_response('獎勵規則不存在', 404)
 
-        # 檢查權限
+        # 檢查權限（一帳號一廟）
         if reward.temple_id:
-            temple_admin = TempleAdmin.query.filter_by(
-                temple_id=reward.temple_id,
-                user_id=current_user.id,
-                is_active=True
-            ).first()
-
-            if not temple_admin or not temple_admin.has_permission('manage_rewards'):
+            if account_type != 'temple_admin':
+                return error_response('需要廟方管理員權限', 403)
+            if not hasattr(current_user, 'temple_id') or current_user.temple_id != reward.temple_id:
                 return error_response('您沒有權限刪除此獎勵', 403)
         else:
-            if current_user.role != 'admin':
+            if account_type != 'super_admin':
                 return error_response('只有系統管理員可以刪除全站獎勵', 403)
 
         # 軟刪除
@@ -354,18 +339,14 @@ def get_reward_statistics(current_user, reward_id):
         if not reward:
             return error_response('獎勵規則不存在', 404)
 
-        # 檢查權限
+        # 檢查權限（一帳號一廟）
         if reward.temple_id:
-            temple_admin = TempleAdmin.query.filter_by(
-                temple_id=reward.temple_id,
-                user_id=current_user.id,
-                is_active=True
-            ).first()
-
-            if not temple_admin or not temple_admin.has_permission('view_stats'):
+            if account_type != 'temple_admin':
+                return error_response('需要廟方管理員權限', 403)
+            if not hasattr(current_user, 'temple_id') or current_user.temple_id != reward.temple_id:
                 return error_response('您沒有權限查看此獎勵的統計', 403)
         else:
-            if current_user.role != 'admin':
+            if account_type != 'super_admin':
                 return error_response('只有系統管理員可以查看全站獎勵統計', 403)
 
         days = request.args.get('days', default=30, type=int)

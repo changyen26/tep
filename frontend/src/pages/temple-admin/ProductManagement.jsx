@@ -1,8 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import templeAdminApi from '../../services/templeAdminApi';
-import { uploadAPI } from '../../api/upload';
+import { mockTempleAdminAPI, mockProducts as initialMockProducts } from '../../mocks/templeAdminMockData';
 import './ProductManagement.css';
+
+const USE_MOCK = true; // 設為 false 使用真實 API
+
+// 本地 mock 資料（可修改）
+let mockProductsData = [...initialMockProducts];
 
 const ProductManagement = () => {
   const { templeId } = useParams();
@@ -71,12 +75,35 @@ const ProductManagement = () => {
       if (keyword) params.keyword = keyword;
       if (selectedCategory) params.category = selectedCategory;
 
-      const response = await templeAdminApi.products.list(templeId, params);
+      if (USE_MOCK) {
+        // 使用 Mock 資料
+        await new Promise(resolve => setTimeout(resolve, 300));
+        let filtered = [...mockProductsData];
 
-      if (response.success) {
-        setProducts(response.data.products || []);
-        setTotal(response.data.total || 0);
-        setTotalPages(Math.ceil((response.data.total || 0) / pageSize));
+        if (params.keyword) {
+          const kw = params.keyword.toLowerCase();
+          filtered = filtered.filter(p => p.name.toLowerCase().includes(kw));
+        }
+
+        if (params.category) {
+          filtered = filtered.filter(p => p.category === params.category);
+        }
+
+        const start = (params.page - 1) * params.per_page;
+        const paginated = filtered.slice(start, start + params.per_page);
+
+        setProducts(paginated);
+        setTotal(filtered.length);
+        setTotalPages(Math.ceil(filtered.length / pageSize));
+      } else {
+        const templeAdminApi = await import('../../services/templeAdminApi').then(m => m.default);
+        const response = await templeAdminApi.products.list(templeId, params);
+
+        if (response.success) {
+          setProducts(response.data.products || []);
+          setTotal(response.data.total || 0);
+          setTotalPages(Math.ceil((response.data.total || 0) / pageSize));
+        }
       }
     } catch (err) {
       console.error('載入商品列表失敗:', err);
@@ -195,25 +222,38 @@ const ProductManagement = () => {
     try {
       setUploading(true);
 
-      const uploadPromises = files.map(async (file) => {
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('type', 'product');
+      if (USE_MOCK) {
+        // Mock 上傳：使用隨機圖片 URL
+        await new Promise(resolve => setTimeout(resolve, 500));
+        const mockUrls = files.map((_, index) =>
+          `https://picsum.photos/200/200?random=${Date.now() + index}`
+        );
+        setFormData((prev) => ({
+          ...prev,
+          images: [...prev.images, ...mockUrls],
+        }));
+      } else {
+        const { uploadAPI } = await import('../../api/upload');
+        const uploadPromises = files.map(async (file) => {
+          const formDataObj = new FormData();
+          formDataObj.append('file', file);
+          formDataObj.append('type', 'product');
 
-        const response = await uploadAPI.uploadFile(formData);
-        if (response.success) {
-          return response.data.url;
-        }
-        return null;
-      });
+          const response = await uploadAPI.uploadFile(formDataObj);
+          if (response.success) {
+            return response.data.url;
+          }
+          return null;
+        });
 
-      const uploadedUrls = await Promise.all(uploadPromises);
-      const validUrls = uploadedUrls.filter((url) => url !== null);
+        const uploadedUrls = await Promise.all(uploadPromises);
+        const validUrls = uploadedUrls.filter((url) => url !== null);
 
-      setFormData((prev) => ({
-        ...prev,
-        images: [...prev.images, ...validUrls],
-      }));
+        setFormData((prev) => ({
+          ...prev,
+          images: [...prev.images, ...validUrls],
+        }));
+      }
     } catch (err) {
       console.error('圖片上傳失敗:', err);
       alert('圖片上傳失敗，請稍後再試');
@@ -249,19 +289,43 @@ const ProductManagement = () => {
         stock_quantity: parseInt(formData.stock_quantity, 10),
         low_stock_threshold: parseInt(formData.low_stock_threshold, 10),
         images: formData.images,
+        is_active: true,
       };
 
-      let response;
-      if (modalMode === 'create') {
-        response = await templeAdminApi.products.create(templeId, data);
-      } else {
-        response = await templeAdminApi.products.update(templeId, currentProduct.id, data);
-      }
+      if (USE_MOCK) {
+        await new Promise(resolve => setTimeout(resolve, 300));
 
-      if (response.success) {
+        if (modalMode === 'create') {
+          const newProduct = {
+            id: Math.max(...mockProductsData.map(p => p.id), 0) + 1,
+            ...data,
+            created_at: new Date().toISOString(),
+          };
+          mockProductsData.push(newProduct);
+        } else {
+          const index = mockProductsData.findIndex(p => p.id === currentProduct.id);
+          if (index !== -1) {
+            mockProductsData[index] = { ...mockProductsData[index], ...data };
+          }
+        }
+
         handleCloseModal();
         fetchProducts();
         alert(modalMode === 'create' ? '商品新增成功' : '商品更新成功');
+      } else {
+        const templeAdminApi = await import('../../services/templeAdminApi').then(m => m.default);
+        let response;
+        if (modalMode === 'create') {
+          response = await templeAdminApi.products.create(templeId, data);
+        } else {
+          response = await templeAdminApi.products.update(templeId, currentProduct.id, data);
+        }
+
+        if (response.success) {
+          handleCloseModal();
+          fetchProducts();
+          alert(modalMode === 'create' ? '商品新增成功' : '商品更新成功');
+        }
       }
     } catch (err) {
       console.error('提交失敗:', err);
@@ -282,12 +346,22 @@ const ProductManagement = () => {
     if (!productToDelete) return;
 
     try {
-      const response = await templeAdminApi.products.delete(templeId, productToDelete.id);
-      if (response.success) {
+      if (USE_MOCK) {
+        await new Promise(resolve => setTimeout(resolve, 300));
+        mockProductsData = mockProductsData.filter(p => p.id !== productToDelete.id);
         setShowDeleteConfirm(false);
         setProductToDelete(null);
         fetchProducts();
         alert('商品刪除成功');
+      } else {
+        const templeAdminApi = await import('../../services/templeAdminApi').then(m => m.default);
+        const response = await templeAdminApi.products.delete(templeId, productToDelete.id);
+        if (response.success) {
+          setShowDeleteConfirm(false);
+          setProductToDelete(null);
+          fetchProducts();
+          alert('商品刪除成功');
+        }
       }
     } catch (err) {
       console.error('刪除失敗:', err);

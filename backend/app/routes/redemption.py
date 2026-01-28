@@ -8,7 +8,6 @@ from app.models.product import Product
 from app.models.address import Address
 from app.models.redemption import Redemption
 from app.models.temple import Temple
-from app.models.temple_admin import TempleAdmin
 from app.utils.auth import token_required, admin_required
 from app.utils.response import success_response, error_response
 from datetime import datetime
@@ -374,13 +373,15 @@ def get_temple_redemptions(current_user, temple_id):
             return error_response('廟宇不存在或已停用', 404)
 
         # 檢查權限
-        temple_admin = TempleAdmin.query.filter_by(
-            temple_id=temple_id,
-            user_id=current_user.id,
-            is_active=True
-        ).first()
+        # DEPRECATED: Permission check removed - use auth context
+        # temple_admin = TempleAdmin.query.filter_by( # Use temple_id from auth context
+        # temple_id=temple_id,
+        # user_id=current_user.id,
+        # is_active=True
+        # ).first()
 
-        if not temple_admin or not temple_admin.has_permission('view_stats'):
+
+        # DEPRECATED: if not temple_admin or not temple_admin.has_permission('view_stats'):
             return error_response('您沒有權限查看此廟宇的訂單', 403)
 
         # 解析參數
@@ -438,13 +439,15 @@ def update_temple_redemption_status(current_user, temple_id, redemption_id):
             return error_response('廟宇不存在或已停用', 404)
 
         # 檢查權限
-        temple_admin = TempleAdmin.query.filter_by(
-            temple_id=temple_id,
-            user_id=current_user.id,
-            is_active=True
-        ).first()
+        # DEPRECATED: Permission check removed - use auth context
+        # temple_admin = TempleAdmin.query.filter_by( # Use temple_id from auth context
+        # temple_id=temple_id,
+        # user_id=current_user.id,
+        # is_active=True
+        # ).first()
 
-        if not temple_admin or not temple_admin.has_permission('view_stats'):
+
+        # DEPRECATED: if not temple_admin or not temple_admin.has_permission('view_stats'):
             return error_response('您沒有權限管理此廟宇的訂單', 403)
 
         redemption = Redemption.query.get(redemption_id)

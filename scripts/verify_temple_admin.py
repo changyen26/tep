@@ -256,6 +256,14 @@ def main():
         expected_status=204
     )
 
+    test_endpoint(
+        "OPTIONS /temple-admin/temples/:id/pilgrimage-visits",
+        "OPTIONS",
+        f"temple-admin/temples/{TEMPLE_ID}/pilgrimage-visits",
+        headers={'Origin': CORS_ORIGIN},
+        expected_status=204
+    )
+
     # ====================================
     # Test 2: 無 Token（必須 401，不可 500）
     # ====================================
@@ -268,6 +276,7 @@ def main():
         f"temple-admin/temples/{TEMPLE_ID}/checkins",
         f"temple-admin/temples/{TEMPLE_ID}/revenue",
         f"temple-admin/temples/{TEMPLE_ID}/devotees",
+        f"temple-admin/temples/{TEMPLE_ID}/pilgrimage-visits",
     ]
 
     for endpoint in endpoints_to_test:
@@ -329,6 +338,14 @@ def main():
             f"GET /temple-admin/temples/{TEMPLE_ID}/devotees",
             "GET",
             f"temple-admin/temples/{TEMPLE_ID}/devotees",
+            headers=headers_with_token,
+            expected_status=[200, 403]
+        )
+
+        test_endpoint(
+            f"GET /temple-admin/temples/{TEMPLE_ID}/pilgrimage-visits",
+            "GET",
+            f"temple-admin/temples/{TEMPLE_ID}/pilgrimage-visits",
             headers=headers_with_token,
             expected_status=[200, 403]
         )

@@ -1,7 +1,14 @@
 {
   "permissions": {
     "allow": [
-      "Bash(python -m flask:*)"
+      "Bash(python -m flask:*)",
+      "Bash(python scripts/setup_test_data.py:*)",
+      "Bash(python run.py:*)",
+      "Bash(curl:*)",
+      "Bash(python:*)",
+      "WebFetch(domain:api.github.com)",
+      "Bash(git pull:*)",
+      "Bash(git clone:*)"
     ],
     "deny": [],
     "ask": []

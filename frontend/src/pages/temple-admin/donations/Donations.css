@@ -1,0 +1,999 @@
+/**
+ * Donations Management Styles
+ * 線上捐款管理樣式
+ */
+
+/* ===== 容器與標題 ===== */
+.donations-container {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.donations-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.header-left h2 {
+  margin: 0;
+  font-size: 24px;
+  color: #1a1a2e;
+}
+
+.header-subtitle {
+  color: #666;
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.btn-back {
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.btn-back:hover {
+  background: #f0f0f0;
+  color: #333;
+}
+
+/* ===== 按鈕 ===== */
+.btn-primary {
+  padding: 10px 20px;
+  background: #b8860b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.btn-primary:hover {
+  background: #996e09;
+}
+
+.btn-secondary {
+  padding: 10px 20px;
+  background: white;
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+  background: #f5f5f5;
+}
+
+.btn-danger {
+  background: #dc3545;
+  color: white;
+  border: none;
+}
+
+.btn-danger:hover {
+  background: #c82333;
+}
+
+.btn-link {
+  background: none;
+  border: none;
+  color: #b8860b;
+  cursor: pointer;
+  font-size: 14px;
+  text-decoration: underline;
+}
+
+.btn-link:hover {
+  color: #996e09;
+}
+
+.btn-icon {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: #f0f0f0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s;
+}
+
+.btn-icon:hover {
+  background: #e0e0e0;
+}
+
+/* ===== 統計卡片 ===== */
+.donation-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.stat-card.warning {
+  border-left: 4px solid #f39c12;
+}
+
+.stat-card.danger {
+  border-left: 4px solid #e74c3c;
+}
+
+.stat-icon {
+  font-size: 32px;
+}
+
+.stat-content {
+  flex: 1;
+}
+
+.stat-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+.stat-amount {
+  font-size: 16px;
+  color: #b8860b;
+  font-weight: 600;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: #666;
+  margin-top: 2px;
+}
+
+/* ===== 篩選區 ===== */
+.donation-filters {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.filter-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  margin-bottom: 12px;
+}
+
+.filter-row:last-child {
+  margin-bottom: 0;
+}
+
+.filter-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.filter-item label {
+  font-size: 12px;
+  color: #666;
+}
+
+.filter-item select,
+.filter-item input {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  min-width: 140px;
+}
+
+.filter-item.flex-grow {
+  flex: 1;
+  min-width: 200px;
+}
+
+.filter-item.flex-grow input {
+  width: 100%;
+}
+
+/* ===== 表格 ===== */
+.donation-table-wrapper {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.donation-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.donation-table th,
+.donation-table td {
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.donation-table th {
+  background: #f8f9fa;
+  font-weight: 600;
+  font-size: 13px;
+  color: #666;
+  white-space: nowrap;
+}
+
+.donation-table tbody tr:hover {
+  background: #fafafa;
+}
+
+.order-no {
+  font-family: monospace;
+  font-size: 13px;
+}
+
+.transaction-id {
+  font-size: 11px;
+  color: #999;
+  margin-top: 2px;
+}
+
+.donor-info .donor-name {
+  font-weight: 500;
+}
+
+.donor-info .donor-contact {
+  font-size: 12px;
+  color: #666;
+}
+
+.amount-value {
+  font-weight: 600;
+  color: #b8860b;
+  font-size: 15px;
+}
+
+.purpose-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  background: #e9ecef;
+  color: #495057;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+.paid-time {
+  font-size: 13px;
+  color: #666;
+}
+
+.receipt-no {
+  font-size: 11px;
+  color: #666;
+  margin-top: 2px;
+}
+
+/* ===== 狀態標籤 ===== */
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-pending { background: #fff3cd; color: #856404; }
+.status-paid { background: #d4edda; color: #155724; }
+.status-failed { background: #f8d7da; color: #721c24; }
+.status-refunded { background: #e2e3e5; color: #383d41; }
+
+.reconcile-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.reconcile-pending { background: #e3f2fd; color: #1565c0; }
+.reconcile-matched { background: #d4edda; color: #155724; }
+.reconcile-unmatched { background: #f8d7da; color: #721c24; }
+
+.receipt-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.receipt-pending { background: #fff3cd; color: #856404; }
+.receipt-issued { background: #d4edda; color: #155724; }
+.receipt-not-required { background: #e9ecef; color: #6c757d; }
+.receipt-cancelled { background: #f8d7da; color: #721c24; }
+
+/* ===== 捐款詳情 ===== */
+.donation-summary-card {
+  background: linear-gradient(135deg, #b8860b, #daa520);
+  color: white;
+  border-radius: 16px;
+  padding: 32px;
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.summary-main {
+  flex: 1;
+}
+
+.summary-amount {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.summary-amount .currency {
+  font-size: 24px;
+  opacity: 0.8;
+}
+
+.summary-amount .value {
+  font-size: 48px;
+  font-weight: 700;
+}
+
+.summary-meta {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.summary-meta .order-no {
+  font-family: monospace;
+  opacity: 0.9;
+}
+
+.summary-meta .purpose-badge {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.summary-status {
+  display: flex;
+  gap: 24px;
+}
+
+.summary-status .status-item {
+  text-align: center;
+}
+
+.summary-status .status-item label {
+  display: block;
+  font-size: 12px;
+  opacity: 0.8;
+  margin-bottom: 6px;
+}
+
+/* ===== Tabs ===== */
+.detail-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #eee;
+}
+
+.tab-btn {
+  padding: 12px 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #666;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: all 0.2s;
+}
+
+.tab-btn:hover {
+  color: #333;
+}
+
+.tab-btn.active {
+  color: #b8860b;
+  border-bottom-color: #b8860b;
+}
+
+/* ===== 詳情區塊 ===== */
+.detail-section {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.info-group {
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.info-group h4 {
+  margin: 0 0 16px 0;
+  font-size: 14px;
+  color: #333;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+.info-item {
+  margin-bottom: 12px;
+}
+
+.info-item:last-child {
+  margin-bottom: 0;
+}
+
+.info-item label {
+  display: block;
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 2px;
+}
+
+.info-item div {
+  font-size: 14px;
+  color: #333;
+}
+
+.info-item .highlight {
+  color: #b8860b;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.info-item .mono {
+  font-family: monospace;
+}
+
+.info-item .fee {
+  color: #dc3545;
+}
+
+/* ===== 時間線 ===== */
+.history-timeline {
+  position: relative;
+  padding-left: 32px;
+  margin-top: 16px;
+}
+
+.history-timeline::before {
+  content: '';
+  position: absolute;
+  left: 12px;
+  top: 24px;
+  bottom: 24px;
+  width: 2px;
+  background: #eee;
+}
+
+.timeline-item {
+  position: relative;
+  padding-bottom: 20px;
+}
+
+.timeline-item:last-child {
+  padding-bottom: 0;
+}
+
+.timeline-icon {
+  position: absolute;
+  left: -32px;
+  top: 0;
+  width: 24px;
+  height: 24px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  border: 2px solid #eee;
+  z-index: 1;
+}
+
+.timeline-content {
+  background: #f8f9fa;
+  padding: 12px 16px;
+  border-radius: 8px;
+}
+
+.timeline-header {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.timeline-action {
+  font-weight: 500;
+  color: #333;
+}
+
+.receipt-no-tag {
+  font-family: monospace;
+  font-size: 12px;
+  background: #e3f2fd;
+  color: #1565c0;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.timeline-note {
+  font-size: 13px;
+  color: #666;
+  margin-top: 6px;
+}
+
+.timeline-meta {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+  font-size: 12px;
+  color: #999;
+}
+
+.empty-history {
+  color: #999;
+  font-size: 14px;
+  padding: 20px;
+  text-align: center;
+}
+
+/* ===== Modal ===== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  max-width: 480px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.modal-content h3 {
+  margin: 0 0 20px 0;
+  font-size: 20px;
+}
+
+.modal-body {
+  margin-bottom: 24px;
+}
+
+.modal-body p {
+  margin: 8px 0;
+  color: #666;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.form-group {
+  margin-top: 16px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.form-group textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  resize: vertical;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* ===== 對帳報表 ===== */
+.reconcile-date-picker {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.date-inputs {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.date-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.date-input-group label {
+  font-size: 12px;
+  color: #666;
+}
+
+.date-input-group input {
+  padding: 10px 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.date-separator {
+  color: #666;
+  padding-bottom: 10px;
+}
+
+.quick-dates {
+  display: flex;
+  gap: 8px;
+}
+
+.quick-dates button {
+  padding: 6px 12px;
+  background: #f0f0f0;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+
+.quick-dates button:hover {
+  background: #e0e0e0;
+}
+
+/* 對帳摘要 */
+.reconcile-summary {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.reconcile-summary h3 {
+  margin: 0 0 20px 0;
+  font-size: 18px;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+}
+
+.summary-card {
+  background: #f8f9fa;
+  padding: 16px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.summary-card.success {
+  background: #d4edda;
+}
+
+.summary-card.warning {
+  background: #fff3cd;
+}
+
+.summary-card.danger {
+  background: #f8d7da;
+}
+
+.summary-card.info {
+  background: #e3f2fd;
+}
+
+.summary-label {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.summary-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: #333;
+}
+
+.summary-amount {
+  font-size: 14px;
+  color: #666;
+  margin-top: 2px;
+}
+
+.net-total {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 2px solid #eee;
+  text-align: right;
+  font-size: 16px;
+}
+
+.net-amount {
+  font-size: 28px;
+  font-weight: 700;
+  color: #27ae60;
+  margin-left: 12px;
+}
+
+/* 對帳區塊 */
+.reconcile-section {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.reconcile-section h3 {
+  margin: 0 0 16px 0;
+  font-size: 16px;
+}
+
+.reconcile-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 24px;
+}
+
+/* 異常表格 */
+.unmatched-table-wrapper,
+.daily-table-wrapper {
+  overflow-x: auto;
+}
+
+.unmatched-table,
+.daily-table,
+.stats-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.unmatched-table th,
+.unmatched-table td,
+.daily-table th,
+.daily-table td,
+.stats-table th,
+.stats-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.unmatched-table th,
+.daily-table th,
+.stats-table th {
+  background: #f8f9fa;
+  font-weight: 600;
+  font-size: 13px;
+  color: #666;
+}
+
+.mono {
+  font-family: monospace;
+}
+
+.reason {
+  color: #dc3545;
+  font-size: 13px;
+}
+
+.text-success { color: #27ae60; }
+.text-danger { color: #dc3545; }
+.text-muted { color: #999; }
+
+/* 進度條 */
+.progress-bar-mini {
+  display: inline-block;
+  width: 60px;
+  height: 6px;
+  background: #eee;
+  border-radius: 3px;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.progress-bar-mini .progress-fill {
+  height: 100%;
+  background: #27ae60;
+  border-radius: 3px;
+}
+
+/* ===== 分頁 ===== */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.btn-pagination {
+  padding: 8px 16px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-pagination:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-info {
+  color: #666;
+  font-size: 14px;
+}
+
+/* ===== 狀態 ===== */
+.loading-state,
+.error-state,
+.empty-state {
+  padding: 60px 20px;
+  text-align: center;
+  color: #666;
+  background: white;
+  border-radius: 12px;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #eee;
+  border-top-color: #b8860b;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 16px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===== 響應式 ===== */
+@media (max-width: 768px) {
+  .donations-container {
+    padding: 16px;
+  }
+
+  .donations-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .header-actions {
+    justify-content: flex-end;
+  }
+
+  .filter-row {
+    flex-direction: column;
+  }
+
+  .filter-item {
+    width: 100%;
+  }
+
+  .donation-summary-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .summary-amount .value {
+    font-size: 36px;
+  }
+
+  .summary-status {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .reconcile-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .date-inputs {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .date-separator {
+    display: none;
+  }
+}

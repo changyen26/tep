@@ -1,63 +1,205 @@
+/* ========================================
+   Temple Admin Layout - 現代化設計
+   ======================================== */
+
 .temple-admin-layout {
   display: grid;
-  grid-template-columns: 220px 1fr;
+  grid-template-columns: 260px 1fr;
   min-height: 100vh;
-  background: #f6f7fb;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
   color: #1f2933;
 }
 
+/* ========================================
+   Sidebar 側邊欄
+   ======================================== */
 .temple-admin-sidebar {
-  background: #1f2933;
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
   color: #f6f7fb;
-  padding: 20px 16px;
+  padding: 0;
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.temple-admin-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.temple-admin-sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.temple-admin-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
 }
 
 .sidebar-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
   font-weight: 700;
-  letter-spacing: 0.5px;
-  margin-bottom: 24px;
+  font-size: 16px;
+  letter-spacing: 1px;
+  padding: 28px 20px;
+  margin: 0;
+  background: linear-gradient(135deg, #e94560 0%, #ff6b6b 100%);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.sidebar-brand::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+.brand-icon {
+  font-size: 28px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.brand-text {
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
 }
 
 .sidebar-nav {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
+  padding: 20px 12px;
 }
 
 .nav-link {
-  display: block;
-  padding: 10px 12px;
-  border-radius: 8px;
-  color: #e5e7eb;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.7);
   text-decoration: none;
-  transition: background 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   user-select: none;
+  font-size: 14px;
+  font-weight: 500;
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-link::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 0;
+  background: linear-gradient(135deg, #e94560 0%, #ff6b6b 100%);
+  border-radius: 0 4px 4px 0;
+  transition: height 0.3s ease;
 }
 
 .nav-link:hover {
   background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  transform: translateX(4px);
+}
+
+.nav-link:hover::before {
+  height: 60%;
 }
 
 .nav-link.active {
-  background: #2563eb;
+  background: linear-gradient(135deg, rgba(233, 69, 96, 0.2) 0%, rgba(255, 107, 107, 0.1) 100%);
   color: #fff;
+  font-weight: 600;
 }
 
+.nav-link.active::before {
+  height: 70%;
+}
+
+/* Nav Icon & Text */
+.nav-icon {
+  font-size: 18px;
+  width: 28px;
+  text-align: center;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.nav-link:hover .nav-icon {
+  transform: scale(1.15);
+}
+
+.nav-text {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Active indicator dot */
+.nav-link::after {
+  content: '';
+  margin-left: auto;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: transparent;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.nav-link.active::after {
+  background: #e94560;
+  box-shadow: 0 0 12px rgba(233, 69, 96, 0.8);
+}
+
+/* ========================================
+   Main Content Area
+   ======================================== */
 .temple-admin-main {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
+/* ========================================
+   Header 頂部導航
+   ======================================== */
 .temple-admin-header {
-  min-height: 60px;
-  background: #fff;
-  border-bottom: 1px solid #e5e7eb;
-  padding: 12px 20px;
+  min-height: 70px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  padding: 0 32px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.04);
 }
 
 .header-info {
@@ -67,49 +209,170 @@
 }
 
 .header-title {
-  font-weight: 600;
-  font-size: 16px;
+  font-weight: 700;
+  font-size: 20px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #e94560 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .header-meta {
   display: flex;
-  gap: 16px;
-  font-size: 12px;
+  gap: 20px;
+  font-size: 13px;
   color: #6b7280;
 }
 
 .temple-id,
 .user-role {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.temple-id::before {
+  content: '🏛️';
+  font-size: 12px;
+}
+
+.user-role::before {
+  content: '👤';
+  font-size: 12px;
 }
 
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
 }
 
 .user-name {
   font-size: 14px;
-  color: #4b5563;
+  font-weight: 600;
+  color: #374151;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  border-radius: 20px;
 }
 
 .btn-ghost {
-  border: 1px solid #e5e7eb;
-  background: #fff;
-  color: #111827;
-  padding: 6px 12px;
-  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: #4b5563;
+  padding: 10px 18px;
+  border-radius: 10px;
   cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  text-decoration: none;
 }
 
 .btn-ghost:hover {
-  background: #f3f4f6;
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  color: #1f2933;
+  transform: translateY(-1px);
 }
 
+.btn-ghost:last-child {
+  color: #e94560;
+}
+
+.btn-ghost:last-child:hover {
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  color: #dc2626;
+}
+
+/* ========================================
+   Content Area 內容區域
+   ======================================== */
 .temple-admin-content {
-  padding: 24px;
+  padding: 32px;
   flex: 1;
+  max-width: 1600px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* ========================================
+   Loading & Guard States
+   ======================================== */
+.guard-loading,
+.guard-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+}
+
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid #e5e7eb;
+  border-top-color: #e94560;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.guard-loading p {
+  margin-top: 16px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.error-container {
+  text-align: center;
+  padding: 48px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.error-container h2 {
+  color: #dc2626;
+  margin-bottom: 12px;
+}
+
+.error-container p {
+  color: #6b7280;
+  margin-bottom: 8px;
+}
+
+.error-container button {
+  margin-top: 20px;
+  padding: 12px 32px;
+  background: linear-gradient(135deg, #e94560 0%, #ff6b6b 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.error-container button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(233, 69, 96, 0.3);
+}
+
+/* ========================================
+   Responsive Design
+   ======================================== */
+@media (max-width: 1024px) {
+  .temple-admin-layout {
+    grid-template-columns: 220px 1fr;
+  }
+
+  .temple-admin-content {
+    padding: 24px;
+  }
 }
 
 @media (max-width: 900px) {
@@ -118,6 +381,36 @@
   }
 
   .temple-admin-sidebar {
-    grid-row: 2;
+    position: fixed;
+    left: -280px;
+    width: 280px;
+    z-index: 1000;
+    transition: left 0.3s ease;
+  }
+
+  .temple-admin-sidebar.open {
+    left: 0;
+  }
+
+  .temple-admin-header {
+    padding: 0 20px;
+  }
+
+  .temple-admin-content {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-meta {
+    display: none;
+  }
+
+  .user-name {
+    display: none;
+  }
+
+  .temple-admin-content {
+    padding: 16px;
   }
 }

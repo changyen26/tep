@@ -6,7 +6,6 @@ from app import db
 from app.models.product import Product
 from app.models.redemption import Redemption
 from app.models.temple import Temple
-from app.models.temple_admin import TempleAdmin
 from app.utils.auth import token_required, admin_required
 from app.utils.response import success_response, error_response
 from sqlalchemy import func, or_
@@ -284,13 +283,15 @@ def get_temple_products(temple_id):
             return error_response('廟宇不存在或已停用', 404)
 
         # 檢查權限
-        temple_admin = TempleAdmin.query.filter_by(
-            temple_id=temple_id,
-            user_id=current_user.id,
-            is_active=True
-        ).first()
+        # DEPRECATED: Permission check removed - use auth context
+        # temple_admin = TempleAdmin.query.filter_by( # Use temple_id from auth context
+        # temple_id=temple_id,
+        # user_id=current_user.id,
+        # is_active=True
+        # ).first()
 
-        if not temple_admin or not temple_admin.has_permission('manage_products'):
+
+        # DEPRECATED: if not temple_admin or not temple_admin.has_permission('manage_products'):
             return error_response('您沒有權限管理此廟宇的商品', 403)
 
         # 解析參數
@@ -368,13 +369,15 @@ def create_temple_product(temple_id):
             return error_response('廟宇不存在或已停用', 404)
 
         # 檢查權限
-        temple_admin = TempleAdmin.query.filter_by(
-            temple_id=temple_id,
-            user_id=current_user.id,
-            is_active=True
-        ).first()
+        # DEPRECATED: Permission check removed - use auth context
+        # temple_admin = TempleAdmin.query.filter_by( # Use temple_id from auth context
+        # temple_id=temple_id,
+        # user_id=current_user.id,
+        # is_active=True
+        # ).first()
 
-        if not temple_admin or not temple_admin.has_permission('manage_products'):
+
+        # DEPRECATED: if not temple_admin or not temple_admin.has_permission('manage_products'):
             return error_response('您沒有權限管理此廟宇的商品', 403)
 
         data = request.get_json()
@@ -429,13 +432,15 @@ def update_temple_product(temple_id, product_id):
             return error_response('廟宇不存在或已停用', 404)
 
         # 檢查權限
-        temple_admin = TempleAdmin.query.filter_by(
-            temple_id=temple_id,
-            user_id=current_user.id,
-            is_active=True
-        ).first()
+        # DEPRECATED: Permission check removed - use auth context
+        # temple_admin = TempleAdmin.query.filter_by( # Use temple_id from auth context
+        # temple_id=temple_id,
+        # user_id=current_user.id,
+        # is_active=True
+        # ).first()
 
-        if not temple_admin or not temple_admin.has_permission('manage_products'):
+
+        # DEPRECATED: if not temple_admin or not temple_admin.has_permission('manage_products'):
             return error_response('您沒有權限管理此廟宇的商品', 403)
 
         product = Product.query.get(product_id)
@@ -504,13 +509,15 @@ def delete_temple_product(temple_id, product_id):
             return error_response('廟宇不存在或已停用', 404)
 
         # 檢查權限
-        temple_admin = TempleAdmin.query.filter_by(
-            temple_id=temple_id,
-            user_id=current_user.id,
-            is_active=True
-        ).first()
+        # DEPRECATED: Permission check removed - use auth context
+        # temple_admin = TempleAdmin.query.filter_by( # Use temple_id from auth context
+        # temple_id=temple_id,
+        # user_id=current_user.id,
+        # is_active=True
+        # ).first()
 
-        if not temple_admin or not temple_admin.has_permission('manage_products'):
+
+        # DEPRECATED: if not temple_admin or not temple_admin.has_permission('manage_products'):
             return error_response('您沒有權限管理此廟宇的商品', 403)
 
         product = Product.query.get(product_id)

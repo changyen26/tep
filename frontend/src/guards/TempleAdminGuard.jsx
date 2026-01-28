@@ -11,6 +11,9 @@
 import { Navigate, useParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
+// 開發模式：跳過認證檢查（設為 false 啟用認證）
+const DEV_SKIP_AUTH = true;
+
 /**
  * 權限守衛組件
  * @param {Object} props
@@ -18,7 +21,12 @@ import { useAuth } from '../context/AuthContext';
  */
 const TempleAdminGuard = ({ children }) => {
   const { templeId } = useParams();
-  const { isAuthenticated, role, user, loading } = useAuth();
+  const { isAuthenticated, accountType, user, loading } = useAuth();
+
+  // 開發模式：直接通過
+  if (DEV_SKIP_AUTH) {
+    return <>{children}</>;
+  }
 
   // 載入中
   if (loading) {
@@ -30,27 +38,27 @@ const TempleAdminGuard = ({ children }) => {
     );
   }
 
-  // 未登入 → 導回登入頁
+  // 未登入 → 導向廟方管理員登入頁
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace state={{ from: window.location.pathname }} />;
+    return <Navigate to="/temple-admin/login" replace state={{ from: window.location.pathname }} />;
   }
 
-  // 角色檢查：只允許 temple_admin 或 admin
-  if (role !== 'temple_admin' && role !== 'admin') {
+  // 角色檢查：只允許 temple_admin 或 super_admin
+  if (accountType !== 'temple_admin' && accountType !== 'super_admin') {
     return (
       <div className="guard-error">
         <div className="error-container">
           <h2>權限不足</h2>
           <p>您沒有權限訪問廟方管理後台</p>
-          <p>目前角色：{role || '未知'}</p>
-          <button onClick={() => (window.location.href = '/dashboard')}>返回首頁</button>
+          <p>目前角色：{accountType || '未知'}</p>
+          <button onClick={() => (window.location.href = '/login')}>返回登入</button>
         </div>
       </div>
     );
   }
 
   // temple_admin：強制檢查 templeId 一致性
-  if (role === 'temple_admin') {
+  if (accountType === 'temple_admin') {
     const userTempleId = user?.temple_id?.toString();
     const routeTempleId = templeId?.toString();
 
@@ -77,7 +85,7 @@ const TempleAdminGuard = ({ children }) => {
     }
   }
 
-  // admin：可以訪問任意 templeId，無需檢查
+  // super_admin：可以訪問任意 templeId，無需檢查
 
   // 通過所有檢查，渲染子組件
   return <>{children}</>;
