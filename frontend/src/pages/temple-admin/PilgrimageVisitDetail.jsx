@@ -1,7 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import templeAdminApi from '../../services/templeAdminApi';
+import { mockPilgrimageVisits } from '../../mocks/templeAdminMockData';
 import './PilgrimageVisitDetail.css';
+
+const USE_MOCK = true; // 設為 false 使用真實 API
+
+// 本地 mock 資料（可修改）
+let mockVisitsData = [...mockPilgrimageVisits];
 
 const PilgrimageVisitDetail = () => {
   const { templeId, visitId } = useParams();
@@ -27,17 +32,58 @@ const PilgrimageVisitDetail = () => {
       setLoading(true);
       setError(null);
 
-      const response = await templeAdminApi.pilgrimageVisits.get(templeId, visitId);
+      if (USE_MOCK) {
+        await new Promise(resolve => setTimeout(resolve, 300));
 
-      if (response.success || response.data) {
-        const data = response.data || response;
-        setVisit(data);
-        setEditData({
-          status: data.status || 'pending',
-          assignedStaff: data.assignedStaff || '',
-          adminNote: data.adminNote || '',
-          replyMessage: data.replyMessage || '',
-        });
+        // 從 mock 資料中找到對應的登記
+        const mockVisit = mockVisitsData.find(v => v.id === parseInt(visitId));
+
+        if (mockVisit) {
+          // 轉換欄位名稱以匹配頁面期望的格式
+          const formattedVisit = {
+            id: mockVisit.id,
+            contactName: mockVisit.contact_name,
+            contactPhone: mockVisit.contact_phone,
+            contactEmail: mockVisit.contact_email,
+            groupName: mockVisit.organization_name,
+            peopleCount: mockVisit.estimated_people,
+            visitStartAt: `${mockVisit.expected_date}T${mockVisit.expected_time}`,
+            purpose: mockVisit.purpose || '進香祈福',
+            needs: mockVisit.notes || '',
+            status: mockVisit.status,
+            createdAt: mockVisit.created_at,
+            updatedAt: mockVisit.updated_at,
+            assignedStaff: mockVisit.assigned_staff || '',
+            adminNote: mockVisit.admin_note || '',
+            replyMessage: mockVisit.reply_message || '',
+            transportation: mockVisit.transportation,
+            busCount: mockVisit.bus_count,
+          };
+
+          setVisit(formattedVisit);
+          setEditData({
+            status: formattedVisit.status || 'pending',
+            assignedStaff: formattedVisit.assignedStaff || '',
+            adminNote: formattedVisit.adminNote || '',
+            replyMessage: formattedVisit.replyMessage || '',
+          });
+        } else {
+          setError('找不到此進香登記');
+        }
+      } else {
+        const templeAdminApi = await import('../../services/templeAdminApi').then(m => m.default);
+        const response = await templeAdminApi.pilgrimageVisits.get(templeId, visitId);
+
+        if (response.success || response.data) {
+          const data = response.data || response;
+          setVisit(data);
+          setEditData({
+            status: data.status || 'pending',
+            assignedStaff: data.assignedStaff || '',
+            adminNote: data.adminNote || '',
+            replyMessage: data.replyMessage || '',
+          });
+        }
       }
     } catch (err) {
       console.error('載入進香登記詳情失敗:', err);
@@ -59,9 +105,31 @@ const PilgrimageVisitDetail = () => {
 
     try {
       setLoading(true);
-      await templeAdminApi.pilgrimageVisits.update(templeId, visitId, editData);
-      setIsEditing(false);
-      await fetchVisitDetail();
+
+      if (USE_MOCK) {
+        await new Promise(resolve => setTimeout(resolve, 300));
+
+        // 更新 mock 資料
+        const index = mockVisitsData.findIndex(v => v.id === parseInt(visitId));
+        if (index !== -1) {
+          mockVisitsData[index] = {
+            ...mockVisitsData[index],
+            status: editData.status,
+            assigned_staff: editData.assignedStaff,
+            admin_note: editData.adminNote,
+            reply_message: editData.replyMessage,
+            updated_at: new Date().toISOString(),
+          };
+        }
+
+        setIsEditing(false);
+        await fetchVisitDetail();
+      } else {
+        const templeAdminApi = await import('../../services/templeAdminApi').then(m => m.default);
+        await templeAdminApi.pilgrimageVisits.update(templeId, visitId, editData);
+        setIsEditing(false);
+        await fetchVisitDetail();
+      }
     } catch (err) {
       console.error('更新進香登記失敗:', err);
       alert(err.message || '更新失敗，請稍後再試');
@@ -186,6 +254,16 @@ const PilgrimageVisitDetail = () => {
             </span>
           </div>
         </div>
+
+        {visit.transportation && (
+          <div className="info-item full-width">
+            <label>交通方式</label>
+            <span>
+              {visit.transportation === 'bus' ? '遊覽車' : visit.transportation}
+              {visit.busCount ? ` (${visit.busCount} 台)` : ''}
+            </span>
+          </div>
+        )}
 
         {visit.purpose && (
           <div className="info-item full-width">
