@@ -1,0 +1,234 @@
+/**
+ * 廟宇網站整體佈局樣式
+ * 金黑配色風格
+ */
+
+/* CSS 變數定義 */
+:root {
+  --temple-gold: #ab8c1f;
+  --temple-gold-light: #d4b756;
+  --temple-gold-dark: #8a7018;
+  --temple-dark: #232428;
+  --temple-dark-light: #2d2d32;
+  --temple-dark-bg: #1a1a1d;
+  --temple-text: #ffffff;
+  --temple-text-secondary: rgba(255, 255, 255, 0.7);
+  --temple-text-muted: rgba(255, 255, 255, 0.5);
+  --temple-border: rgba(171, 140, 31, 0.2);
+}
+
+/* 整體佈局 */
+.temple-website-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f5f5f5;
+}
+
+/* 主內容區域 */
+.temple-website-main {
+  flex: 1;
+  padding-top: 140px; /* Header 高度 (top bar + main nav) */
+}
+
+@media (max-width: 1024px) {
+  .temple-website-main {
+    padding-top: 110px;
+  }
+}
+
+@media (max-width: 768px) {
+  .temple-website-main {
+    padding-top: 70px; /* 手機版 Header 高度 */
+  }
+}
+
+/* 通用頁面容器 */
+.temple-page-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+@media (max-width: 768px) {
+  .temple-page-container {
+    padding: 24px 16px;
+  }
+}
+
+/* 頁面標題區 */
+.temple-page-header {
+  background: linear-gradient(135deg, #232428 0%, #1a1a1d 100%);
+  padding: 60px 24px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.temple-page-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ab8c1f' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  opacity: 0.5;
+}
+
+.temple-page-header h1 {
+  position: relative;
+  font-size: 36px;
+  font-weight: 700;
+  color: #d4b756;
+  margin: 0 0 16px;
+  letter-spacing: 4px;
+}
+
+.temple-page-header p {
+  position: relative;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.8;
+}
+
+@media (max-width: 768px) {
+  .temple-page-header {
+    padding: 40px 16px;
+  }
+
+  .temple-page-header h1 {
+    font-size: 28px;
+    letter-spacing: 2px;
+  }
+
+  .temple-page-header p {
+    font-size: 14px;
+  }
+}
+
+/* 區塊標題 */
+.temple-section-title {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.temple-section-title h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #232428;
+  margin: 0 0 12px;
+  letter-spacing: 2px;
+  position: relative;
+  display: inline-block;
+}
+
+.temple-section-title h2::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #ab8c1f, #d4b756);
+  border-radius: 2px;
+}
+
+.temple-section-title p {
+  font-size: 15px;
+  color: #666;
+  margin: 16px 0 0;
+}
+
+/* 金色按鈕 */
+.temple-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 32px;
+  background: linear-gradient(135deg, #ab8c1f 0%, #d4b756 100%);
+  color: #232428;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.temple-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(171, 140, 31, 0.4);
+}
+
+.temple-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 32px;
+  background: transparent;
+  color: #ab8c1f;
+  font-size: 15px;
+  font-weight: 600;
+  border: 2px solid #ab8c1f;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.temple-btn-secondary:hover {
+  background: #ab8c1f;
+  color: #232428;
+}
+
+/* 卡片樣式 */
+.temple-card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.temple-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* 分隔線 */
+.temple-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(171, 140, 31, 0.3), transparent);
+  margin: 40px 0;
+}
+
+/* 載入動畫 */
+.temple-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+}
+
+.temple-loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid rgba(171, 140, 31, 0.2);
+  border-top-color: #ab8c1f;
+  border-radius: 50%;
+  animation: temple-spin 1s linear infinite;
+}
+
+@keyframes temple-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

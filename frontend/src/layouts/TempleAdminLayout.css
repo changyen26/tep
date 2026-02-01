@@ -14,7 +14,7 @@
    Sidebar 側邊欄
    ======================================== */
 .temple-admin-sidebar {
-  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  background: linear-gradient(180deg, #1a1a2e 0%, #1a1a2e 100%);
   color: #f6f7fb;
   padding: 0;
   box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);

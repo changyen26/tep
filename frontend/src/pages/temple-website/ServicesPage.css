@@ -1,0 +1,222 @@
+/**
+ * 服務項目頁面樣式 (Refactored)
+ */
+
+.temple-services-page {
+  background: linear-gradient(135deg, #232428 0%, #1a1a1d 100%);
+  min-height: 100vh;
+}
+
+.services-page-content {
+  padding: 60px 0;
+}
+
+.services-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* 服務網格 */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+
+/* 服務詳情卡片 */
+.service-detail-card {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(171, 140, 31, 0.2);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.service-detail-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 32px rgba(171, 140, 31, 0.3);
+  border-color: rgba(171, 140, 31, 0.5);
+}
+
+.service-detail-image {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+}
+
+.service-detail-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.service-detail-card:hover .service-detail-image img {
+  transform: scale(1.05);
+}
+
+.service-detail-icon {
+  position: absolute;
+  bottom: -25px; /* Partially hidden */
+  left: 24px;
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #ab8c1f 0%, #d4b756 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: #232428;
+  border: 3px solid #1a1a1d;
+  transition: transform 0.3s ease;
+}
+
+.service-detail-card:hover .service-detail-icon {
+  transform: translateY(-10px);
+}
+
+.service-detail-content {
+  flex: 1;
+  padding: 24px;
+  padding-top: 36px; /* Space for the icon */
+  display: flex;
+  flex-direction: column;
+}
+
+.service-detail-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #d4b756;
+  margin: 0 0 12px;
+}
+
+.service-detail-desc {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.7;
+  margin: 0 0 20px;
+  flex-grow: 1; /* Pushes price and button to the bottom */
+}
+
+.service-detail-price {
+  margin-bottom: 20px;
+}
+
+.price-label {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.price-value {
+  font-size: 18px;
+  font-weight: 600;
+  color: #ab8c1f;
+}
+
+.service-detail-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #ab8c1f 0%, #d4b756 100%);
+  color: #232428;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  align-self: stretch; /* Make button full width */
+}
+
+.service-detail-btn:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 16px rgba(171, 140, 31, 0.4);
+}
+
+
+/* 服務須知 */
+.services-notice-section {
+  padding: 80px 0;
+  background: #f5f5f5; /* Keep this light for contrast */
+}
+
+.notice-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #232428;
+  text-align: center;
+  margin: 0 0 40px;
+  letter-spacing: 2px;
+}
+
+.notice-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.notice-card {
+  padding: 32px 24px;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.notice-card h4 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #ab8c1f;
+  margin: 0 0 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.notice-card p {
+  font-size: 14px;
+  color: #555;
+  margin: 0 0 8px;
+  line-height: 1.6;
+}
+
+.notice-card p:last-child {
+  margin-bottom: 0;
+}
+
+/* 響應式設計 */
+@media (max-width: 1200px) {
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .services-page-content {
+    padding: 40px 0;
+  }
+
+  .services-container {
+    padding: 0 16px;
+  }
+  
+  .notice-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .notice-grid {
+    grid-template-columns: 1fr;
+  }
+}

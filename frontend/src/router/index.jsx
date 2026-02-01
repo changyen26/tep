@@ -12,6 +12,7 @@ import TempleDetail from '../pages/TempleDetail';
 import AdminLayout from '../layouts/AdminLayout';
 import RoleGuard from '../components/RoleGuard';
 import templeAdminRoutes from '../routes/templeAdminRoutes';
+import templeWebsiteRoutes from '../routes/templeWebsiteRoutes';
 
 // 登入保護
 const PrivateRoute = ({ children }) => {
@@ -113,6 +114,9 @@ const AppRoutes = () => (
 
     {/* 廟方管理後台 - 使用集中式路由配置 */}
     {templeAdminRoutes}
+
+    {/* 廟宇官網 - 公開路由，無需登入 */}
+    {templeWebsiteRoutes}
 
     <Route path="*" element={<Navigate to="/dashboard" replace />} />
   </Routes>

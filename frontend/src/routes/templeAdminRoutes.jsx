@@ -69,6 +69,9 @@ import DonationList from '../pages/temple-admin/donations/DonationList';
 import DonationDetail from '../pages/temple-admin/donations/DonationDetail';
 import ReconcileReport from '../pages/temple-admin/donations/ReconcileReport';
 
+// 官網設定
+import WebsiteSettings from '../pages/temple-admin/website/WebsiteSettings';
+
 /**
  * 廟方管理路由元件
  * 使用方式：在主路由中 import 並掛載
@@ -160,6 +163,9 @@ export const templeAdminRoutes = (
     <Route path="staff/logs" element={<ActivityLog />} />
     <Route path="staff/:staffId" element={<StaffDetail />} />
     <Route path="staff/:staffId/edit" element={<StaffEdit />} />
+
+    {/* 官網設定 */}
+    <Route path="website" element={<WebsiteSettings />} />
   </Route>
 );
 

@@ -1,0 +1,343 @@
+/**
+ * 廟宇網站 Footer 樣式
+ * 參考受天宮設計 - 深色背景、金色裝飾
+ */
+
+.temple-footer {
+  background: linear-gradient(180deg, #1a1a1d 0%, #0f0f10 100%);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* 頂部裝飾線 */
+.footer-decoration {
+  height: 6px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    #ab8c1f 20%,
+    #d4b756 50%,
+    #ab8c1f 80%,
+    transparent 100%
+  );
+  position: relative;
+}
+
+.footer-decoration::after {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(171, 140, 31, 0.2);
+}
+
+/* 主要內容區 */
+.footer-main {
+  padding: 60px 24px 40px;
+}
+
+.footer-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.5fr repeat(3, 1fr);
+  gap: 48px;
+}
+
+/* 廟宇資訊區 */
+.footer-temple-info {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  text-decoration: none;
+}
+
+.footer-logo-placeholder {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, #ab8c1f 0%, #d4b756 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(171, 140, 31, 0.3);
+  position: relative;
+}
+
+.footer-logo-placeholder::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  border: 2px solid rgba(26, 26, 29, 0.3);
+}
+
+.footer-logo-placeholder span {
+  font-size: 28px;
+  color: #1a1a1d;
+  font-weight: 700;
+  font-family: 'Noto Serif TC', serif;
+}
+
+.footer-logo-image {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+}
+
+.footer-logo-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.footer-temple-name {
+  font-size: 22px;
+  font-weight: 700;
+  color: #d4b756;
+  letter-spacing: 3px;
+  font-family: 'Noto Serif TC', serif;
+}
+
+.footer-temple-subtitle {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 1px;
+}
+
+.footer-description {
+  font-size: 14px;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+/* 社群媒體 */
+.footer-social {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.footer-social-link {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(171, 140, 31, 0.1);
+  border: 1px solid rgba(171, 140, 31, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #d4b756;
+  font-size: 18px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.footer-social-link:hover {
+  background: #ab8c1f;
+  border-color: #ab8c1f;
+  color: #1a1a1d;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(171, 140, 31, 0.3);
+}
+
+/* 連結區塊 */
+.footer-links-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.footer-links-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #d4b756;
+  margin: 0;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(171, 140, 31, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.title-icon {
+  font-size: 18px;
+}
+
+.footer-links-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.footer-link {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-left: 0;
+}
+
+.footer-link::before {
+  content: '›';
+  color: #ab8c1f;
+  font-size: 16px;
+  opacity: 0;
+  transform: translateX(-5px);
+  transition: all 0.3s ease;
+}
+
+.footer-link:hover {
+  color: #d4b756;
+  padding-left: 4px;
+}
+
+.footer-link:hover::before {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* 聯絡資訊區塊 */
+.footer-contact-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.footer-contact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.footer-contact-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.contact-label {
+  font-size: 12px;
+  color: #ab8c1f;
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+
+.contact-value {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.5;
+}
+
+.footer-contact-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: transparent;
+  border: 1px solid rgba(171, 140, 31, 0.5);
+  color: #d4b756;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  margin-top: 8px;
+}
+
+.footer-contact-btn:hover {
+  background: rgba(171, 140, 31, 0.1);
+  border-color: #ab8c1f;
+}
+
+/* 底部版權區 */
+.footer-bottom {
+  border-top: 1px solid rgba(171, 140, 31, 0.1);
+  padding: 20px 24px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.footer-bottom-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-copyright {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.footer-powered {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.footer-powered a {
+  color: #ab8c1f;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-powered a:hover {
+  color: #d4b756;
+}
+
+/* 響應式設計 */
+@media (max-width: 1200px) {
+  .footer-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+  }
+
+  .footer-temple-info {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer-main {
+    padding: 40px 16px 32px;
+  }
+
+  .footer-container {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .footer-temple-info {
+    grid-column: span 1;
+  }
+
+  .footer-logo-placeholder {
+    width: 56px;
+    height: 56px;
+  }
+
+  .footer-logo-placeholder span {
+    font-size: 24px;
+  }
+
+  .footer-temple-name {
+    font-size: 20px;
+  }
+
+  .footer-bottom-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+}

@@ -94,6 +94,7 @@ const TempleAdminLayout = () => {
     { path: 'dashboard', label: '儀表板', icon: '📊' },
     { path: 'business', label: '經營診斷', icon: '🏢' },
     { path: 'analytics', label: '數據分析', icon: '📈' },
+    { path: 'website', label: '官網設定', icon: '🌐' },
     { path: 'events', label: '活動報名管理', icon: '📅' },
     { path: 'pilgrimage-visits', label: '進香登記管理', icon: '🚌' },
     { path: 'lamps', label: '點燈管理', icon: '🏮' },
