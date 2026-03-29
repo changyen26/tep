@@ -1,0 +1,254 @@
+/**
+ * 廟宇網站 Footer 樣式
+ * 金黑配色風格
+ */
+
+.temple-footer {
+  background: linear-gradient(180deg, #1a1a1d 0%, #131315 100%);
+  color: rgba(255, 255, 255, 0.8);
+  padding-top: 60px;
+}
+
+/* 主要內容區 */
+.footer-main {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px 40px;
+  display: grid;
+  grid-template-columns: 1.5fr repeat(3, 1fr);
+  gap: 40px;
+}
+
+/* 廟宇資訊區 */
+.footer-temple-info {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  text-decoration: none;
+}
+
+.footer-logo-placeholder {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, #ab8c1f 0%, #d4b756 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: #232428;
+  font-weight: bold;
+}
+
+.footer-logo-image {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+}
+
+.footer-logo-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-temple-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: #d4b756;
+  letter-spacing: 2px;
+}
+
+.footer-temple-subtitle {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.footer-description {
+  font-size: 14px;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.footer-contact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.footer-contact-item .anticon {
+  color: #ab8c1f;
+  font-size: 16px;
+}
+
+/* 連結區塊 */
+.footer-links-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.footer-links-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #d4b756;
+  padding-bottom: 12px;
+  border-bottom: 2px solid rgba(171, 140, 31, 0.3);
+  margin: 0;
+}
+
+.footer-links-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-link {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.footer-link::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: #ab8c1f;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.footer-link:hover {
+  color: #d4b756;
+  padding-left: 4px;
+}
+
+.footer-link:hover::before {
+  opacity: 1;
+}
+
+/* 社群媒體 */
+.footer-social {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.footer-social-link {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(171, 140, 31, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ab8c1f;
+  font-size: 18px;
+  transition: all 0.3s ease;
+}
+
+.footer-social-link:hover {
+  background: #ab8c1f;
+  color: #232428;
+  transform: translateY(-3px);
+}
+
+/* 底部版權區 */
+.footer-bottom {
+  border-top: 1px solid rgba(171, 140, 31, 0.15);
+  padding: 24px;
+}
+
+.footer-bottom-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.footer-copyright {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.footer-copyright a {
+  color: #ab8c1f;
+  text-decoration: none;
+}
+
+.footer-copyright a:hover {
+  color: #d4b756;
+}
+
+.footer-legal {
+  display: flex;
+  gap: 24px;
+}
+
+.footer-legal-link {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-legal-link:hover {
+  color: #d4b756;
+}
+
+/* 響應式設計 */
+@media (max-width: 1024px) {
+  .footer-main {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .footer-temple-info {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .temple-footer {
+    padding-top: 40px;
+  }
+
+  .footer-main {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 0 16px 32px;
+  }
+
+  .footer-temple-info {
+    grid-column: span 1;
+  }
+
+  .footer-bottom-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .footer-legal {
+    justify-content: center;
+  }
+}

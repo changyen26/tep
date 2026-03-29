@@ -1,0 +1,264 @@
+.events-page {
+  overflow-x: hidden;
+}
+
+/* 頁首橫幅 - 共用樣式 */
+.page-banner {
+  position: relative;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    135deg,
+    var(--color-dark) 0%,
+    var(--color-dark-light) 50%,
+    var(--color-dark) 100%
+  );
+}
+
+.banner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(171, 140, 31, 0.15) 0%,
+    transparent 70%
+  );
+}
+
+.banner-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.banner-content h1 {
+  font-size: 3rem;
+  color: var(--color-gold);
+  margin-bottom: 0.5rem;
+  letter-spacing: 8px;
+}
+
+.banner-content p {
+  color: var(--color-text-muted);
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+/* 年度三元節 */
+.annual-section {
+  background: var(--color-dark);
+}
+
+.section-intro {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 3rem;
+  color: var(--color-text-muted);
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+.annual-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.annual-card {
+  background: var(--color-dark-light);
+  border-radius: 8px;
+  padding: 2rem;
+  border: 1px solid var(--color-dark-lighter);
+  transition: all 0.3s ease;
+}
+
+.annual-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-gold);
+  box-shadow: 0 8px 24px rgba(171, 140, 31, 0.15);
+}
+
+.annual-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.annual-header h3 {
+  color: var(--color-gold);
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.annual-date {
+  background: var(--color-gold);
+  color: var(--color-dark);
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.annual-deity {
+  color: var(--color-gold-light);
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+}
+
+.annual-desc {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+
+.annual-activities h4 {
+  color: var(--color-text);
+  font-size: 0.95rem;
+  margin-bottom: 0.75rem;
+}
+
+.annual-activities ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.annual-activities li {
+  background: var(--color-dark);
+  color: var(--color-gold);
+  padding: 0.35rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  border: 1px solid var(--color-dark-lighter);
+}
+
+/* 近期活動 */
+.upcoming-section {
+  background: var(--color-dark-light);
+}
+
+.upcoming-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.upcoming-card {
+  padding: 2rem;
+}
+
+.upcoming-info h3 {
+  color: var(--color-gold);
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.upcoming-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-text);
+  font-size: 0.95rem;
+}
+
+.meta-icon {
+  font-size: 1.1rem;
+}
+
+.upcoming-info p {
+  color: var(--color-text-muted);
+  margin-bottom: 0;
+  line-height: 1.7;
+}
+
+/* 注意事項 */
+.notice-section {
+  background: var(--color-dark);
+}
+
+.notice-box {
+  background: var(--color-dark-light);
+  border: 1px solid var(--color-gold);
+  border-radius: 8px;
+  padding: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.notice-box h3 {
+  color: var(--color-gold);
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.notice-box ul {
+  list-style: none;
+}
+
+.notice-box li {
+  color: var(--color-text-muted);
+  padding: 0.5rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+  line-height: 1.6;
+}
+
+.notice-box li::before {
+  content: '•';
+  color: var(--color-gold);
+  position: absolute;
+  left: 0;
+  font-weight: bold;
+}
+
+/* 響應式 */
+@media (max-width: 992px) {
+  .annual-grid {
+    grid-template-columns: 1fr;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .banner-content h1 {
+    font-size: 2.5rem;
+    letter-spacing: 4px;
+  }
+
+  .page-banner {
+    height: 250px;
+  }
+
+  .upcoming-meta {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .banner-content h1 {
+    font-size: 2rem;
+  }
+
+  .annual-header {
+    flex-direction: column;
+  }
+}

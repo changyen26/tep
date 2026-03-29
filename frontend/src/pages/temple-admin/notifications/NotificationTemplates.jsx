@@ -1,58 +1,10 @@
 /**
  * 推播通知管理 - 範本管理
  */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import api from '../../../services/templeAdminApi';
 import './Notifications.css';
-
-// 預設範本
-const defaultTemplates = [
-  {
-    id: 1,
-    name: '活動通知',
-    category: 'event',
-    title: '【活動通知】{eventName}',
-    content: '親愛的信眾您好：\n\n本殿將於 {eventDate} 舉辦「{eventName}」，誠摯邀請您蒞臨參與。\n\n活動地點：{location}\n活動時間：{eventTime}\n\n歡迎攜家帶眷同來參拜，三官大帝庇佑闔家平安！\n\n{templeName} 敬上',
-    isDefault: true,
-    usageCount: 12,
-  },
-  {
-    id: 2,
-    name: '點燈到期提醒',
-    category: 'reminder',
-    title: '【溫馨提醒】您的{lampType}即將到期',
-    content: '親愛的 {userName} 信眾您好：\n\n您於本殿點的「{lampType}」將於 {expireDate} 到期。\n\n如欲續點，請於到期前至本殿服務處辦理，或透過線上系統申請。\n\n感謝您長期護持，三官大帝保佑您平安順遂！\n\n{templeName} 敬上',
-    isDefault: true,
-    usageCount: 8,
-  },
-  {
-    id: 3,
-    name: '新春祝福',
-    category: 'festival',
-    title: '【新春祝福】{templeName}恭賀新禧',
-    content: '親愛的信眾：\n\n新春佳節，{templeName}全體同仁敬祝您：\n\n龍年行大運、福氣滿門庭！\n闔家平安、事業順遂、福慧增長！\n\n新春期間（除夕至初五）本殿照常開放，歡迎蒞臨參拜。\n\n{templeName} 敬上',
-    isDefault: true,
-    usageCount: 3,
-  },
-  {
-    id: 4,
-    name: '法會通知',
-    category: 'event',
-    title: '【法會通知】{eventName}',
-    content: '各位信眾平安：\n\n本殿訂於 {eventDate} 啟建「{eventName}」，屆時恭請諸佛菩薩、三官大帝降臨壇場，為眾生消災祈福。\n\n法會時間：{eventTime}\n法會地點：本殿正殿\n\n歡迎十方信眾隨喜參加，同霑法益。\n\n{templeName} 敬啟',
-    isDefault: false,
-    usageCount: 5,
-  },
-  {
-    id: 5,
-    name: '營業時間調整',
-    category: 'announcement',
-    title: '【公告】營業時間調整通知',
-    content: '各位信眾您好：\n\n因應{reason}，本殿營業時間調整如下：\n\n調整期間：{period}\n開放時間：{hours}\n\n造成不便，敬請見諒。如有任何疑問，歡迎來電洽詢。\n\n{templeName} 敬上',
-    isDefault: false,
-    usageCount: 2,
-  },
-];
 
 const categoryLabels = {
   event: '活動',
@@ -66,9 +18,11 @@ const NotificationTemplates = () => {
   const { templeId } = useParams();
   const navigate = useNavigate();
 
-  const [templates, setTemplates] = useState(defaultTemplates);
+  const [templates, setTemplates] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editingTemplate, setEditingTemplate] = useState(null);
+  const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     category: 'custom',
@@ -76,18 +30,27 @@ const NotificationTemplates = () => {
     content: '',
   });
 
-  const handleBack = () => {
-    navigate(`/temple-admin/${templeId}/notifications`);
+  useEffect(() => {
+    loadTemplates();
+  }, [templeId]);
+
+  const loadTemplates = async () => {
+    setLoading(true);
+    try {
+      const res = await api.notifications.listTemplates(templeId);
+      if (res.data?.success) {
+        setTemplates(res.data.data || []);
+      }
+    } catch (err) {
+      console.error('載入模板失敗', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleCreate = () => {
     setEditingTemplate(null);
-    setFormData({
-      name: '',
-      category: 'custom',
-      title: '',
-      content: '',
-    });
+    setFormData({ name: '', category: 'custom', title: '', content: '' });
     setShowModal(true);
   };
 
@@ -102,40 +65,43 @@ const NotificationTemplates = () => {
     setShowModal(true);
   };
 
-  const handleDelete = (id) => {
-    if (window.confirm('確定要刪除此範本嗎？')) {
+  const handleDelete = async (id) => {
+    if (!window.confirm('確定要刪除此範本嗎？')) return;
+    try {
+      await api.notifications.deleteTemplate(id);
       setTemplates(templates.filter((t) => t.id !== id));
+    } catch (err) {
+      alert('刪除失敗');
     }
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!formData.name.trim() || !formData.title.trim() || !formData.content.trim()) {
       alert('請填寫完整資料');
       return;
     }
-
-    if (editingTemplate) {
-      setTemplates(
-        templates.map((t) =>
-          t.id === editingTemplate.id ? { ...t, ...formData } : t
-        )
-      );
-    } else {
-      setTemplates([
-        ...templates,
-        {
-          id: Date.now(),
-          ...formData,
-          isDefault: false,
-          usageCount: 0,
-        },
-      ]);
+    setSaving(true);
+    try {
+      if (editingTemplate) {
+        const res = await api.notifications.updateTemplate(editingTemplate.id, formData);
+        if (res.data?.success) {
+          setTemplates(templates.map((t) => t.id === editingTemplate.id ? res.data.data : t));
+        }
+      } else {
+        const res = await api.notifications.createTemplate({ ...formData, templeId: Number(templeId) });
+        if (res.data?.success) {
+          setTemplates([...templates, res.data.data]);
+        }
+      }
+      setShowModal(false);
+    } catch (err) {
+      alert('儲存失敗');
+    } finally {
+      setSaving(false);
     }
-    setShowModal(false);
   };
 
   const handleUseTemplate = (template) => {
-    // 跳轉到建立推播頁面並帶入範本
     navigate(`/temple-admin/${templeId}/notifications/new?template=${template.id}`);
   };
 
@@ -144,7 +110,7 @@ const NotificationTemplates = () => {
       <div className="notifications-header">
         <h2>訊息範本管理</h2>
         <div className="header-actions">
-          <button className="btn-secondary" onClick={handleBack}>
+          <button className="btn-secondary" onClick={() => navigate(`/temple-admin/${templeId}/notifications`)}>
             返回列表
           </button>
           <button className="btn-primary" onClick={handleCreate}>
@@ -167,49 +133,46 @@ const NotificationTemplates = () => {
         </div>
       </div>
 
-      <div className="templates-grid">
-        {templates.map((template) => (
-          <div key={template.id} className="template-card">
-            <div className="template-card-header">
-              <div className="template-name">{template.name}</div>
-              <span className={`category-badge ${template.category}`}>
-                {categoryLabels[template.category]}
-              </span>
-            </div>
-            <div className="template-title">{template.title}</div>
-            <div className="template-content-preview">
-              {template.content.substring(0, 100)}...
-            </div>
-            <div className="template-card-footer">
-              <span className="usage-count">使用 {template.usageCount} 次</span>
-              <div className="template-actions">
-                <button
-                  className="btn-sm btn-primary"
-                  onClick={() => handleUseTemplate(template)}
-                >
-                  使用
-                </button>
-                {!template.isDefault && (
-                  <>
-                    <button
-                      className="btn-sm btn-secondary"
-                      onClick={() => handleEdit(template)}
-                    >
-                      編輯
-                    </button>
-                    <button
-                      className="btn-sm btn-danger"
-                      onClick={() => handleDelete(template.id)}
-                    >
-                      刪除
-                    </button>
-                  </>
-                )}
+      {loading ? (
+        <div className="loading-state">載入中...</div>
+      ) : templates.length === 0 ? (
+        <div className="empty-state">尚無範本，點擊「新增範本」建立</div>
+      ) : (
+        <div className="templates-grid">
+          {templates.map((template) => (
+            <div key={template.id} className="template-card">
+              <div className="template-card-header">
+                <div className="template-name">{template.name}</div>
+                <span className={`category-badge ${template.category}`}>
+                  {categoryLabels[template.category]}
+                </span>
+              </div>
+              <div className="template-title">{template.title}</div>
+              <div className="template-content-preview">
+                {(template.content || '').substring(0, 100)}...
+              </div>
+              <div className="template-card-footer">
+                <span className="usage-count">使用 {template.usageCount || 0} 次</span>
+                <div className="template-actions">
+                  <button className="btn-sm btn-primary" onClick={() => handleUseTemplate(template)}>
+                    使用
+                  </button>
+                  {!template.isDefault && (
+                    <>
+                      <button className="btn-sm btn-secondary" onClick={() => handleEdit(template)}>
+                        編輯
+                      </button>
+                      <button className="btn-sm btn-danger" onClick={() => handleDelete(template.id)}>
+                        刪除
+                      </button>
+                    </>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       {/* 編輯 Modal */}
       {showModal && (
@@ -217,9 +180,7 @@ const NotificationTemplates = () => {
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h3>{editingTemplate ? '編輯範本' : '新增範本'}</h3>
-              <button className="modal-close" onClick={() => setShowModal(false)}>
-                &times;
-              </button>
+              <button className="modal-close" onClick={() => setShowModal(false)}>&times;</button>
             </div>
             <div className="modal-body">
               <div className="form-group">
@@ -268,11 +229,9 @@ const NotificationTemplates = () => {
               </div>
             </div>
             <div className="modal-footer">
-              <button className="btn-secondary" onClick={() => setShowModal(false)}>
-                取消
-              </button>
-              <button className="btn-primary" onClick={handleSave}>
-                儲存
+              <button className="btn-secondary" onClick={() => setShowModal(false)}>取消</button>
+              <button className="btn-primary" onClick={handleSave} disabled={saving}>
+                {saving ? '儲存中...' : '儲存'}
               </button>
             </div>
           </div>

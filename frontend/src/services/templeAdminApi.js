@@ -488,6 +488,67 @@ export const business = {
 /**
  * 預設匯出所有 API
  */
+/**
+ * ========================================
+ * 通知管理
+ * ========================================
+ */
+export const notifications = {
+  /** 列表 GET /temple-admin/notifications/?temple_id=&status=&page=&pageSize= */
+  list: (templeId, params = {}) =>
+    http.get('/temple-admin/notifications/', { params: { temple_id: templeId, ...params } }),
+
+  /** 詳情 GET /temple-admin/notifications/:id */
+  get: (notificationId) =>
+    http.get(`/temple-admin/notifications/${notificationId}`),
+
+  /** 建立 POST /temple-admin/notifications/ */
+  create: (payload) =>
+    http.post('/temple-admin/notifications/', payload),
+
+  /** 編輯草稿 PUT /temple-admin/notifications/:id */
+  update: (notificationId, payload) =>
+    http.put(`/temple-admin/notifications/${notificationId}`, payload),
+
+  /** 刪除草稿 DELETE /temple-admin/notifications/:id */
+  delete: (notificationId) =>
+    http.delete(`/temple-admin/notifications/${notificationId}`),
+
+  /** 立即發送 POST /temple-admin/notifications/:id/send */
+  send: (notificationId) =>
+    http.post(`/temple-admin/notifications/${notificationId}/send`),
+
+  /** 設定排程 POST /temple-admin/notifications/:id/schedule */
+  schedule: (notificationId, scheduledAt) =>
+    http.post(`/temple-admin/notifications/${notificationId}/schedule`, { scheduledAt }),
+
+  /** 取消排程 POST /temple-admin/notifications/:id/cancel-schedule */
+  cancelSchedule: (notificationId) =>
+    http.post(`/temple-admin/notifications/${notificationId}/cancel-schedule`),
+
+  /** 預估受眾人數 GET /temple-admin/notifications/audience-count */
+  audienceCount: (templeId, targetAudience, targetEventId = null) =>
+    http.get('/temple-admin/notifications/audience-count', {
+      params: { temple_id: templeId, targetAudience, ...(targetEventId ? { targetEventId } : {}) },
+    }),
+
+  /** 模板列表 GET /temple-admin/notifications/templates */
+  listTemplates: (templeId) =>
+    http.get('/temple-admin/notifications/templates', { params: { temple_id: templeId } }),
+
+  /** 建立模板 POST /temple-admin/notifications/templates */
+  createTemplate: (payload) =>
+    http.post('/temple-admin/notifications/templates', payload),
+
+  /** 編輯模板 PUT /temple-admin/notifications/templates/:id */
+  updateTemplate: (templateId, payload) =>
+    http.put(`/temple-admin/notifications/templates/${templateId}`, payload),
+
+  /** 刪除模板 DELETE /temple-admin/notifications/templates/:id */
+  deleteTemplate: (templateId) =>
+    http.delete(`/temple-admin/notifications/templates/${templateId}`),
+};
+
 export default {
   temples,
   events,
@@ -501,4 +562,5 @@ export default {
   pilgrimageVisits,
   analytics,
   business,
+  notifications,
 };

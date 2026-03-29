@@ -1,0 +1,211 @@
+.about-page {
+  overflow-x: hidden;
+}
+
+/* 頁首橫幅 */
+.page-banner {
+  position: relative;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    135deg,
+    var(--color-dark) 0%,
+    var(--color-dark-light) 50%,
+    var(--color-dark) 100%
+  );
+}
+
+.banner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(171, 140, 31, 0.15) 0%,
+    transparent 70%
+  );
+}
+
+.banner-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.banner-content h1 {
+  font-size: 3rem;
+  color: var(--color-gold);
+  margin-bottom: 0.5rem;
+  letter-spacing: 8px;
+}
+
+.banner-content p {
+  color: var(--color-text-muted);
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+/* 廟宇沿革 */
+.history-section {
+  background: var(--color-dark);
+}
+
+.history-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.history-content p {
+  color: var(--color-text);
+  font-size: 1.05rem;
+  line-height: 2;
+  margin-bottom: 1.5rem;
+  text-align: justify;
+}
+
+/* 主祀神明 */
+.deities-section {
+  background: var(--color-dark-light);
+}
+
+.deities-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.deity-card {
+  background: var(--color-dark);
+  padding: 2rem;
+  border-radius: 8px;
+  border: 1px solid var(--color-dark-lighter);
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.deity-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-gold);
+  box-shadow: 0 8px 24px rgba(171, 140, 31, 0.15);
+}
+
+.deity-icon {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 1.5rem;
+  background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  color: var(--color-dark);
+  font-weight: 700;
+}
+
+.deity-card h3 {
+  color: var(--color-gold);
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.deity-info {
+  background: var(--color-dark-light);
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+.deity-info p {
+  margin: 0.25rem 0;
+  font-size: 0.9rem;
+  color: var(--color-text);
+}
+
+.deity-desc {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  line-height: 1.8;
+  text-align: left;
+  margin-bottom: 0;
+}
+
+/* 建築特色 */
+.architecture-section {
+  background: var(--color-dark);
+}
+
+.architecture-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+.architecture-item {
+  background: var(--color-dark-light);
+  padding: 2rem 1.5rem;
+  border-radius: 8px;
+  text-align: center;
+  border: 1px solid var(--color-dark-lighter);
+  transition: all 0.3s ease;
+}
+
+.architecture-item:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-gold);
+}
+
+.architecture-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.architecture-item h3 {
+  color: var(--color-gold);
+  margin-bottom: 0.75rem;
+}
+
+.architecture-item p {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  line-height: 1.7;
+  margin-bottom: 0;
+}
+
+/* 響應式 */
+@media (max-width: 992px) {
+  .deities-grid {
+    grid-template-columns: 1fr;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .architecture-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .banner-content h1 {
+    font-size: 2.5rem;
+    letter-spacing: 4px;
+  }
+
+  .page-banner {
+    height: 250px;
+  }
+}
+
+@media (max-width: 576px) {
+  .architecture-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .banner-content h1 {
+    font-size: 2rem;
+  }
+}

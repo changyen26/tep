@@ -16,6 +16,8 @@ db = SQLAlchemy()
 migrate = Migrate()
 
 def create_app():
+    import pathlib
+    liff_dist = str(pathlib.Path(__file__).resolve().parent.parent.parent / 'liff' / 'dist')
     app = Flask(__name__)
 
     # 設定
@@ -32,7 +34,7 @@ def create_app():
     # ========================================
     CORS(app,
          resources={r"/api/*": {
-             "origins": ["http://localhost:5173", "http://localhost:5174"],
+             "origins": ["http://localhost:5173", "http://localhost:5174", "http://localhost:5175", "https://liff.line.me", "https://wanted-pmc-seats-engineer.trycloudflare.com"],
              "allow_headers": ["Content-Type", "Authorization"],
              "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
              "supports_credentials": True,
@@ -79,10 +81,10 @@ def create_app():
         }), 500
 
     # 導入模型（讓 Flask-Migrate 能夠偵測）- 三表帳號系統
-    from app.models import User, PublicUser, TempleAdminUser, SuperAdminUser, Amulet, Checkin, Energy, Temple, Product, Address, Redemption, TempleAnnouncement, CheckinReward, RewardClaim, TempleApplication, SystemSettings, SystemLog, UserReport, Notification, NotificationSettings, TempleEvent, EventRegistration
+    from app.models import User, PublicUser, TempleAdminUser, SuperAdminUser, Amulet, Checkin, Energy, Temple, Product, Address, Redemption, TempleAnnouncement, CheckinReward, RewardClaim, TempleApplication, SystemSettings, SystemLog, UserReport, Notification, NotificationSettings, TempleEvent, EventRegistration, LineUser, TempleNotification, NotificationStats, NotificationTemplate
 
     # 註冊路由（新增 temple_admin_api 為主要廟方後台 API）
-    from app.routes import auth, user, amulet, checkin, energy, temple, product, address, redemption, upload, stats, leaderboard, temple_announcement, temple_admin, temple_stats, temple_revenue, temple_export, reward, admin, notification, temple_event_admin, temple_admin_api
+    from app.routes import auth, user, amulet, checkin, energy, temple, product, address, redemption, upload, stats, leaderboard, temple_announcement, temple_admin, temple_stats, temple_revenue, temple_export, reward, admin, notification, temple_event_admin, temple_admin_api, public_event, line_webhook, temple_notification_admin
 
     # 新版三表系統 - 優先註冊
     app.register_blueprint(temple_admin_api.bp)  # 廟方後台 API（新版，三表系統）
@@ -109,5 +111,27 @@ def create_app():
     app.register_blueprint(admin.bp)
     app.register_blueprint(notification.bp)
     app.register_blueprint(temple_event_admin.bp)
+    app.register_blueprint(temple_notification_admin.bp)  # 廟方通知管理
+
+    # 公開 API & LINE
+    app.register_blueprint(public_event.bp)    # 公開活動/報名 API
+    app.register_blueprint(line_webhook.bp)    # LINE webhook
+
+    # 排程服務（非 debug reloader 子程序才啟動）
+    if not app.debug or os.environ.get('WERKZEUG_RUN_MAIN') == 'true':
+        from app.services.scheduler import init_scheduler
+        init_scheduler(app)
+
+    # LIFF SPA fallback — 所有 /liff/ 子路徑都回傳 index.html
+    from flask import send_from_directory
+    @app.route('/liff')
+    @app.route('/liff/')
+    @app.route('/liff/<path:path>')
+    def serve_liff(path=''):
+        # 如果是靜態資源（有副檔名），直接回傳檔案
+        if '.' in path:
+            return send_from_directory(liff_dist, path)
+        # 否則回傳 index.html（SPA routing）
+        return send_from_directory(liff_dist, 'index.html')
 
     return app

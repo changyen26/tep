@@ -1,0 +1,226 @@
+@import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Zhi+Mang+Xing&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@400;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  /* 皇帝黃 */
+  --color-temple-gold: #d4a017;
+  --color-temple-gold-light: #e8b92d;
+  --color-temple-gold-dark: #b38a10;
+
+  /* 帝王紅 */
+  --color-temple-red: #cc2222;
+  --color-temple-red-light: #e63333;
+  --color-temple-red-dark: #a01a1a;
+
+  /* 暖棕黑底 */
+  --color-admin-dark: #1f1a18;
+  --color-admin-dark-light: #2a2220;
+  --color-admin-dark-lighter: #3d302c;
+
+  /* 側邊欄專用色 */
+  --color-admin-sidebar: #421818;
+  --color-admin-sidebar-light: #552222;
+  --color-admin-sidebar-border: #663030;
+
+  /* 字體 */
+  --font-serif: 'Noto Serif TC', serif;
+  --font-sans: 'Noto Sans TC', sans-serif;
+}
+
+/* 白河三官寶殿 - 全域樣式 */
+/* 保留 CSS 變數供後台使用 */
+
+:root {
+  --color-gold: #d4a017;
+  --color-gold-light: #e8b92d;
+  --color-gold-dark: #b38a10;
+  --color-dark: #1f1a18;
+  --color-dark-light: #2a2220;
+  --color-dark-lighter: #3d302c;
+  --color-red: #cc2222;
+  --color-red-light: #e63333;
+  --color-red-dark: #a01a1a;
+  --color-sidebar: #421818;
+  --color-sidebar-light: #552222;
+  --color-sidebar-border: #663030;
+  --color-white: #ffffff;
+  --color-text: #e8e8e8;
+  --color-text-muted: #a0a0a0;
+  --font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 保留後台頁面的舊樣式相容 */
+.admin-layout {
+  background-color: var(--color-dark);
+  color: var(--color-text);
+}
+
+.admin-layout a {
+  color: var(--color-gold);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.admin-layout a:hover {
+  color: var(--color-gold-light);
+}
+
+.admin-layout h1,
+.admin-layout h2,
+.admin-layout h3,
+.admin-layout h4,
+.admin-layout h5,
+.admin-layout h6 {
+  color: var(--color-gold);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+/* 後台按鈕樣式 */
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
+  color: var(--color-dark);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--color-gold-light), var(--color-gold));
+  color: var(--color-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(212, 160, 23, 0.3);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 2px solid var(--color-gold);
+  color: var(--color-gold);
+}
+
+.btn-outline:hover {
+  background: var(--color-gold);
+  color: var(--color-dark);
+}
+
+/* 後台卡片樣式 */
+.card {
+  background: var(--color-dark-light);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--color-dark-lighter);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* 後台 section 樣式 */
+.section {
+  padding: 4rem 0;
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: 3rem;
+  position: relative;
+}
+
+.section-title::after {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-gold), var(--color-gold-light));
+  margin: 1rem auto 0;
+}
+
+/* 響應式 */
+@media (max-width: 768px) {
+  .section {
+    padding: 2.5rem 0;
+  }
+}
+
+/* ===== Intro Animation 開門動畫 ===== */
+
+/* 書法字體 */
+.font-brush {
+  font-family: 'Ma Shan Zheng', 'Zhi Mang Xing', serif;
+}
+
+/* 廟門基底樣式 */
+.intro-door {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  background-color: #9A1C1F;
+  z-index: 10;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  transition: transform 2.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.intro-door-left {
+  left: 0;
+  justify-content: flex-end;
+  transform-origin: left center;
+  border-right: 4px solid #7A1618;
+}
+
+.intro-door-right {
+  right: 0;
+  justify-content: flex-start;
+  transform-origin: right center;
+  border-left: 4px solid #7A1618;
+}
+
+/* 向內推門動畫 */
+.door-push-in-left {
+  transform: rotateY(-105deg);
+}
+
+.door-push-in-right {
+  transform: rotateY(105deg);
+}
+
+/* 標題脈動動畫 */
+.intro-pulse {
+  animation: intro-pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes intro-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}

@@ -31,10 +31,64 @@ import MapPage from '../pages/map/MapPage';
 // 設定頁面
 import SettingsPage from '../pages/settings/SettingsPage';
 
+// 廟宇網站模板頁面
+import TempleWebsiteLayout from '../components/temple-website/layout/TempleWebsiteLayout';
+import TempleWebsiteHomePage from '../pages/temple-website/HomePage';
+import TempleWebsiteAboutPage from '../pages/temple-website/AboutPage';
+import TempleWebsiteNewsPage from '../pages/temple-website/NewsPage';
+import TempleWebsiteEventsPage from '../pages/temple-website/EventsPage';
+import TempleWebsiteServicesPage from '../pages/temple-website/ServicesPage';
+import TempleWebsiteLightingPage from '../pages/temple-website/LightingPage';
+import TempleWebsiteGalleryPage from '../pages/temple-website/GalleryPage';
+import TempleWebsiteContactPage from '../pages/temple-website/ContactPage';
+
 export const router = createBrowserRouter([
   {
     path: '/login',
     element: <LoginPage />,
+  },
+  // 廟宇網站模板路由
+  {
+    path: '/temple/:templeId',
+    element: <TempleWebsiteLayout />,
+    children: [
+      {
+        index: true,
+        element: <TempleWebsiteHomePage />,
+      },
+      {
+        path: 'about',
+        element: <TempleWebsiteAboutPage />,
+      },
+      {
+        path: 'news',
+        element: <TempleWebsiteNewsPage />,
+      },
+      {
+        path: 'news/:newsId',
+        element: <TempleWebsiteNewsPage />,
+      },
+      {
+        path: 'events',
+        element: <TempleWebsiteEventsPage />,
+      },
+      {
+        path: 'services',
+        element: <TempleWebsiteServicesPage />,
+      },
+      {
+        path: 'lighting',
+        element: <TempleWebsiteLightingPage />,
+      },
+      {
+        path: 'gallery',
+        element: <TempleWebsiteGalleryPage />,
+      },
+      {
+        path: 'contact',
+        element: <TempleWebsiteContactPage />,
+      },
+    ],
   },
   {
     path: '/',

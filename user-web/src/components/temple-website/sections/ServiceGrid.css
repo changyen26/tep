@@ -1,0 +1,207 @@
+/**
+ * 服務項目網格樣式
+ */
+
+.service-grid-section {
+  padding: 80px 24px;
+  background: linear-gradient(135deg, #232428 0%, #1a1a1d 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 背景裝飾 */
+.service-grid-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ab8c1f' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+.service-grid-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* 區塊標題 */
+.service-grid-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.service-grid-header h2 {
+  font-size: 32px;
+  font-weight: 700;
+  color: #d4b756;
+  margin: 0 0 12px;
+  letter-spacing: 2px;
+  position: relative;
+  display: inline-block;
+}
+
+.service-grid-header h2::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #ab8c1f, #d4b756);
+  border-radius: 2px;
+}
+
+.service-grid-header p {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 20px 0 0;
+}
+
+/* 服務網格 */
+.service-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+/* 服務卡片 */
+.service-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(171, 140, 31, 0.2);
+  border-radius: 12px;
+  padding: 32px 24px;
+  text-align: center;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.service-card:hover {
+  background: rgba(171, 140, 31, 0.1);
+  border-color: rgba(171, 140, 31, 0.4);
+  transform: translateY(-6px);
+}
+
+.service-card-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 20px;
+  background: linear-gradient(135deg, #ab8c1f 0%, #d4b756 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  color: #232428;
+  transition: transform 0.3s ease;
+}
+
+.service-card:hover .service-card-icon {
+  transform: scale(1.1);
+}
+
+.service-card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #d4b756;
+  margin: 0 0 12px;
+}
+
+.service-card-desc {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0 0 16px;
+  line-height: 1.6;
+}
+
+.service-card-price {
+  font-size: 14px;
+  color: #ab8c1f;
+  font-weight: 500;
+  padding: 6px 16px;
+  background: rgba(171, 140, 31, 0.1);
+  border-radius: 20px;
+  display: inline-block;
+}
+
+/* 查看更多按鈕 */
+.service-grid-footer {
+  text-align: center;
+}
+
+.service-more-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 40px;
+  background: linear-gradient(135deg, #ab8c1f 0%, #d4b756 100%);
+  color: #232428;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.service-more-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(171, 140, 31, 0.4);
+}
+
+/* 響應式設計 */
+@media (max-width: 1200px) {
+  .service-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .service-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .service-grid-section {
+    padding: 60px 16px;
+  }
+
+  .service-grid-header h2 {
+    font-size: 26px;
+  }
+
+  .service-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .service-card {
+    padding: 24px 16px;
+  }
+
+  .service-card-icon {
+    width: 56px;
+    height: 56px;
+    font-size: 24px;
+  }
+
+  .service-card-title {
+    font-size: 16px;
+  }
+
+  .service-card-desc {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .service-grid {
+    grid-template-columns: 1fr;
+  }
+}

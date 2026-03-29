@@ -1,0 +1,436 @@
+/**
+ * 聯絡我們頁面樣式
+ */
+
+.temple-contact-page {
+  background: #f5f5f5;
+  min-height: 100vh;
+}
+
+.contact-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* 區塊標題 */
+.section-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #232428;
+  text-align: center;
+  margin: 0 0 40px;
+  letter-spacing: 2px;
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #ab8c1f, #d4b756);
+  border-radius: 2px;
+}
+
+/* 聯絡資訊區 */
+.contact-info-section {
+  padding: 60px 0;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+
+.contact-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.contact-card h3 {
+  font-size: 22px;
+  font-weight: 600;
+  color: #232428;
+  margin: 0 0 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid rgba(171, 140, 31, 0.2);
+}
+
+.contact-items {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.contact-icon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #ab8c1f 0%, #d4b756 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: #232428;
+  flex-shrink: 0;
+}
+
+.contact-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.contact-text .label {
+  font-size: 13px;
+  color: #999;
+}
+
+.contact-text .value {
+  font-size: 16px;
+  color: #232428;
+  font-weight: 500;
+}
+
+/* 社群連結 */
+.social-section {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #eee;
+}
+
+.social-section h4 {
+  font-size: 16px;
+  color: #232428;
+  margin: 0 0 16px;
+}
+
+.social-links {
+  display: flex;
+  gap: 12px;
+}
+
+.social-link {
+  width: 44px;
+  height: 44px;
+  background: #f5f5f5;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: #ab8c1f;
+  transition: all 0.3s ease;
+}
+
+.social-link:hover {
+  background: #ab8c1f;
+  color: #232428;
+  transform: translateY(-2px);
+}
+
+/* 地圖 */
+.map-placeholder {
+  height: 300px;
+  background: linear-gradient(135deg, #232428 0%, #1a1a1d 100%);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.map-placeholder .anticon {
+  font-size: 48px;
+  color: #ab8c1f;
+}
+
+.map-placeholder p {
+  font-size: 18px;
+  color: #d4b756;
+  margin: 0;
+}
+
+.map-placeholder span {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* 交通指南 */
+.traffic-section {
+  padding: 60px 0;
+  background: #fff;
+}
+
+.traffic-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px;
+}
+
+.traffic-card {
+  padding: 32px;
+  background: #f8f8f8;
+  border-radius: 16px;
+}
+
+.traffic-icon {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, #ab8c1f 0%, #d4b756 100%);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  color: #232428;
+  margin-bottom: 20px;
+}
+
+.traffic-card h4 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #232428;
+  margin: 0 0 16px;
+}
+
+.traffic-card ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.traffic-card li {
+  position: relative;
+  padding-left: 20px;
+  margin-bottom: 12px;
+  font-size: 15px;
+  color: #555;
+  line-height: 1.6;
+}
+
+.traffic-card li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 8px;
+  height: 8px;
+  background: #ab8c1f;
+  border-radius: 50%;
+}
+
+/* 進香團預約 */
+.pilgrimage-booking-section {
+  padding: 60px 0;
+  background: linear-gradient(135deg, #232428 0%, #1a1a1d 100%);
+}
+
+.booking-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 48px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(171, 140, 31, 0.3);
+  border-radius: 20px;
+}
+
+.booking-content h3 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #d4b756;
+  margin: 0 0 16px;
+}
+
+.booking-content p {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 24px;
+}
+
+.booking-info {
+  display: flex;
+  gap: 32px;
+}
+
+.booking-item {
+  display: flex;
+  gap: 8px;
+}
+
+.booking-item .label {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.booking-item .value {
+  font-size: 14px;
+  color: #d4b756;
+  font-weight: 500;
+}
+
+.booking-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 40px;
+  background: linear-gradient(135deg, #ab8c1f 0%, #d4b756 100%);
+  color: #232428;
+  font-size: 18px;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.booking-btn:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 24px rgba(171, 140, 31, 0.4);
+}
+
+/* 意見回饋 */
+.feedback-section {
+  padding: 60px 0;
+  background: #f5f5f5;
+}
+
+.feedback-form-wrapper {
+  max-width: 700px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.feedback-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #232428;
+}
+
+.form-group input,
+.form-group textarea {
+  padding: 14px 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #ab8c1f;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.submit-btn {
+  padding: 16px 40px;
+  background: linear-gradient(135deg, #ab8c1f 0%, #d4b756 100%);
+  color: #232428;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  align-self: center;
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(171, 140, 31, 0.4);
+}
+
+/* 響應式設計 */
+@media (max-width: 1024px) {
+  .booking-card {
+    flex-direction: column;
+    gap: 32px;
+    text-align: center;
+  }
+
+  .booking-info {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .booking-item {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-info-section,
+  .traffic-section,
+  .pilgrimage-booking-section,
+  .feedback-section {
+    padding: 40px 0;
+  }
+
+  .contact-container {
+    padding: 0 16px;
+  }
+
+  .contact-grid,
+  .traffic-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-card {
+    padding: 24px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .booking-card {
+    padding: 32px 24px;
+  }
+
+  .feedback-form-wrapper {
+    padding: 24px;
+  }
+}

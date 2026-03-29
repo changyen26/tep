@@ -2,8 +2,9 @@
  * 推播通知管理 - 建立新推播
  * 包含客群篩選、範本選擇、AI 文案助手、訊息預覽
  */
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import api from '../../../services/templeAdminApi';
 import './Notifications.css';
 
 // AI 文案助手選項
@@ -607,19 +608,23 @@ const NotificationNew = () => {
   const [userPoints, setUserPoints] = useState(100);
   const imageGenerationCost = 30;
 
-  // 計算目標人數
-  const targetCount = useMemo(() => {
-    if (selectedAudience === 'event_registered' && selectedEvent) {
-      const event = eventOptions.find((e) => e.id === Number(selectedEvent));
-      return event?.registrations || 0;
-    }
-    if (selectedAudience === 'custom') {
-      // 模擬自訂篩選結果
-      return 150;
-    }
-    const audience = audienceOptions.find((a) => a.id === selectedAudience);
-    return audience?.count || 0;
-  }, [selectedAudience, selectedEvent]);
+  // 計算目標人數（從 API 取得）
+  const [targetCount, setTargetCount] = useState(0);
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const res = await api.notifications.audienceCount(
+          templeId,
+          selectedAudience,
+          selectedAudience === 'event_registered' ? selectedEvent || null : null
+        );
+        if (res.data?.success) setTargetCount(res.data.data.count || 0);
+      } catch {
+        setTargetCount(0);
+      }
+    };
+    fetch();
+  }, [templeId, selectedAudience, selectedEvent]);
 
   // 套用範本
   const handleTemplateSelect = (templateId) => {
@@ -675,13 +680,45 @@ const NotificationNew = () => {
 
   // 送出
   const handleSubmit = async () => {
+    if (!title.trim() || !content.trim()) {
+      alert('請填寫標題與內容');
+      return;
+    }
     setSubmitting(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      alert(scheduleType === 'now' ? '推播已發送！' : '推播已排程！');
+      // 1. 建立通知草稿
+      const payload = {
+        templeId: Number(templeId),
+        title: title.trim(),
+        content: content.trim(),
+        channels,
+        targetAudience: selectedAudience,
+        targetEventId: selectedAudience === 'event_registered' ? Number(selectedEvent) || null : null,
+        targetFilters: selectedAudience === 'custom' ? customFilters : null,
+        imageUrl: notificationImage || null,
+      };
+      const createRes = await api.notifications.create(payload);
+      if (!createRes.data?.success) {
+        throw new Error(createRes.data?.message || '建立失敗');
+      }
+      const notifId = createRes.data.data.id;
+
+      // 2. 立即發送 or 排程
+      if (scheduleType === 'now') {
+        await api.notifications.send(notifId);
+        alert('推播已發送！');
+      } else {
+        if (!scheduledAt) {
+          alert('請選擇排程時間');
+          setSubmitting(false);
+          return;
+        }
+        await api.notifications.schedule(notifId, scheduledAt);
+        alert('推播已排程！');
+      }
       navigate(`/temple-admin/${templeId}/notifications`);
     } catch (err) {
-      alert('發送失敗，請稍後再試');
+      alert('操作失敗：' + (err.message || '請稍後再試'));
     } finally {
       setSubmitting(false);
     }
@@ -1036,8 +1073,14 @@ const NotificationNew = () => {
             <span className="target-count">{targetCount.toLocaleString()} 人</span>
           </div>
 
+          {targetCount === 0 && (
+            <div className="warning-banner" style={{ color: '#b45309', background: '#fef3c7', padding: '8px 12px', borderRadius: '6px', marginBottom: '12px', fontSize: '13px' }}>
+              目前尚無符合條件的 LINE 追蹤者，仍可繼續建立推播草稿。
+            </div>
+          )}
+
           <div className="form-actions">
-            <button className="btn-primary" onClick={handleNext} disabled={targetCount === 0}>
+            <button className="btn-primary" onClick={handleNext}>
               下一步：編輯內容
             </button>
           </div>

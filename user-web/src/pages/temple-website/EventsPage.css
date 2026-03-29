@@ -1,0 +1,245 @@
+/**
+ * 活動一覽頁面樣式
+ */
+
+.temple-events-page {
+  background: #f5f5f5;
+  min-height: 100vh;
+}
+
+.events-page-content {
+  padding: 60px 0;
+}
+
+.events-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* 活動網格 */
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+
+/* 活動卡片 */
+.event-card {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.event-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+}
+
+.event-card-image {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+}
+
+.event-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.event-card:hover .event-card-image img {
+  transform: scale(1.08);
+}
+
+.event-status {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.event-status.upcoming {
+  background: linear-gradient(135deg, #ab8c1f 0%, #d4b756 100%);
+  color: #232428;
+}
+
+.event-status.ongoing {
+  background: #52c41a;
+  color: #fff;
+}
+
+.event-status.ended {
+  background: #999;
+  color: #fff;
+}
+
+.event-card-content {
+  padding: 24px;
+}
+
+.event-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #232428;
+  margin: 0 0 16px;
+}
+
+.event-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.event-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #666;
+}
+
+.event-meta-item .anticon {
+  color: #ab8c1f;
+}
+
+.event-description {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.7;
+  margin: 0 0 20px;
+}
+
+.event-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 24px;
+  background: transparent;
+  border: 2px solid #ab8c1f;
+  border-radius: 8px;
+  color: #ab8c1f;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.event-btn:hover {
+  background: #ab8c1f;
+  color: #232428;
+}
+
+/* 無活動提示 */
+.events-empty {
+  text-align: center;
+  padding: 80px 0;
+}
+
+.events-empty .anticon {
+  font-size: 64px;
+  color: #ddd;
+  margin-bottom: 16px;
+}
+
+.events-empty p {
+  font-size: 16px;
+  color: #999;
+  margin: 0;
+}
+
+/* 年度行事曆 */
+.annual-calendar-section {
+  padding: 60px 0;
+  background: linear-gradient(135deg, #232428 0%, #1a1a1d 100%);
+}
+
+.calendar-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #d4b756;
+  text-align: center;
+  margin: 0 0 40px;
+  letter-spacing: 2px;
+}
+
+.calendar-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.calendar-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(171, 140, 31, 0.2);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.calendar-item:hover {
+  background: rgba(171, 140, 31, 0.1);
+  border-color: rgba(171, 140, 31, 0.4);
+}
+
+.calendar-date {
+  font-size: 14px;
+  font-weight: 600;
+  color: #d4b756;
+  min-width: 120px;
+}
+
+.calendar-event {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* 響應式設計 */
+@media (max-width: 1024px) {
+  .events-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .calendar-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .events-page-content {
+    padding: 40px 0;
+  }
+
+  .events-container {
+    padding: 0 16px;
+  }
+
+  .events-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .calendar-list {
+    grid-template-columns: 1fr;
+  }
+
+  .calendar-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .calendar-date {
+    min-width: auto;
+  }
+}

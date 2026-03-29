@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+:root {
+  --color-temple-gold: #D4A574;
+  --color-temple-gold-light: #E0BB8A;
+  --color-bg-dark: #0f0f1a;
+  --color-bg-card: #16213e;
+  --color-bg-card-light: #1a2744;
+  --color-border: #1e3054;
+}
+
+body {
+  margin: 0;
+  font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: var(--color-bg-dark);
+  color: #e2e8f0;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100svh;
+}
+
+@utility text-temple-gold {
+  color: var(--color-temple-gold);
+}
+@utility text-temple-gold-light {
+  color: var(--color-temple-gold-light);
+}
+@utility bg-temple-gold {
+  background-color: var(--color-temple-gold);
+}
+@utility bg-dark {
+  background-color: var(--color-bg-dark);
+}
+@utility bg-card {
+  background-color: var(--color-bg-card);
+}
+@utility bg-card-light {
+  background-color: var(--color-bg-card-light);
+}
+@utility border-card {
+  border-color: var(--color-border);
+}

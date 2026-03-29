@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//e/tep/backend/**)",
+      "Read(//e/tep/**)",
+      "Bash(grep -r \"route\\\\|blueprint\\\\|@bp\\\\.route\" /e/tep/backend/app/routes/*.py | grep \"def \" | head -30)",
+      "Bash(find /e/tep -maxdepth 1 -name \"*.md\" -type f | xargs ls -lt | head -10)",
+      "Bash(grep -r \"role\\\\|permission\\\\|scope\" /e/tep/backend/app/models/*.py | grep -i \"column\\\\|json\" | head -20)",
+      "Bash(find E:/tep -name .env* -o -name *.env)"
+    ]
+  }
+}

@@ -1,0 +1,286 @@
+.gallery-page {
+  overflow-x: hidden;
+}
+
+/* 頁首橫幅 */
+.page-banner {
+  position: relative;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    135deg,
+    var(--color-dark) 0%,
+    var(--color-dark-light) 50%,
+    var(--color-dark) 100%
+  );
+}
+
+.banner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(171, 140, 31, 0.15) 0%,
+    transparent 70%
+  );
+}
+
+.banner-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.banner-content h1 {
+  font-size: 3rem;
+  color: var(--color-gold);
+  margin-bottom: 0.5rem;
+  letter-spacing: 8px;
+}
+
+.banner-content p {
+  color: var(--color-text-muted);
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+/* 相簿區 */
+.gallery-section {
+  background: var(--color-dark);
+}
+
+.gallery-filter {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.filter-btn {
+  background: var(--color-dark-light);
+  color: var(--color-text);
+  border: 1px solid var(--color-dark-lighter);
+  padding: 0.5rem 1.25rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+  background: var(--color-gold);
+  color: var(--color-dark);
+  border-color: var(--color-gold);
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.gallery-item {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--color-dark-light);
+  border: 1px solid var(--color-dark-lighter);
+}
+
+.gallery-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    135deg,
+    var(--color-dark-light) 0%,
+    var(--color-dark) 100%
+  );
+}
+
+.placeholder-icon {
+  font-size: 3rem;
+  opacity: 0.3;
+}
+
+.gallery-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+}
+
+.gallery-item:hover .gallery-overlay {
+  transform: translateY(0);
+}
+
+.gallery-overlay h3 {
+  color: var(--color-gold);
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.gallery-overlay p {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.no-photos {
+  text-align: center;
+  padding: 3rem;
+  color: var(--color-text-muted);
+}
+
+/* Lightbox */
+.lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 2rem;
+}
+
+.lightbox-content {
+  position: relative;
+  max-width: 800px;
+  width: 100%;
+  background: var(--color-dark-light);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 40px;
+  height: 40px;
+  background: var(--color-dark);
+  color: var(--color-gold);
+  border: none;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  z-index: 1;
+  transition: all 0.3s ease;
+}
+
+.lightbox-close:hover {
+  background: var(--color-gold);
+  color: var(--color-dark);
+}
+
+.lightbox-image {
+  aspect-ratio: 16/10;
+  background: var(--color-dark);
+}
+
+.lightbox-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbox-placeholder .placeholder-icon {
+  font-size: 5rem;
+}
+
+.lightbox-info {
+  padding: 1.5rem;
+}
+
+.lightbox-info h3 {
+  color: var(--color-gold);
+  margin-bottom: 0.5rem;
+}
+
+.lightbox-info p {
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+/* 上傳提示 */
+.upload-section {
+  background: var(--color-dark-light);
+}
+
+.upload-notice {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: var(--color-dark);
+  border-radius: 8px;
+  border: 1px solid var(--color-dark-lighter);
+}
+
+.upload-notice h3 {
+  color: var(--color-gold);
+  margin-bottom: 1rem;
+}
+
+.upload-notice p {
+  color: var(--color-text-muted);
+  margin: 0;
+  line-height: 1.7;
+}
+
+/* 響應式 */
+@media (max-width: 992px) {
+  .gallery-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .banner-content h1 {
+    font-size: 2.5rem;
+    letter-spacing: 4px;
+  }
+
+  .page-banner {
+    height: 250px;
+  }
+
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .gallery-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery-item {
+    aspect-ratio: 4/3;
+  }
+
+  .banner-content h1 {
+    font-size: 2rem;
+  }
+}

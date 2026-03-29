@@ -1,0 +1,382 @@
+/**
+ * 關於本宮頁面樣式
+ */
+
+.temple-about-page {
+  background: #fff;
+}
+
+.about-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* 簡介區 */
+.about-intro-section {
+  padding: 80px 0;
+  background: #fff;
+}
+
+.about-intro-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.about-intro-image {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+
+.about-intro-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.about-intro-text h2 {
+  font-size: 36px;
+  font-weight: 700;
+  color: #232428;
+  margin: 0 0 8px;
+  letter-spacing: 2px;
+}
+
+.about-intro-subtitle {
+  font-size: 18px;
+  color: #ab8c1f;
+  margin: 0 0 24px;
+  font-weight: 500;
+}
+
+.about-intro-desc {
+  font-size: 16px;
+  color: #555;
+  line-height: 1.9;
+  margin: 0 0 32px;
+}
+
+.about-stats {
+  display: flex;
+  gap: 32px;
+}
+
+.about-stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 20px 24px;
+  background: #f8f8f8;
+  border-radius: 12px;
+}
+
+.about-stat-item .anticon {
+  font-size: 24px;
+  color: #ab8c1f;
+}
+
+.stat-number {
+  font-size: 28px;
+  font-weight: 700;
+  color: #232428;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: #666;
+}
+
+/* 區塊標題 */
+.about-section-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.about-section-header h2 {
+  font-size: 32px;
+  font-weight: 700;
+  color: #232428;
+  margin: 0 0 12px;
+  letter-spacing: 2px;
+  position: relative;
+  display: inline-block;
+}
+
+.about-section-header h2::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #ab8c1f, #d4b756);
+  border-radius: 2px;
+}
+
+.about-section-header.light h2 {
+  color: #d4b756;
+}
+
+.about-section-header.light h2::after {
+  background: linear-gradient(90deg, #d4b756, #fff);
+}
+
+.about-section-header p {
+  font-size: 15px;
+  color: #666;
+  margin: 20px 0 0;
+}
+
+.about-section-header.light p {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* 歷史沿革 */
+.about-history-section {
+  padding: 80px 0;
+  background: #f8f8f8;
+}
+
+.about-history-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+}
+
+.history-text p {
+  font-size: 16px;
+  color: #555;
+  line-height: 2;
+  margin: 0 0 20px;
+}
+
+.history-timeline {
+  position: relative;
+  padding-left: 40px;
+}
+
+.history-timeline::before {
+  content: '';
+  position: absolute;
+  left: 10px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg, #ab8c1f, #d4b756);
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 32px;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -34px;
+  top: 6px;
+  width: 12px;
+  height: 12px;
+  background: #ab8c1f;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 2px #ab8c1f;
+}
+
+.timeline-year {
+  font-size: 24px;
+  font-weight: 700;
+  color: #ab8c1f;
+  margin-bottom: 8px;
+}
+
+.timeline-event h4 {
+  font-size: 18px;
+  color: #232428;
+  margin: 0 0 4px;
+}
+
+.timeline-event p {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+}
+
+/* 主祀神尊 */
+.about-deity-section {
+  padding: 80px 0;
+  background: linear-gradient(135deg, #232428 0%, #1a1a1d 100%);
+}
+
+.about-deity-content {
+  display: grid;
+  grid-template-columns: 400px 1fr;
+  gap: 60px;
+  align-items: start;
+}
+
+.deity-image {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.deity-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.deity-info h3 {
+  font-size: 36px;
+  font-weight: 700;
+  color: #d4b756;
+  margin: 0 0 8px;
+  letter-spacing: 2px;
+}
+
+.deity-title {
+  font-size: 18px;
+  color: #ab8c1f;
+  margin: 0 0 24px;
+}
+
+.deity-desc {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.9;
+  margin: 0 0 20px;
+}
+
+.deity-blessings {
+  margin-top: 32px;
+}
+
+.deity-blessings h4 {
+  font-size: 16px;
+  color: #d4b756;
+  margin: 0 0 16px;
+}
+
+.blessing-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.blessing-tag {
+  padding: 8px 20px;
+  background: rgba(171, 140, 31, 0.15);
+  border: 1px solid rgba(171, 140, 31, 0.3);
+  border-radius: 20px;
+  font-size: 14px;
+  color: #d4b756;
+}
+
+/* 榮譽與認證 */
+.about-awards-section {
+  padding: 80px 0;
+  background: #fff;
+}
+
+.awards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.award-card {
+  text-align: center;
+  padding: 40px 24px;
+  background: #f8f8f8;
+  border-radius: 16px;
+  transition: all 0.3s ease;
+}
+
+.award-card:hover {
+  background: #f0f0f0;
+  transform: translateY(-4px);
+}
+
+.award-card .anticon {
+  font-size: 40px;
+  color: #ab8c1f;
+  margin-bottom: 16px;
+}
+
+.award-card h4 {
+  font-size: 18px;
+  color: #232428;
+  margin: 0 0 8px;
+}
+
+.award-card p {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+}
+
+/* 響應式設計 */
+@media (max-width: 1024px) {
+  .about-intro-content,
+  .about-history-content {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .about-deity-content {
+    grid-template-columns: 1fr;
+  }
+
+  .deity-image {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .awards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .about-intro-section,
+  .about-history-section,
+  .about-deity-section,
+  .about-awards-section {
+    padding: 60px 0;
+  }
+
+  .about-container {
+    padding: 0 16px;
+  }
+
+  .about-intro-text h2 {
+    font-size: 28px;
+  }
+
+  .about-section-header h2 {
+    font-size: 26px;
+  }
+
+  .about-stats {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .stat-number {
+    font-size: 24px;
+  }
+
+  .deity-info h3 {
+    font-size: 28px;
+  }
+
+  .awards-grid {
+    grid-template-columns: 1fr;
+  }
+}
