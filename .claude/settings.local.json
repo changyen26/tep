@@ -8,7 +8,9 @@
       "Bash(python:*)",
       "WebFetch(domain:api.github.com)",
       "Bash(git pull:*)",
-      "Bash(git clone:*)"
+      "Bash(git clone:*)",
+      "Bash(python -c \":*)",
+      "Bash(xargs wc:*)"
     ],
     "deny": [],
     "ask": []
