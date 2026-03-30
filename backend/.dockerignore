@@ -1,0 +1,10 @@
+__pycache__
+*.pyc
+.env
+.env.*
+!.env.example
+venv/
+.git
+uploads/avatars/*
+uploads/products/*
+uploads/temp/*

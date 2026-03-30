@@ -1,0 +1,113 @@
+version: "3.8"
+
+services:
+  # ========================================
+  # MySQL 資料庫
+  # ========================================
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpassword}
+      MYSQL_DATABASE: ${DB_NAME:-amulet_system_v2}
+      MYSQL_USER: ${DB_USER:-tepuser}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-teppassword}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ========================================
+  # Flask 後端 API
+  # ========================================
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_NAME=${DB_NAME:-amulet_system_v2}
+      - DB_USER=${DB_USER:-tepuser}
+      - DB_PASSWORD=${DB_PASSWORD:-teppassword}
+      - SECRET_KEY=${SECRET_KEY}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - JWT_EXPIRATION_HOURS=${JWT_EXPIRATION_HOURS:-1}
+      - FLASK_ENV=${FLASK_ENV:-production}
+      - CORS_ORIGINS=${CORS_ORIGINS:-http://localhost}
+      - LINE_CHANNEL_ACCESS_TOKEN=${LINE_CHANNEL_ACCESS_TOKEN:-}
+      - LINE_CHANNEL_SECRET=${LINE_CHANNEL_SECRET:-}
+      - LINE_LIFF_ID=${LINE_LIFF_ID:-}
+      - PUBLIC_BASE_URL=${PUBLIC_BASE_URL:-http://localhost}
+    volumes:
+      - uploads_data:/app/uploads
+    ports:
+      - "5000:5000"
+
+  # ========================================
+  # 廟方管理後台 (frontend)
+  # ========================================
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+
+  # ========================================
+  # 系統管理後台 (sgbd)
+  # ========================================
+  sgbd:
+    build: ./sgbd
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "5174:80"
+
+  # ========================================
+  # 信眾端網站 (user-web)
+  # ========================================
+  user-web:
+    build: ./user-web
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "5175:80"
+
+  # ========================================
+  # LINE LIFF 應用
+  # ========================================
+  liff:
+    build: ./liff
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "5176:80"
+
+  # ========================================
+  # Nginx 反向代理（主入口）
+  # ========================================
+  nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    depends_on:
+      - backend
+      - frontend
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - uploads_data:/app/uploads:ro
+
+volumes:
+  mysql_data:
+  uploads_data:
