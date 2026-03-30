@@ -6,12 +6,15 @@
 - super_admin 可以存取任意 templeId（但統計 API 除外，應使用系統管理後台）
 """
 from flask import Blueprint, request
+from app.utils.logger import get_logger
 from app import db
 from app.models.temple import Temple
 from app.utils.auth import token_required
 from app.utils.response import success_response, error_response
 from sqlalchemy import func
 from datetime import datetime, timedelta
+
+logger = get_logger('routes.temple_admin_api')
 
 bp = Blueprint('temple_admin_api', __name__, url_prefix='/api/temple-admin/temples')
 
@@ -48,11 +51,24 @@ def check_temple_access(current_user, account_type, temple_id):
 @bp.route('/<int:temple_id>', methods=['GET', 'OPTIONS'])
 @token_required
 def get_temple(current_user, account_type, temple_id):
-    """
-    取得廟宇資訊
-    GET /api/temple-admin/temples/:templeId
-
-    權限：temple_admin（僅自己的廟宇）、super_admin（任意廟宇）
+    """取得廟宇資訊
+    ---
+    tags:
+      - 廟方管理
+    security:
+      - Bearer: []
+    parameters:
+      - name: temple_id
+        in: path
+        type: integer
+        required: true
+    responses:
+      200:
+        description: 廟宇資訊
+      403:
+        description: 權限不足
+      404:
+        description: 廟宇不存在
     """
     if request.method == 'OPTIONS':
         return '', 204
@@ -85,26 +101,12 @@ def get_temple(current_user, account_type, temple_id):
         return success_response(temple_data)
 
     except AttributeError as e:
-        import os
-        import traceback
-        if os.getenv('FLASK_ENV') == 'development' or os.getenv('FLASK_DEBUG') == '1':
-            print(f"\n{'='*80}")
-            print(f"❌ AttributeError in get_temple (temple_id={temple_id})")
-            print(f"{'='*80}")
-            traceback.print_exc()
-            print(f"{'='*80}\n")
+        logger.exception('AttributeError in get_temple (temple_id=%s)', temple_id)
         return error_response(f'資料模型錯誤: {str(e)}', 500)
 
     except Exception as e:
         db.session.rollback()
-        import os
-        import traceback
-        if os.getenv('FLASK_ENV') == 'development' or os.getenv('FLASK_DEBUG') == '1':
-            print(f"\n{'='*80}")
-            print(f"❌ Exception in get_temple (temple_id={temple_id})")
-            print(f"{'='*80}")
-            traceback.print_exc()
-            print(f"{'='*80}\n")
+        logger.exception('Exception in get_temple (temple_id=%s)', temple_id)
         return error_response(f'查詢失敗: {str(e)}', 500)
 
 @bp.route('/<int:temple_id>', methods=['PUT', 'OPTIONS'])
@@ -252,7 +254,7 @@ def get_temple_stats(current_user, account_type, temple_id):
 
         except Exception as e:
             # 如果統計查詢失敗，返回預設值（避免前端崩潰）
-            print(f"Stats query error: {e}")
+            logger.error('Stats query error: %s', e)
             stats = {
                 'today': {'checkins': 0, 'orders': 0, 'revenue': 0},
                 'month': {'checkins': 0, 'orders': 0, 'revenue': 0}
@@ -262,14 +264,7 @@ def get_temple_stats(current_user, account_type, temple_id):
 
     except Exception as e:
         db.session.rollback()
-        import os
-        import traceback
-        if os.getenv('FLASK_ENV') == 'development' or os.getenv('FLASK_DEBUG') == '1':
-            print(f"\n{'='*80}")
-            print(f"❌ Exception in get_temple_stats (temple_id={temple_id})")
-            print(f"{'='*80}")
-            traceback.print_exc()
-            print(f"{'='*80}\n")
+        logger.exception('Exception in get_temple_stats (temple_id=%s)', temple_id)
         return error_response(f'查詢統計資料失敗: {str(e)}', 500)
 
 # ===== 打卡記錄 =====
@@ -519,7 +514,7 @@ def get_temple_orders(current_user, account_type, temple_id):
 
         except Exception as e:
             # 如果查詢失敗，返回空陣列
-            print(f"Orders query error: {e}")
+            logger.error('Orders query error: %s', e)
             return success_response({
                 'orders': [],
                 'total': 0,
@@ -530,14 +525,7 @@ def get_temple_orders(current_user, account_type, temple_id):
 
     except Exception as e:
         db.session.rollback()
-        import os
-        import traceback
-        if os.getenv('FLASK_ENV') == 'development' or os.getenv('FLASK_DEBUG') == '1':
-            print(f"\n{'='*80}")
-            print(f"❌ Exception in get_temple_orders (temple_id={temple_id})")
-            print(f"{'='*80}")
-            traceback.print_exc()
-            print(f"{'='*80}\n")
+        logger.exception('Exception in get_temple_orders (temple_id=%s)', temple_id)
         return error_response(f'查詢訂單失敗: {str(e)}', 500)
 
 @bp.route('/<int:temple_id>/orders/<int:order_id>', methods=['GET', 'OPTIONS'])
@@ -853,8 +841,7 @@ def get_temple_revenue(current_user, account_type, temple_id):
         })
 
     except Exception as e:
-        import traceback
-        traceback.print_exc()
+        logger.exception('查詢收入報表失敗')
         return error_response(f'查詢收入報表失敗: {str(e)}', 500)
 
 @bp.route('/<int:temple_id>/revenue/summary', methods=['GET', 'OPTIONS'])
@@ -942,8 +929,7 @@ def get_temple_revenue_summary(current_user, account_type, temple_id):
         })
 
     except Exception as e:
-        import traceback
-        traceback.print_exc()
+        logger.exception('查詢收入摘要失敗')
         return error_response(f'查詢收入摘要失敗: {str(e)}', 500)
 
 # ===== 信眾管理 =====
@@ -1092,8 +1078,7 @@ def get_temple_devotees(current_user, account_type, temple_id):
         })
 
     except Exception as e:
-        import traceback
-        traceback.print_exc()
+        logger.exception('查詢信眾列表失敗')
         return error_response(f'查詢信眾列表失敗: {str(e)}', 500)
 
 @bp.route('/<int:temple_id>/devotees/<int:public_user_id>', methods=['GET', 'OPTIONS'])
@@ -1216,8 +1201,7 @@ def get_temple_devotee_detail(current_user, account_type, temple_id, public_user
         })
 
     except Exception as e:
-        import traceback
-        traceback.print_exc()
+        logger.exception('查詢信眾詳情失敗')
         return error_response(f'查詢信眾詳情失敗: {str(e)}', 500)
 
 
@@ -1294,8 +1278,7 @@ def get_pilgrimage_visits(current_user, account_type, temple_id):
     except ValueError:
         return error_response('無效的分頁參數', 400)
     except Exception as e:
-        import traceback
-        traceback.print_exc()
+        logger.exception('查詢進香登記失敗')
         return error_response(f'查詢進香登記失敗: {str(e)}', 500)
 
 
@@ -1365,8 +1348,7 @@ def create_pilgrimage_visit(current_user, account_type, temple_id):
         return error_response(f'資料格式錯誤: {str(e)}', 400)
     except Exception as e:
         db.session.rollback()
-        import traceback
-        traceback.print_exc()
+        logger.exception('新增進香登記失敗')
         return error_response(f'新增進香登記失敗: {str(e)}', 500)
 
 
@@ -1403,8 +1385,7 @@ def get_pilgrimage_visit_detail(current_user, account_type, temple_id, visit_id)
         return success_response(visit.to_dict())
 
     except Exception as e:
-        import traceback
-        traceback.print_exc()
+        logger.exception('查詢進香登記詳情失敗')
         return error_response(f'查詢進香登記失敗: {str(e)}', 500)
 
 
@@ -1496,7 +1477,7 @@ def update_pilgrimage_visit(current_user, account_type, temple_id, visit_id):
     except Exception as e:
         db.session.rollback()
         import traceback
-        traceback.print_exc()
+        logger.exception('Unhandled exception')
         return error_response(f'更新進香登記失敗: {str(e)}', 500)
 
 
@@ -1874,7 +1855,7 @@ def get_member_analytics(current_user, account_type, temple_id):
 
     except Exception as e:
         import traceback
-        traceback.print_exc()
+        logger.exception('Unhandled exception')
         return error_response(f'查詢會員分析資料失敗: {str(e)}', 500)
 
 
@@ -2119,7 +2100,7 @@ def get_business_dashboard(current_user, account_type, temple_id):
 
     except Exception as e:
         import traceback
-        traceback.print_exc()
+        logger.exception('Unhandled exception')
         return error_response(f'查詢經營診斷資料失敗: {str(e)}', 500)
 
 
@@ -2156,7 +2137,7 @@ def get_temple_events(current_user, account_type, temple_id):
 
     except Exception as e:
         import traceback
-        traceback.print_exc()
+        logger.exception('Unhandled exception')
         return error_response(f'獲取活動列表失敗: {str(e)}', 500)
 
 
@@ -2217,7 +2198,7 @@ def get_temple_lamps(current_user, account_type, temple_id):
 
     except Exception as e:
         import traceback
-        traceback.print_exc()
+        logger.exception('Unhandled exception')
         return error_response(f'獲取點燈列表失敗: {str(e)}', 500)
 
 
@@ -2235,7 +2216,7 @@ def handle_blueprint_exception(error):
     import os
     if os.getenv('FLASK_ENV') == 'development' or os.getenv('FLASK_DEBUG') == '1':
         import traceback
-        traceback.print_exc()
+        logger.exception('Unhandled exception')
         return error_response(f'Internal Server Error: {str(error)}', 500)
 
     # 生產環境：返回通用錯誤

@@ -12,6 +12,9 @@ from app.utils.auth import token_required, admin_required
 from app.utils.response import success_response, error_response
 from datetime import datetime
 from sqlalchemy import func
+from app.utils.logger import get_logger
+
+logger = get_logger('routes.redemption')
 
 bp = Blueprint('redemption', __name__, url_prefix='/api/redemptions')
 

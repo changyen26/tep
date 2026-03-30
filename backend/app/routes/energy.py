@@ -7,6 +7,9 @@ from app.models.energy import Energy
 from app.models.amulet import Amulet
 from app.utils.auth import token_required
 from app.utils.response import success_response, error_response
+from app.utils.logger import get_logger
+
+logger = get_logger('routes.energy')
 
 bp = Blueprint('energy', __name__, url_prefix='/api/energy')
 

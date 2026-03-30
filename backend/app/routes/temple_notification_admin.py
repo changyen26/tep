@@ -2,6 +2,7 @@
 廟方通知管理 API
 """
 from flask import Blueprint, request
+from app.utils.logger import get_logger
 from app import db
 from app.models.temple_notification import TempleNotification, NotificationStats, NotificationTemplate
 from app.models.temple_admin import TempleAdmin
@@ -10,6 +11,8 @@ from app.utils.auth import token_required
 from app.utils.response import success_response, error_response
 from app.services.notification_service import count_audience, send_notification
 from datetime import datetime
+
+logger = get_logger('routes.temple_notification_admin')
 
 bp = Blueprint('temple_notification_admin', __name__, url_prefix='/api/temple-admin/notifications')
 
@@ -59,7 +62,7 @@ def list_notifications(current_user):
             'totalPages': pagination.pages,
         })
     except Exception as e:
-        print(f'[NotifAdmin] list error: {e}')
+        logger.error('list error: %s', e)
         return error_response('載入通知列表失敗', 500)
 
 
@@ -77,7 +80,7 @@ def get_notification(current_user, notification_id):
             return error_response('無權限', 403)
         return success_response(notif.to_dict(include_stats=True))
     except Exception as e:
-        print(f'[NotifAdmin] get error: {e}')
+        logger.error('get error: %s', e)
         return error_response('載入通知失敗', 500)
 
 
@@ -126,7 +129,7 @@ def create_notification(current_user):
         return success_response(notif.to_dict(), '通知已建立', 201)
     except Exception as e:
         db.session.rollback()
-        print(f'[NotifAdmin] create error: {e}')
+        logger.error('create error: %s', e)
         return error_response('建立通知失敗', 500)
 
 
@@ -169,7 +172,7 @@ def update_notification(current_user, notification_id):
         return success_response(notif.to_dict())
     except Exception as e:
         db.session.rollback()
-        print(f'[NotifAdmin] update error: {e}')
+        logger.error('update error: %s', e)
         return error_response('更新通知失敗', 500)
 
 
@@ -193,7 +196,7 @@ def delete_notification(current_user, notification_id):
         return success_response(None, '已刪除')
     except Exception as e:
         db.session.rollback()
-        print(f'[NotifAdmin] delete error: {e}')
+        logger.error('delete error: %s', e)
         return error_response('刪除失敗', 500)
 
 
@@ -218,7 +221,7 @@ def send_now(current_user, notification_id):
             return success_response(notif.to_dict(include_stats=True), '發送成功')
         return error_response('發送失敗', 500)
     except Exception as e:
-        print(f'[NotifAdmin] send error: {e}')
+        logger.error('send error: %s', e)
         return error_response('發送失敗', 500)
 
 
@@ -252,7 +255,7 @@ def schedule_notification(current_user, notification_id):
         return success_response(notif.to_dict(), '排程已設定')
     except Exception as e:
         db.session.rollback()
-        print(f'[NotifAdmin] schedule error: {e}')
+        logger.error('schedule error: %s', e)
         return error_response('設定排程失敗', 500)
 
 
@@ -277,7 +280,7 @@ def cancel_schedule(current_user, notification_id):
         return success_response(notif.to_dict(), '排程已取消')
     except Exception as e:
         db.session.rollback()
-        print(f'[NotifAdmin] cancel schedule error: {e}')
+        logger.error('cancel schedule error: %s', e)
         return error_response('取消排程失敗', 500)
 
 
@@ -300,7 +303,7 @@ def audience_count(current_user):
         cnt = count_audience(temple_id, target_audience, target_event_id)
         return success_response({'count': cnt})
     except Exception as e:
-        print(f'[NotifAdmin] audience-count error: {e}')
+        logger.error('audience-count error: %s', e)
         return error_response('計算受眾失敗', 500)
 
 
@@ -323,7 +326,7 @@ def list_templates(current_user):
         ).all()
         return success_response([t.to_dict() for t in templates])
     except Exception as e:
-        print(f'[NotifAdmin] list templates error: {e}')
+        logger.error('list templates error: %s', e)
         return error_response('載入模板失敗', 500)
 
 
@@ -354,7 +357,7 @@ def create_template(current_user):
         return success_response(tmpl.to_dict(), '模板已建立', 201)
     except Exception as e:
         db.session.rollback()
-        print(f'[NotifAdmin] create template error: {e}')
+        logger.error('create template error: %s', e)
         return error_response('建立模板失敗', 500)
 
 
@@ -385,7 +388,7 @@ def update_template(current_user, template_id):
         return success_response(tmpl.to_dict())
     except Exception as e:
         db.session.rollback()
-        print(f'[NotifAdmin] update template error: {e}')
+        logger.error('update template error: %s', e)
         return error_response('更新模板失敗', 500)
 
 
@@ -407,5 +410,5 @@ def delete_template(current_user, template_id):
         return success_response(None, '已刪除')
     except Exception as e:
         db.session.rollback()
-        print(f'[NotifAdmin] delete template error: {e}')
+        logger.error('delete template error: %s', e)
         return error_response('刪除模板失敗', 500)

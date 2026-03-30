@@ -5,6 +5,8 @@ from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_cors import CORS
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from dotenv import load_dotenv
 import os
 
@@ -14,6 +16,11 @@ load_dotenv()
 # 初始化擴充套件
 db = SQLAlchemy()
 migrate = Migrate()
+limiter = Limiter(
+    key_func=get_remote_address,
+    default_limits=["200 per minute"],
+    storage_uri="memory://",
+)
 
 def create_app():
     import pathlib
@@ -28,13 +35,38 @@ def create_app():
     # 初始化擴充
     db.init_app(app)
     migrate.init_app(app, db)
+    limiter.init_app(app)
+
+    # API 文檔 (Swagger UI at /api/docs)
+    from flasgger import Swagger
+    app.config['SWAGGER'] = {
+        'title': '廟宇管理系統 API',
+        'version': '1.0.0',
+        'description': '廟宇管理系統後端 RESTful API 文檔',
+        'uiversion': 3,
+        'specs_route': '/api/docs/',
+        'securityDefinitions': {
+            'Bearer': {
+                'type': 'apiKey',
+                'name': 'Authorization',
+                'in': 'header',
+                'description': 'JWT Token，格式：Bearer {token}'
+            }
+        }
+    }
+    Swagger(app)
+
+    # 初始化日誌系統
+    from app.utils.logger import setup_logging
+    setup_logging(app)
 
     # ========================================
-    # 配置 CORS - 重要：必須對所有響應生效（包括錯誤）
+    # 配置 CORS - 從環境變數讀取允許的來源
     # ========================================
+    cors_origins = [o.strip() for o in os.getenv('CORS_ORIGINS', 'http://localhost:5173,http://localhost:5174,http://localhost:5175').split(',') if o.strip()]
     CORS(app,
          resources={r"/api/*": {
-             "origins": ["http://localhost:5173", "http://localhost:5174", "http://localhost:5175", "https://liff.line.me", "https://wanted-pmc-seats-engineer.trycloudflare.com"],
+             "origins": cors_origins,
              "allow_headers": ["Content-Type", "Authorization"],
              "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
              "supports_credentials": True,
@@ -42,12 +74,18 @@ def create_app():
              "max_age": 3600
          }},
          supports_credentials=True,
-         intercept_exceptions=False  # 關鍵：確保異常響應也有 CORS headers
+         intercept_exceptions=False
     )
 
     # ========================================
-    # 全局錯誤處理器 - 確保所有錯誤都返回 JSON 格式並帶 CORS headers
+    # 全局錯誤處理器 - 統一 JSON 回應格式
     # ========================================
+    from app.utils.exceptions import AppError
+
+    @app.errorhandler(AppError)
+    def handle_app_error(error):
+        return jsonify(error.to_dict()), error.status_code
+
     @app.errorhandler(404)
     def not_found(error):
         return jsonify({
@@ -56,23 +94,26 @@ def create_app():
             'data': None
         }), 404
 
+    @app.errorhandler(429)
+    def rate_limit_exceeded(error):
+        return jsonify({
+            'status': 'error',
+            'message': '請求過於頻繁，請稍後再試',
+            'data': None
+        }), 429
+
     @app.errorhandler(500)
     def internal_error(error):
-        db.session.rollback()  # 回滾任何失敗的資料庫操作
+        db.session.rollback()
         return jsonify({
             'status': 'error',
             'message': '伺服器內部錯誤，請稍後再試',
-            'data': str(error) if app.debug else None
+            'data': None
         }), 500
 
     @app.errorhandler(Exception)
     def handle_exception(error):
-        # 記錄錯誤（production 環境應該使用 logging）
-        if app.debug:
-            print(f"Unhandled Exception: {error}")
-            import traceback
-            traceback.print_exc()
-
+        app.logger.exception('Unhandled exception: %s', error)
         db.session.rollback()
         return jsonify({
             'status': 'error',
@@ -81,7 +122,7 @@ def create_app():
         }), 500
 
     # 導入模型（讓 Flask-Migrate 能夠偵測）- 三表帳號系統
-    from app.models import User, PublicUser, TempleAdminUser, SuperAdminUser, Amulet, Checkin, Energy, Temple, Product, Address, Redemption, TempleAnnouncement, CheckinReward, RewardClaim, TempleApplication, SystemSettings, SystemLog, UserReport, Notification, NotificationSettings, TempleEvent, EventRegistration, LineUser, TempleNotification, NotificationStats, NotificationTemplate
+    from app.models import User, PublicUser, TempleAdminUser, SuperAdminUser, Amulet, Checkin, Energy, Temple, Product, Address, Redemption, TempleAnnouncement, CheckinReward, RewardClaim, TempleApplication, SystemSettings, SystemLog, UserReport, Notification, NotificationSettings, TempleEvent, EventRegistration, LineUser, TempleNotification, NotificationStats, NotificationTemplate, RefreshToken
 
     # 註冊路由（新增 temple_admin_api 為主要廟方後台 API）
     from app.routes import auth, user, amulet, checkin, energy, temple, product, address, redemption, upload, stats, leaderboard, temple_announcement, temple_admin, temple_stats, temple_revenue, temple_export, reward, admin, notification, temple_event_admin, temple_admin_api, public_event, line_webhook, temple_notification_admin

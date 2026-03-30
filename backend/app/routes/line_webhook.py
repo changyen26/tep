@@ -3,6 +3,7 @@ LINE Webhook 處理
 接收 LINE 平台事件（訊息、加好友、postback 等）
 """
 from flask import Blueprint, request, abort
+from app.utils.logger import get_logger
 from app import db
 from app.models.line_user import LineUser
 from app.models.event_registration import EventRegistration
@@ -18,6 +19,8 @@ from app.utils.response import success_response
 from datetime import datetime
 from urllib.parse import parse_qs
 from sqlalchemy import func
+
+logger = get_logger('routes.line_webhook')
 
 bp = Blueprint('line_webhook', __name__, url_prefix='/api/line')
 
@@ -57,7 +60,7 @@ def webhook():
             elif event_type == 'postback':
                 handle_postback(event)
         except Exception as e:
-            print(f'[LINE Webhook] Error handling {event_type}: {e}')
+            logger.error('Error handling %s: %s', event_type, e)
 
     return success_response(None, 'OK')
 

@@ -14,6 +14,9 @@ from app.utils.response import error_response
 from datetime import datetime, timedelta
 import csv
 import io
+from app.utils.logger import get_logger
+
+logger = get_logger('routes.temple_export')
 
 bp = Blueprint('temple_export', __name__, url_prefix='/api/temple-export')
 

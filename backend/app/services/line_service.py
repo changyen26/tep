@@ -7,6 +7,9 @@ import hashlib
 import base64
 import requests
 from flask import current_app
+from app.utils.logger import get_logger
+
+logger = get_logger('services.line_service')
 
 
 LINE_API_BASE = 'https://api.line.me/v2'
@@ -57,7 +60,7 @@ def reply_message(reply_token, messages):
         json={'replyToken': reply_token, 'messages': messages}
     )
     if not resp.ok:
-        print(f'[LINE] reply_message error: {resp.status_code} {resp.text}')
+        logger.error(f'[LINE] reply_message error: {resp.status_code} {resp.text}')
     return resp
 
 
@@ -71,7 +74,7 @@ def push_message(to, messages):
         json={'to': to, 'messages': messages}
     )
     if not resp.ok:
-        print(f'[LINE] push_message error: {resp.status_code} {resp.text}')
+        logger.error(f'[LINE] push_message error: {resp.status_code} {resp.text}')
     return resp
 
 
@@ -85,7 +88,7 @@ def broadcast_message(messages):
         json={'messages': messages}
     )
     if not resp.ok:
-        print(f'[LINE] broadcast_message error: {resp.status_code} {resp.text}')
+        logger.error(f'[LINE] broadcast_message error: {resp.status_code} {resp.text}')
     return resp
 
 
@@ -99,7 +102,7 @@ def multicast_message(to_list, messages):
         json={'to': to_list, 'messages': messages}
     )
     if not resp.ok:
-        print(f'[LINE] multicast_message error: {resp.status_code} {resp.text}')
+        logger.error(f'[LINE] multicast_message error: {resp.status_code} {resp.text}')
     return resp
 
 
@@ -113,7 +116,7 @@ def get_profile(user_id):
     )
     if resp.ok:
         return resp.json()
-    print(f'[LINE] get_profile error: {resp.status_code} {resp.text}')
+    logger.error(f'[LINE] get_profile error: {resp.status_code} {resp.text}')
     return None
 
 

@@ -6,6 +6,9 @@ from app import db
 from app.models.address import Address
 from app.utils.auth import token_required
 from app.utils.response import success_response, error_response
+from app.utils.logger import get_logger
+
+logger = get_logger('routes.address')
 
 bp = Blueprint('address', __name__, url_prefix='/api/addresses')
 

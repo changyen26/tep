@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
 
 function LoginPage() {
-  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -15,10 +15,7 @@ function LoginPage() {
     setError('')
     setLoading(true)
 
-    // 模擬延遲
-    await new Promise(resolve => setTimeout(resolve, 500))
-
-    const result = login(username, password)
+    const result = await login(email, password)
 
     if (result.success) {
       navigate('/admin')
@@ -48,15 +45,15 @@ function LoginPage() {
           )}
 
           <div className="mb-5">
-            <label htmlFor="username" className="block text-gray-200 mb-2 text-[0.95rem]">
-              帳號
+            <label htmlFor="email" className="block text-gray-200 mb-2 text-[0.95rem]">
+              Email
             </label>
             <input
-              type="text"
-              id="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="請輸入帳號"
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="請輸入 Email"
               required
               autoFocus
               className="w-full py-3.5 px-4 bg-admin-dark border border-admin-dark-lighter rounded text-gray-200 text-base transition-colors duration-200 placeholder:text-gray-500 focus:outline-none focus:border-temple-gold"
@@ -97,10 +94,9 @@ function LoginPage() {
           </a>
         </div>
 
-        {/* Test credentials hint */}
+        {/* Footer note */}
         <div className="mt-6 pt-6 border-t border-admin-dark-lighter text-center">
-          <p className="text-gray-500 text-xs my-1">測試帳號：admin</p>
-          <p className="text-gray-500 text-xs my-1">測試密碼：sgbd2024</p>
+          <p className="text-gray-500 text-xs my-1">請使用廟方管理員帳號登入</p>
         </div>
       </div>
     </div>

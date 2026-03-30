@@ -6,6 +6,9 @@ from app import db
 from app.models.user import User
 from app.utils.auth import token_required
 from app.utils.response import success_response, error_response
+from app.utils.logger import get_logger
+
+logger = get_logger('routes.user')
 
 bp = Blueprint('user', __name__, url_prefix='/api/user')
 

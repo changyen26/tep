@@ -4,6 +4,9 @@
 [DEPRECATED] 此模組已棄用，請改用 temple_admin_api.py
 """
 from flask import Blueprint, request, jsonify
+from app.utils.logger import get_logger
+
+logger = get_logger('routes.temple_revenue')
 
 bp = Blueprint('temple_revenue', __name__, url_prefix='/api/temple-revenue')
 

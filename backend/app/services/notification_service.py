@@ -12,6 +12,9 @@ from app.models.notification import Notification
 from app.models.temple_notification import TempleNotification, NotificationStats
 from app.services import line_service
 from app.utils.line_flex import temple_notification_message
+from app.utils.logger import get_logger
+
+logger = get_logger('services.notification_service')
 
 
 # LINE multicast 每次上限 500 人
@@ -148,11 +151,11 @@ def send_notification(notification_id):
     """
     notif = TempleNotification.query.get(notification_id)
     if not notif:
-        print(f'[Notify] notification {notification_id} not found')
+        logger.info(f'[Notify] notification {notification_id} not found')
         return False
 
     if notif.status not in ('draft', 'scheduled'):
-        print(f'[Notify] notification {notification_id} status={notif.status}, skip')
+        logger.info(f'[Notify] notification {notification_id} status={notif.status}, skip')
         return False
 
     notif.status = 'sending'
@@ -185,7 +188,7 @@ def send_notification(notification_id):
                 if resp and resp.ok:
                     line_sent += len(chunk)
                 else:
-                    print(f'[Notify] LINE multicast chunk {i} failed')
+                    logger.error(f'[Notify] LINE multicast chunk {i} failed')
 
             # 寫入統計
             stats = NotificationStats(
@@ -212,11 +215,11 @@ def send_notification(notification_id):
         notif.status = 'sent'
         notif.sent_at = datetime.utcnow()
         db.session.commit()
-        print(f'[Notify] notification {notification_id} sent to {total_sent} users')
+        logger.info(f'[Notify] notification {notification_id} sent to {total_sent} users')
         return True
 
     except Exception as e:
-        print(f'[Notify] send error: {e}')
+        logger.error(f'[Notify] send error: {e}')
         notif.status = 'failed'
         db.session.commit()
         return False

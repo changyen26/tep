@@ -2,6 +2,7 @@
 打卡 API
 """
 from flask import Blueprint, request
+from app.utils.logger import get_logger
 from app import db
 from app.models.checkin import Checkin
 from app.models.amulet import Amulet
@@ -13,6 +14,8 @@ from app.utils.auth import token_required
 from app.utils.response import success_response, error_response
 from datetime import datetime, timedelta
 from sqlalchemy import func, distinct, or_
+
+logger = get_logger('routes.checkin')
 
 bp = Blueprint('checkin', __name__, url_prefix='/api/checkin')
 
@@ -581,7 +584,7 @@ def _check_and_grant_rewards(user, checkin):
 
     except Exception as e:
         # 獎勵發放失敗不應影響打卡，記錄錯誤但繼續
-        print(f'獎勵發放錯誤: {str(e)}')
+        logger.error('獎勵發放錯誤: %s', e)
         return []
 
 def _check_first_time_eligibility(user_id, reward, current_checkin):

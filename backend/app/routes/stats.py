@@ -12,6 +12,9 @@ from app.utils.auth import token_required, admin_required
 from app.utils.response import success_response, error_response
 from sqlalchemy import func, desc, and_
 from datetime import datetime, timedelta
+from app.utils.logger import get_logger
+
+logger = get_logger('routes.stats')
 
 bp = Blueprint('stats', __name__, url_prefix='/api/stats')
 

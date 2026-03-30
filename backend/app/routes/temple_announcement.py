@@ -9,6 +9,9 @@ from app.utils.auth import token_required
 from app.utils.temple_auth import temple_admin_required
 from app.utils.response import success_response, error_response
 from datetime import datetime
+from app.utils.logger import get_logger
+
+logger = get_logger('routes.temple_announcement')
 
 bp = Blueprint('temple_announcement', __name__, url_prefix='/api/temple-announcements')
 

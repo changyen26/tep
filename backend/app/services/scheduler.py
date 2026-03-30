@@ -5,6 +5,9 @@
 from datetime import datetime
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
+from app.utils.logger import get_logger
+
+logger = get_logger('services.scheduler')
 
 _scheduler = None
 
@@ -25,10 +28,10 @@ def check_scheduled_notifications():
             ).all()
 
             for notif in due:
-                print(f'[Scheduler] firing notification {notif.id}: {notif.title}')
+                logger.info(f'[Scheduler] firing notification {notif.id}: {notif.title}')
                 send_notification(notif.id)
         except Exception as e:
-            print(f'[Scheduler] error: {e}')
+            logger.error(f'[Scheduler] error: {e}')
 
 
 def init_scheduler(app):
@@ -45,4 +48,4 @@ def init_scheduler(app):
         replace_existing=True,
     )
     _scheduler.start()
-    print('[Scheduler] started — checking scheduled notifications every minute')
+    logger.info('[Scheduler] started — checking scheduled notifications every minute')

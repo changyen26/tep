@@ -45,11 +45,42 @@ def generate_unique_filename(original_filename, include_uuid=True):
         microsecond = now.strftime('%f')[:3]  # 取前3位毫秒
         return f"{timestamp}_{microsecond}.{ext}"
 
+# 圖片格式的 magic bytes 簽章
+IMAGE_SIGNATURES = {
+    b'\x89PNG': 'png',
+    b'\xff\xd8\xff': 'jpg',
+    b'GIF87a': 'gif',
+    b'GIF89a': 'gif',
+    b'RIFF': 'webp',  # WebP 以 RIFF 開頭
+}
+
+
+def verify_magic_bytes(file_path):
+    """
+    透過檔案 magic bytes 驗證真實格式，防止偽造副檔名
+    """
+    try:
+        with open(file_path, 'rb') as f:
+            header = f.read(12)
+
+        for sig, fmt in IMAGE_SIGNATURES.items():
+            if header[:len(sig)] == sig:
+                # WebP 額外檢查：RIFF....WEBP
+                if fmt == 'webp' and header[8:12] != b'WEBP':
+                    continue
+                return True, fmt
+
+        return False, '無法識別的檔案格式（magic bytes 不符）'
+    except Exception as e:
+        return False, f'檔案讀取失敗: {str(e)}'
+
+
 def validate_image(file_path, max_size=MAX_FILE_SIZE):
     """
     驗證圖片檔案
-    - 檢查是否為有效圖片
+    - 檢查 magic bytes（真實格式）
     - 檢查檔案大小
+    - 檢查是否為有效圖片
     """
     try:
         # 檢查檔案大小
@@ -57,7 +88,12 @@ def validate_image(file_path, max_size=MAX_FILE_SIZE):
         if file_size > max_size:
             return False, f'檔案大小超過限制 ({max_size / 1024 / 1024}MB)'
 
-        # 嘗試開啟圖片
+        # 檢查 magic bytes
+        is_valid_magic, magic_result = verify_magic_bytes(file_path)
+        if not is_valid_magic:
+            return False, magic_result
+
+        # 嘗試開啟圖片（PIL 深度驗證）
         with Image.open(file_path) as img:
             img.verify()
 

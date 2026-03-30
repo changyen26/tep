@@ -28,5 +28,6 @@ from app.models.lamp_type import LampType
 from app.models.lamp_application import LampApplication
 from app.models.line_user import LineUser
 from app.models.temple_notification import TempleNotification, NotificationStats, NotificationTemplate
+from app.models.refresh_token import RefreshToken
 
-__all__ = ['User', 'PublicUser', 'TempleAdminUser', 'SuperAdminUser', 'Amulet', 'Checkin', 'Energy', 'Temple', 'Product', 'Address', 'Redemption', 'TempleAnnouncement', 'CheckinReward', 'RewardClaim', 'TempleApplication', 'SystemSettings', 'SystemLog', 'UserReport', 'Notification', 'NotificationSettings', 'TempleEvent', 'EventRegistration', 'PilgrimageVisit', 'LampType', 'LampApplication', 'LineUser', 'TempleNotification', 'NotificationStats', 'NotificationTemplate']
+__all__ = ['User', 'PublicUser', 'TempleAdminUser', 'SuperAdminUser', 'Amulet', 'Checkin', 'Energy', 'Temple', 'Product', 'Address', 'Redemption', 'TempleAnnouncement', 'CheckinReward', 'RewardClaim', 'TempleApplication', 'SystemSettings', 'SystemLog', 'UserReport', 'Notification', 'NotificationSettings', 'TempleEvent', 'EventRegistration', 'PilgrimageVisit', 'LampType', 'LampApplication', 'LineUser', 'TempleNotification', 'NotificationStats', 'NotificationTemplate', 'RefreshToken']

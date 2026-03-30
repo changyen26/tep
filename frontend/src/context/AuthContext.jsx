@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
-  const persistAuth = (userData, userToken, accType = null) => {
+  const persistAuth = (userData, userToken, accType = null, refreshTkn = null) => {
     setUser(userData);
     setToken(userToken);
     setRole(userData?.role || null); // 向後兼容
@@ -49,6 +49,10 @@ export const AuthProvider = ({ children }) => {
     if (finalAccountType) {
       localStorage.setItem('account_type', finalAccountType);
     }
+    // 儲存 refresh token
+    if (refreshTkn) {
+      localStorage.setItem('refresh_token', refreshTkn);
+    }
   };
 
   const register = async (data) => {
@@ -58,9 +62,10 @@ export const AuthProvider = ({ children }) => {
       const userData = payload.user;
       const userToken = payload.token;
       const accType = payload.account_type;
+      const refreshTkn = payload.refresh_token;
 
       if (userData && userToken) {
-        persistAuth(userData, userToken, accType);
+        persistAuth(userData, userToken, accType, refreshTkn);
       }
 
       return { success: true, data: payload };
@@ -116,6 +121,7 @@ export const AuthProvider = ({ children }) => {
     setAccountType(null);
     setToken(null);
     localStorage.removeItem('token');
+    localStorage.removeItem('refresh_token');
     localStorage.removeItem('user');
     localStorage.removeItem('account_type');
   };

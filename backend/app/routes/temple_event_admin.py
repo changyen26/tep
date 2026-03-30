@@ -2,6 +2,7 @@
 廟方活動管理 API（僅廟方管理員使用）
 """
 from flask import Blueprint, request
+from app.utils.logger import get_logger
 from app import db
 from app.models.temple_event import TempleEvent
 from app.models.event_registration import EventRegistration
@@ -10,6 +11,8 @@ from app.utils.auth import token_required
 from app.utils.response import success_response, error_response
 from datetime import datetime
 from sqlalchemy import or_
+
+logger = get_logger('routes.temple_event_admin')
 
 bp = Blueprint('temple_event_admin', __name__, url_prefix='/api/temple-admin/events')
 
@@ -83,7 +86,7 @@ def list_events(current_user):
         })
 
     except Exception as e:
-        print(f'Error in list_events: {str(e)}')
+        logger.error('list_events error: %s', e)
         return error_response('載入活動列表失敗', 500)
 
 
@@ -106,7 +109,7 @@ def get_event(current_user, event_id):
         return success_response(event.to_dict(include_registered_count=True))
 
     except Exception as e:
-        print(f'Error in get_event: {str(e)}')
+        logger.error('get_event error: %s', e)
         return error_response('載入活動失敗', 500)
 
 
@@ -190,7 +193,7 @@ def create_event(current_user):
 
     except Exception as e:
         db.session.rollback()
-        print(f'Error in create_event: {str(e)}')
+        logger.error('create_event error: %s', e)
         return error_response('建立活動失敗', 500)
 
 
@@ -257,7 +260,7 @@ def update_event(current_user, event_id):
 
     except Exception as e:
         db.session.rollback()
-        print(f'Error in update_event: {str(e)}')
+        logger.error('update_event error: %s', e)
         return error_response('更新活動失敗', 500)
 
 
@@ -289,7 +292,7 @@ def publish_event(current_user, event_id):
 
     except Exception as e:
         db.session.rollback()
-        print(f'Error in publish_event: {str(e)}')
+        logger.error('publish_event error: %s', e)
         return error_response('發布活動失敗', 500)
 
 
@@ -321,7 +324,7 @@ def close_event(current_user, event_id):
 
     except Exception as e:
         db.session.rollback()
-        print(f'Error in close_event: {str(e)}')
+        logger.error('close_event error: %s', e)
         return error_response('截止活動失敗', 500)
 
 
@@ -353,7 +356,7 @@ def cancel_event(current_user, event_id):
 
     except Exception as e:
         db.session.rollback()
-        print(f'Error in cancel_event: {str(e)}')
+        logger.error('cancel_event error: %s', e)
         return error_response('取消活動失敗', 500)
 
 
@@ -413,5 +416,5 @@ def list_registrations(current_user, event_id):
         })
 
     except Exception as e:
-        print(f'Error in list_registrations: {str(e)}')
+        logger.error('list_registrations error: %s', e)
         return error_response('載入報名名單失敗', 500)

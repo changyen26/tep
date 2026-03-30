@@ -13,6 +13,9 @@ from app.models.redemption import Redemption
 from app.models.system_settings import SystemSettings
 from app.models.user_report import UserReport
 from app.models.checkin import Checkin
+from app.utils.logger import get_logger
+
+logger = get_logger('routes.admin')
 from app.utils.response import success_response, error_response
 from app.utils.auth import generate_admin_token, admin_token_required, admin_permission_required
 from sqlalchemy import func, and_, or_

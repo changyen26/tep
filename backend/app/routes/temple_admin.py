@@ -8,6 +8,9 @@ from app.models.temple import Temple
 from app.models.user import User
 from app.utils.auth import token_required
 from app.utils.response import success_response, error_response
+from app.utils.logger import get_logger
+
+logger = get_logger('routes.temple_admin')
 
 bp = Blueprint('temple_admin', __name__, url_prefix='/api/temple-admins')
 

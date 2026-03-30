@@ -8,6 +8,9 @@ from app.models.notification_settings import NotificationSettings
 from app.utils.response import success_response, error_response
 from app.utils.auth import token_required
 from sqlalchemy import func
+from app.utils.logger import get_logger
+
+logger = get_logger('routes.notification')
 
 bp = Blueprint('notification', __name__, url_prefix='/api/notifications')
 

@@ -9,13 +9,20 @@ from app.models.user import User
 from app.utils.auth import token_required, admin_required
 from app.utils.response import success_response, error_response
 from app.utils.file_upload import save_uploaded_image, delete_file
+from app import limiter
+from app.utils.logger import get_logger
+
+logger = get_logger('routes.upload')
 
 bp = Blueprint('upload', __name__, url_prefix='/api/uploads')
+# 上傳端點限速：每分鐘 10 次
+upload_limit = limiter.shared_limit("10 per minute", scope="uploads")
 
 # 上傳目錄路徑
 UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'uploads')
 
 @bp.route('/image', methods=['POST'])
+@upload_limit
 @token_required
 def upload_image(current_user):
     """
@@ -56,6 +63,7 @@ def upload_image(current_user):
         return error_response(f'上傳失敗: {str(e)}', 500)
 
 @bp.route('/product/<int:product_id>/image', methods=['POST'])
+@upload_limit
 @admin_required
 def upload_product_image(current_user, product_id):
     """
@@ -109,6 +117,7 @@ def upload_product_image(current_user, product_id):
         return error_response(f'上傳失敗: {str(e)}', 500)
 
 @bp.route('/avatar', methods=['POST'])
+@upload_limit
 @token_required
 def upload_avatar(current_user):
     """
@@ -186,8 +195,10 @@ def delete_uploaded_file(current_user):
         file_path = data['file_path']
         full_path = os.path.join(UPLOAD_FOLDER, file_path.replace('/uploads/', ''))
 
-        # 安全檢查：確保路徑在 uploads 目錄內
-        if not full_path.startswith(UPLOAD_FOLDER):
+        # 安全檢查：用 realpath 正規化路徑後再比對，防止路徑穿越（../ 攻擊）
+        real_upload = os.path.realpath(UPLOAD_FOLDER)
+        real_full = os.path.realpath(full_path)
+        if not real_full.startswith(real_upload + os.sep):
             return error_response('無效的檔案路徑', 400)
 
         success, message = delete_file(full_path)

@@ -13,6 +13,9 @@ from app.utils.auth import token_required
 from app.utils.response import success_response, error_response
 from datetime import datetime, timedelta
 from sqlalchemy import func, and_, or_
+from app.utils.logger import get_logger
+
+logger = get_logger('routes.reward')
 
 bp = Blueprint('reward', __name__, url_prefix='/api/rewards')
 

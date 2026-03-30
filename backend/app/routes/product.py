@@ -9,6 +9,9 @@ from app.models.temple import Temple
 from app.utils.auth import token_required, admin_required
 from app.utils.response import success_response, error_response
 from sqlalchemy import func, or_
+from app.utils.logger import get_logger
+
+logger = get_logger('routes.product')
 
 bp = Blueprint('product', __name__, url_prefix='/api/products')
 

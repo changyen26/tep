@@ -7,22 +7,45 @@ from app.models.public_user import PublicUser
 from app.models.temple_admin_user import TempleAdminUser
 from app.models.super_admin_user import SuperAdminUser
 from app.utils.validator import validate_register_data, validate_login_data
-from app.utils.auth import generate_token, token_required, temple_admin_token_required, super_admin_token_required
+from app.utils.auth import generate_token, generate_refresh_token, verify_refresh_token, revoke_refresh_token, revoke_all_user_tokens, token_required, temple_admin_token_required, super_admin_token_required
 from app.utils.response import success_response, error_response
+from app import limiter
 from datetime import datetime
+from app.utils.logger import get_logger
+
+logger = get_logger('routes.auth')
 
 bp = Blueprint('auth', __name__, url_prefix='/api/auth')
 
 @bp.route('/register', methods=['POST', 'OPTIONS'])
+@limiter.limit("3 per minute")
 def register():
-    """
-    一般使用者註冊（僅限 public_users）
-    POST /api/auth/register
-    Body: {
-        "name": "使用者名稱",
-        "email": "user@example.com",
-        "password": "password123"
-    }
+    """一般使用者註冊
+    ---
+    tags:
+      - 認證
+    parameters:
+      - in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          required: [name, email, password]
+          properties:
+            name:
+              type: string
+              example: 王小明
+            email:
+              type: string
+              example: user@example.com
+            password:
+              type: string
+              example: password123
+    responses:
+      201:
+        description: 註冊成功
+      400:
+        description: 資料驗證失敗或 Email 已被註冊
     """
     if request.method == 'OPTIONS':
         return '', 204
@@ -55,12 +78,14 @@ def register():
         db.session.add(new_user)
         db.session.commit()
 
-        # 生成 Token
-        token = generate_token(new_user.id, 'public')
+        # 生成雙 Token
+        access_token = generate_token(new_user.id, 'public')
+        refresh_token = generate_refresh_token(new_user.id, 'public')
 
         return success_response({
             'user': new_user.to_dict(),
-            'token': token,
+            'token': access_token,
+            'refresh_token': refresh_token,
             'account_type': 'public'
         }, '註冊成功', 201)
 
@@ -69,15 +94,38 @@ def register():
         return error_response(f'註冊失敗: {str(e)}', 500)
 
 @bp.route('/login', methods=['POST', 'OPTIONS'])
+@limiter.limit("5 per minute")
 def login():
-    """
-    統一登入 API - 三表帳號系統
-    POST /api/auth/login
-    Body: {
-        "email": "user@example.com",
-        "password": "password123",
-        "login_type": "public" | "temple_admin" | "super_admin"  // 預設 "public"
-    }
+    """統一登入 API
+    ---
+    tags:
+      - 認證
+    parameters:
+      - in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          required: [email, password]
+          properties:
+            email:
+              type: string
+              example: user@example.com
+            password:
+              type: string
+              example: password123
+            login_type:
+              type: string
+              enum: [public, temple_admin, super_admin]
+              default: public
+              description: 帳號類型
+    responses:
+      200:
+        description: 登入成功，回傳 token 與 refresh_token
+      401:
+        description: Email 或密碼錯誤
+      403:
+        description: 帳號已停用
     """
     if request.method == 'OPTIONS':
         return '', 204
@@ -122,13 +170,15 @@ def login():
         user.last_login_at = datetime.utcnow()
         db.session.commit()
 
-        # 生成 Token（包含 account_type）
-        token = generate_token(user.id, account_type)
+        # 生成雙 Token
+        access_token = generate_token(user.id, account_type)
+        refresh_token = generate_refresh_token(user.id, account_type)
 
         # 回傳資料
         response_data = {
             'user': user.to_dict(),
-            'token': token,
+            'token': access_token,
+            'refresh_token': refresh_token,
             'account_type': account_type
         }
 
@@ -196,3 +246,97 @@ def change_password(current_user, account_type):
     except Exception as e:
         db.session.rollback()
         return error_response(f'修改密碼失敗: {str(e)}', 500)
+
+
+@bp.route('/refresh', methods=['POST', 'OPTIONS'])
+def refresh():
+    """刷新 Access Token
+    ---
+    tags:
+      - 認證
+    parameters:
+      - in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          required: [refresh_token]
+          properties:
+            refresh_token:
+              type: string
+    responses:
+      200:
+        description: 回傳新的 access token
+      401:
+        description: Refresh Token 無效或已過期
+    """
+    if request.method == 'OPTIONS':
+        return '', 204
+
+    try:
+        data = request.get_json()
+        refresh_token_str = data.get('refresh_token') if data else None
+        if not refresh_token_str:
+            return error_response('缺少 refresh_token', 400)
+
+        payload, error = verify_refresh_token(refresh_token_str)
+        if error:
+            return error_response(error, 401)
+
+        user_id = payload['user_id']
+        account_type = payload['account_type']
+
+        # 產生新的 access token
+        new_access_token = generate_token(user_id, account_type)
+
+        return success_response({
+            'token': new_access_token,
+            'account_type': account_type
+        }, 'Token 已更新')
+
+    except Exception as e:
+        return error_response(f'刷新 Token 失敗: {str(e)}', 500)
+
+
+@bp.route('/logout', methods=['POST', 'OPTIONS'])
+@token_required
+def logout(current_user, account_type):
+    """登出（撤銷 Refresh Token）
+    ---
+    tags:
+      - 認證
+    security:
+      - Bearer: []
+    parameters:
+      - in: body
+        name: body
+        schema:
+          type: object
+          properties:
+            refresh_token:
+              type: string
+              description: 指定撤銷的 token，不提供則撤銷所有
+    responses:
+      200:
+        description: 已登出
+    """
+    if request.method == 'OPTIONS':
+        return '', 204
+
+    try:
+        data = request.get_json() or {}
+        refresh_token_str = data.get('refresh_token')
+
+        if refresh_token_str:
+            # 撤銷指定的 refresh token
+            payload, _ = verify_refresh_token(refresh_token_str)
+            if payload and payload.get('jti'):
+                revoke_refresh_token(payload['jti'])
+        else:
+            # 撤銷該用戶所有 refresh token
+            revoke_all_user_tokens(current_user.id, account_type)
+
+        return success_response(None, '已登出')
+
+    except Exception as e:
+        return error_response(f'登出失敗: {str(e)}', 500)

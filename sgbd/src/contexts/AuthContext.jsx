@@ -1,38 +1,47 @@
 import { createContext, useContext, useState, useEffect } from 'react'
+import { authApi } from '../services/api'
 
 const AuthContext = createContext(null)
-
-// 模擬管理員帳號
-const ADMIN_CREDENTIALS = {
-  username: 'admin',
-  password: 'sgbd2024'
-}
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // 檢查 localStorage 是否有登入狀態
     const savedUser = localStorage.getItem('sgbd_admin_user')
-    if (savedUser) {
+    const token = localStorage.getItem('sgbd_token')
+    if (savedUser && token) {
       setUser(JSON.parse(savedUser))
     }
     setLoading(false)
   }, [])
 
-  const login = (username, password) => {
-    if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
-      const userData = { username, role: 'admin', name: '管理員' }
-      setUser(userData)
-      localStorage.setItem('sgbd_admin_user', JSON.stringify(userData))
-      return { success: true }
+  const login = async (email, password) => {
+    try {
+      const { ok, data } = await authApi.login(email, password)
+      if (ok && data.status === 'success') {
+        const token = data.data?.token
+        const userData = {
+          id: data.data?.user?.id,
+          name: data.data?.user?.name || email,
+          email: data.data?.user?.email || email,
+          role: 'admin',
+          templeId: data.data?.user?.temple_id,
+        }
+        localStorage.setItem('sgbd_token', token)
+        localStorage.setItem('sgbd_admin_user', JSON.stringify(userData))
+        setUser(userData)
+        return { success: true }
+      }
+      return { success: false, message: data.message || '帳號或密碼錯誤' }
+    } catch (err) {
+      return { success: false, message: err.message || '連線失敗，請稍後再試' }
     }
-    return { success: false, message: '帳號或密碼錯誤' }
   }
 
   const logout = () => {
     setUser(null)
+    localStorage.removeItem('sgbd_token')
     localStorage.removeItem('sgbd_admin_user')
   }
 

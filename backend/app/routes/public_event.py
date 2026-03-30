@@ -3,6 +3,7 @@
 供 LIFF 頁面與 LINE Bot 使用
 """
 from flask import Blueprint, request
+from app.utils.logger import get_logger
 from app import db
 from app.models.temple_event import TempleEvent
 from app.models.event_registration import EventRegistration
@@ -12,6 +13,8 @@ from app.services.line_service import push_message
 from app.utils.line_flex import registration_confirm_message
 from datetime import datetime
 from sqlalchemy import func
+
+logger = get_logger('routes.public_event')
 
 bp = Blueprint('public_event', __name__, url_prefix='/api/public')
 
@@ -47,7 +50,7 @@ def list_public_events(temple_id):
         return success_response({'events': events})
 
     except Exception as e:
-        print(f'Error in list_public_events: {e}')
+        logger.error('list_public_events error: %s', e)
         return error_response('載入活動列表失敗', 500)
 
 
@@ -84,7 +87,7 @@ def get_public_event(event_id):
         return success_response(data)
 
     except Exception as e:
-        print(f'Error in get_public_event: {e}')
+        logger.error('get_public_event error: %s', e)
         return error_response('載入活動失敗', 500)
 
 
@@ -178,13 +181,13 @@ def register_event(event_id):
                 flex = registration_confirm_message(reg_data, event.to_dict())
                 push_message(line_user_id, flex)
             except Exception as push_err:
-                print(f'[LINE] push confirm error: {push_err}')
+                logger.error('push confirm error: %s', push_err)
 
         return success_response(reg_data, '報名成功', 201)
 
     except Exception as e:
         db.session.rollback()
-        print(f'Error in register_event: {e}')
+        logger.error('register_event error: %s', e)
         return error_response('報名失敗', 500)
 
 
@@ -217,7 +220,7 @@ def my_registrations():
         return success_response({'registrations': result})
 
     except Exception as e:
-        print(f'Error in my_registrations: {e}')
+        logger.error('my_registrations error: %s', e)
         return error_response('查詢報名紀錄失敗', 500)
 
 
@@ -252,5 +255,5 @@ def cancel_registration(registration_id):
 
     except Exception as e:
         db.session.rollback()
-        print(f'Error in cancel_registration: {e}')
+        logger.error('cancel_registration error: %s', e)
         return error_response('取消報名失敗', 500)
