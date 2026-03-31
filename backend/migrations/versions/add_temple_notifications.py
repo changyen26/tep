@@ -1,7 +1,7 @@
 """add temple notifications
 
 Revision ID: add_temple_notifications
-Revises: add_line_integration
+Revises: line_001
 Create Date: 2026-03-30
 
 """
@@ -9,7 +9,7 @@ from alembic import op
 import sqlalchemy as sa
 
 revision = 'add_temple_notifications'
-down_revision = 'add_line_integration'
+down_revision = 'line_001'
 branch_labels = None
 depends_on = None
 

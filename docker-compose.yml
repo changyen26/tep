@@ -49,7 +49,7 @@ services:
     volumes:
       - uploads_data:/app/uploads
     ports:
-      - "5000:5000"
+      - "5001:5000"
 
   # ========================================
   # 廟方管理後台 (frontend)
